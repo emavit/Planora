@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-15",
+  "bundle": "Planora GitHub source snapshot",
+  "version": "0.2.1",
+  "license": "MIT for Planora; third-party terms retained",
+  "sourceBuild": {
+    "platform": "Windows x64",
+    "sdk": "10.0.303",
+    "result": "passed",
+    "warnings": 0,
+    "errors": 0,
+    "dependencyRestore": "Existing NuGet cache used; package dependencies declared in included project files"
+  },
+  "freshBundleValidation": {
+    "durable": 22,
+    "coreAuthoring": "passed",
+    "automaticScheduling": 22,
+    "recoveryUi": 20,
+    "closeFlow": 19
+  },
+  "notExecuted": [
+    "GitHub Actions",
+    "macOS runtime qualification",
+    "Linux runtime qualification",
+    "native Windows stress for latest candidate",
+    "live provider inference"
+  ],
+  "publicationChecks": {
+    "knownPrivateIdentifiers": "no matches",
+    "credentialPatterns": "no matches",
+    "excluded": "user project files, credentials/settings, generated artifacts, binaries and caches",
+    "ownDocumentationLinks": "passed",
+    "caveat": "Pattern scan is not a guarantee that every possible sensitive string is detectable."
+  },
+  "provenance": "Existing Planora source and local OfficeIMO subset; upstream OfficeIMO commit unknown",
+  "scope": "Folder and archive preparation only; no GitHub upload or remote configured"
+}

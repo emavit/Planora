@@ -1,0 +1,89 @@
+# Planora
+
+An offline desktop project planner with spreadsheet-style task editing, linked Gantt charts, resources, baselines, multiple timelines, PDF export, local recovery and optional AI/MCP connections.
+
+**Status:** Windows preview, version 0.2.1. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. This is not full Microsoft Project feature or file-format parity. The latest candidate passed automated checks; its native Windows stress gate remains pending.
+
+## Build and run
+
+Install the .NET 10 SDK. From the repository root:
+
+```sh
+dotnet build project-app/ProjectDesk/ProjectDesk.csproj -c Release -p:TargetFrameworks=net10.0 -p:TargetFramework=net10.0 --configfile NuGet.Config
+dotnet project-app/ProjectDesk/bin/Release/net10.0/Planora.dll
+```
+
+Windows self-contained build (PowerShell):
+
+```powershell
+./scripts/build.ps1 -Runtime win-x64
+```
+
+An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; this is not evidence of macOS runtime qualification. Python is not required.
+
+## Validate
+
+```powershell
+./scripts/validate.ps1
+```
+
+The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. On Windows, `./scripts/validate.ps1 -IncludeUi` also runs headless recovery and close-flow checks. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+
+## Quick start: your first project
+
+1. Start Planora and choose **File → New**; set the project name/start date.
+2. Type `Design` in the blank task row and enter `2d` in Duration.
+3. Add `Build`, set automatic scheduling and duration `3d`, then enter `1FS` in Predecessors.
+4. Add a resource through Resource, assign it, and review the calculated dates.
+5. Use File → Save a Copy with a new `.planora` filename to retain timelines/formatting, or `.mpp` for interchange.
+6. Use File → Export PDF for task table + Gantt, Gantt only, or timelines.
+
+**[Read the full user guide](docs/USER-GUIDE.md)** for editing, columns, resources, dates, themes, recovery, AI/MCP and troubleshooting.
+
+## Use
+
+Type a task name in the blank row; Enter/Tab commits and Esc cancels. Use predecessor expressions such as `1FS+2d`. Add/hide columns through View. Timelines have independent date limits, zoom and colors. Save a new `.mpp` copy for interchange or a `.planora` copy for project history, formatting and timelines. Existing destinations and original files are protected.
+
+Recovery checks every 15 seconds during normal use. File → Recovery opens retained checkpoints; the last few seconds before a crash may not have been saved. Keep saving project copies normally. [Recovery guide](docs/RECOVERY.md).
+
+AI/MCP are optional. Credentials belong in platform credential storage, never in the repository or project packages. Provider fixture tests do not qualify real sign-in/inference, and subscriptions do not automatically include API usage.
+
+## Repository
+
+- `project-app/ProjectDesk/`: app source; legacy folder/namespace retained to preserve build and test paths.
+- `project-app/vendor/OfficeIMO/`: required library source subset, including licenses and embedded resources.
+- `scripts/`: build and validation entry points.
+- `docs/`: architecture, roadmap, platform guidance and source inventory.
+- `.github/`: CI and contribution templates.
+
+```mermaid
+flowchart LR
+  UI[Avalonia desktop UI] --> Session[ProjectSession and commands]
+  Session --> Model[OfficeIMO project model and scheduling]
+  UI --> Persistence[Portable files and recovery]
+  UI --> Adapters[AI / MCP / platform credentials and processes]
+```
+
+The current UI/application/platform boundaries are not fully separated. [Architecture](docs/ARCHITECTURE.md) distinguishes current design from the planned refactor.
+
+## Contribute and license
+
+Read [CONTRIBUTING](CONTRIBUTING.md), [AGENTS](AGENTS.md), [open tasks](docs/TASKS.md), and [security guidance](SECURITY.md). Do not submit private project files or credentials.
+
+Planora code is [MIT licensed](LICENSE). Vendored code retains its own notices and terms; see [third-party notices](THIRD-PARTY-NOTICES.md). Planora is not affiliated with Microsoft, Apple, monday.com, OpenAI or Anthropic.
+
+[Functionality and GUI improvement backlog](docs/IMPROVEMENTS.md) · [Release preparation and validation limits](docs/RELEASE.md) · [Changelog](CHANGELOG.md)
+
+## Upload to GitHub
+
+Upload this folder's **contents** as the repository root. Prefer Git or GitHub Desktop for the full source tree. Uploading the ZIP as a single GitHub file does not unpack it into a repository.
+
+With Git installed, from this folder:
+
+```sh
+git init -b main
+git add .
+git commit -m "Initial Planora source"
+```
+
+Then create an empty repository in your GitHub account and follow its instructions to add the remote and push. No remote URL or account is preconfigured. Do not include build outputs or private projects. See [release preparation](docs/RELEASE.md) before enabling public access.
