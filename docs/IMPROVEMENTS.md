@@ -123,6 +123,9 @@ Priority: **P0** data integrity/release blockers, **P1** core daily usability, *
 | MCP-02 | P2 | Project MCP host — missing | Least-privilege read/edit tools with reviewed mutation and local permissions | New host module |
 | AUTO-01 | P2 | Local rules — missing | Deterministic triggers/actions, recursion guards, preview/history and Undo | New automation engine |
 | SYNC-01 | P2 | Personal sync — missing | Conflict detection/merge, offline versioning and no silent last-writer data loss | Persistence and sync interfaces |
+| MOB-01 | P3 after macOS | Android and iOS — planned | Start after macOS completion; evaluate framework/shared core and agree phone/tablet scope | Future mobile clients/adapters |
+| MOB-02 | P3 after macOS | Android — not started | Qualify touch UI, offline persistence, lifecycle, file access, credentials and real-device distribution | Future Android client |
+| MOB-03 | P3 after macOS | iOS — not started | Qualify touch UI, offline persistence, lifecycle, file access, credentials and real-device distribution | Future iOS client |
 | COLLAB-01 | P3 | Live collaboration — separate scope | Identity/permissions, concurrency and hosted infrastructure require an explicit product decision | Future service |
 
 ## Architecture and maintenance
@@ -138,6 +141,6 @@ Priority: **P0** data integrity/release blockers, **P1** core daily usability, *
 
 ## Recommended execution order
 
-Start with REL-01, REC-01, DATA-01/02/03 and GUI-03/04. Then qualify large-project behavior and finish AI-01/02. Expand custom fields/views and scheduling only after shared model semantics are explicit. Resource/portfolio/rule/sync work follows the durable foundation; macOS qualification follows the Windows release gate.
+Start with REL-01, REC-01, DATA-01/02/03 and GUI-03/04. Then qualify large-project behavior and finish AI-01/02. Expand custom fields/views and scheduling only after shared model semantics are explicit. Resource/portfolio/rule/sync work follows the durable foundation; macOS qualification follows the Windows release gate. Android and iOS development follows completion and validation of macOS; see [mobile plan](MOBILE-PLAN.md).
 
 Do not mark a row done merely because a button exists. Record behavior, persistence, Undo, error/cancel handling, affected platform and relevant tests. The complete source method inventory and real-project compatibility matrix remain separate engineering audits.

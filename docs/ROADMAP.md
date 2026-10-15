@@ -1,6 +1,6 @@
 # Roadmap
 
-Windows first; Mac after Windows qualification. Preserve the fast spreadsheet/Gantt workflow and protect original project data.
+Windows first; Mac after Windows qualification; Android and iOS development after the macOS app is completed and validated. Preserve the fast spreadsheet/Gantt workflow and protect original project data.
 
 1. Complete recovery/performance qualification and current Windows native stress gate.
 2. Finish graphical ChatGPT setup and reviewed Gantt/timeline image attachments.
@@ -13,5 +13,6 @@ Windows first; Mac after Windows qualification. Preserve the fast spreadsheet/Ga
 9. Conflict-aware personal file sync.
 10. Hardened Windows release and broader MPP operation/field compatibility matrix.
 11. Actual Mac M1 validation and platform packaging.
+12. After macOS completion, define the shared mobile architecture and phone/tablet feature matrix; develop and qualify Android and iOS apps. See [mobile plan](MOBILE-PLAN.md).
 
-Full Microsoft Project parity is not established. Hosted collaboration, public forms and mobile clients are separate scope decisions. No delivery dates are promised by this backlog.
+Full Microsoft Project parity is not established. Android and iOS are confirmed future targets gated on macOS completion; their framework, detailed feature scope and release dates remain to be decided. Hosted collaboration and public forms remain separate scope decisions. No delivery dates are promised by this backlog.

@@ -2,7 +2,7 @@
 
 An offline desktop project planner with spreadsheet-style task editing, linked Gantt charts, resources, baselines, multiple timelines, PDF export, local recovery and optional AI/MCP connections.
 
-**Status:** Windows preview, version 0.2.1. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. This is not full Microsoft Project feature or file-format parity. The latest candidate passed automated checks; its native Windows stress gate remains pending.
+**Status:** Windows preview, version 0.2.1. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. The latest candidate passed automated checks; its native Windows stress gate remains pending.
 
 ## Build and run
 
@@ -65,6 +65,10 @@ flowchart LR
 ```
 
 The current UI/application/platform boundaries are not fully separated. [Architecture](docs/ARCHITECTURE.md) distinguishes current design from the planned refactor.
+
+## Platform roadmap
+
+Windows is the current focus. Complete and validate macOS next, then develop Android and iOS apps. Mobile requires a touch-friendly phone/tablet UI and platform-specific qualification; desktop binaries are not mobile apps. See the [mobile development plan](docs/MOBILE-PLAN.md). No mobile release date or framework has been selected.
 
 ## Contribute and license
 

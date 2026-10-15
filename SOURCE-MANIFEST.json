@@ -37,13 +37,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 1982,
-      "sha256": "ec38263270f495efe7ebcc73ed518a68c71f66a9718cd6ad7c72442a625d418b"
+      "bytes": 2068,
+      "sha256": "b50d88c45d7ea0a1b8b1fe120a81555139ca56fa57dd04891d2c4ba010ea193a"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 794,
-      "sha256": "9c8c5cdf37b1170f83a889bd59e1a40bf1269f59978f0d1cab8d7712bf2cb164"
+      "bytes": 1001,
+      "sha256": "0e43c724858d028bb82ad0fd15731deed1cfa5de25825e1b8643dbb879a2065f"
     },
     {
       "path": "CLAUDE.md",
@@ -72,13 +72,13 @@
     },
     {
       "path": "PACKAGE-CHECKS.json",
-      "bytes": 1343,
-      "sha256": "e969c63eda3a6a91a3692ecdf17be665dc5a8173b1945514e680fdff3184f002"
+      "bytes": 1642,
+      "sha256": "f0fc6e634a6d32c150d471b066d434e0b6c5941e4bc9baa771b53cd97eaafb98"
     },
     {
       "path": "README.md",
-      "bytes": 5114,
-      "sha256": "c7c4f1bc4b1e6e6e31d7c5a865a35691f1d3f7a88b1c7ab3a656ecc6330c54e7"
+      "bytes": 5567,
+      "sha256": "f558350b5a4c4a46e8268834138c586bcec1e8cbdffe5c4347a4708f1bbda4d9"
     },
     {
       "path": "SECURITY.md",
@@ -92,8 +92,8 @@
     },
     {
       "path": "docs/ARCHITECTURE.md",
-      "bytes": 1778,
-      "sha256": "a706a8bfcbd6cd2e2d4856074978237406e0cb81955d0bb604105ab2d12e764b"
+      "bytes": 2291,
+      "sha256": "fa8b194469b9887961305fe330b55fe3ecd7574a9e4125d3d292fe5f077b464b"
     },
     {
       "path": "docs/CODE-INVENTORY.md",
@@ -117,13 +117,18 @@
     },
     {
       "path": "docs/IMPROVEMENTS.md",
-      "bytes": 17485,
-      "sha256": "67c79923aee7d48e0f318e09d0278eb1fa981edc3ee03f3eadfccda0a2adc72b"
+      "bytes": 17992,
+      "sha256": "0b13041bbfeb974481088a8c44c1cb8ff6f630d9969ee28606317a85e6746174"
+    },
+    {
+      "path": "docs/MOBILE-PLAN.md",
+      "bytes": 2939,
+      "sha256": "b058c420be4e40a74f4b97985901aba3b3627f4f82a3ef6dadf7be37653866d2"
     },
     {
       "path": "docs/PLATFORM_GUIDE.md",
-      "bytes": 808,
-      "sha256": "3275208300200b54ffea3b43f1f933ab0b1ad7a7b158cd433a696e1caea2ce47"
+      "bytes": 1461,
+      "sha256": "1a2574e729fb9268ff6083e077f84b9bc0e8337aac0a82db943ecc46f2b679f4"
     },
     {
       "path": "docs/RECOVERY.md",
@@ -137,18 +142,18 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "bytes": 1102,
-      "sha256": "5c51843d65381399d4fbbf88c1defbca5b531dd10e2d1256204eccecf36820fa"
+      "bytes": 1476,
+      "sha256": "8602e9fe76a1a1cec01ef78bb41319eda2a127d8c838e89fbdfe27e2677d2aad"
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 1927,
-      "sha256": "36efbb02818feb41e0fd55fc13e9eb3f154a361b0d43560d85ef156b38652d95"
+      "bytes": 2538,
+      "sha256": "919d7d77a06216c8b91e22c1f7329deec71294974c9862e3ba367f2c6b575d56"
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 8969,
-      "sha256": "e2df3a15d6cba79ee9e869d22469ef2f710b68e0d10dccab8048a9d74fba07f8"
+      "bytes": 9014,
+      "sha256": "497868ff30e841d62116cb59fd3b0431ddc412faf950bb3ec0e70cf22d1b20ab"
     },
     {
       "path": "global.json",

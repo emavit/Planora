@@ -1,6 +1,6 @@
 # How to use Planora
 
-This guide describes the 0.2.1 Windows preview source. Some Microsoft Project functions remain unavailable or only partially supported. macOS is planned and unqualified.
+This guide describes the 0.2.1 Windows preview source. Some Microsoft Project functions remain unavailable or only partially supported. macOS is planned and unqualified. Android and iOS apps are planned after the macOS app is completed and validated; mobile versions are not available yet. [Mobile roadmap](MOBILE-PLAN.md).
 
 ## 1. Start the app
 

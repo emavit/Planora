@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased documentation
+
+- Confirmed future Android and iOS apps after macOS completion and validation; added the mobile roadmap, platform requirements and implementation tasks. Mobile implementation has not started.
+
 ## 0.2.1 — release candidate
 
 - Added durable command history, local recovery checkpoints and previous-generation recovery.

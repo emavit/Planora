@@ -33,5 +33,15 @@
     "caveat": "Pattern scan is not a guarantee that every possible sensitive string is detectable."
   },
   "provenance": "Existing Planora source and local OfficeIMO subset; upstream OfficeIMO commit unknown",
-  "scope": "Folder and archive preparation only; no GitHub upload or remote configured"
+  "scope": "Folder and archive preparation only; no GitHub upload or remote configured",
+  "documentationUpdates": {
+    "date": "2026-10-15",
+    "platformSequence": [
+      "Windows",
+      "macOS completed and validated",
+      "Android and iOS"
+    ],
+    "mobileImplementation": "not started",
+    "scope": "Roadmap/documentation update; application source unchanged"
+  }
 }
