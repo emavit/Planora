@@ -1,0 +1,1982 @@
+[
+  {
+    "Id": 18,
+    "Label": "New",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/New..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 23,
+    "Label": "Open",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Open...",
+      "Menu Bar/File/Open...",
+      "Standard/Open..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 106,
+    "Label": "Close",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Close",
+      "Menu Bar/File/Close"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3,
+    "Label": "Save",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Save",
+      "Standard/Save"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50527,
+    "Label": "Publish",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Publish...",
+      "Collaborate/Publish..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 748,
+    "Label": "Save As",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Save As..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 846,
+    "Label": "Save Workspace",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Save Workspace..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50512,
+    "Label": "Save For Sharing",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Save For Sharing"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 6128,
+    "Label": "Check In",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Check In..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 6127,
+    "Label": "Check Out",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Check Out"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 7799,
+    "Label": "Version History",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Version History..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 247,
+    "Label": "Page Setup",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Page Setup..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 109,
+    "Label": "Print Preview",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Print Preview",
+      "Standard/Print Preview"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 4,
+    "Label": "Print",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Print..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 750,
+    "Label": "Properties",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Properties"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50524,
+    "Label": "Work Offline",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Work Offline"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 752,
+    "Label": "Exit",
+    "Group": "File",
+    "Paths": [
+      "Menu Bar/File/Exit"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 128,
+    "Label": "Undo",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Can't Undo",
+      "Standard/Can't Undo"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 129,
+    "Label": "Redo",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Can't Redo",
+      "Standard/Can't Redo"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 21,
+    "Label": "Cut Cell",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Cut Cell",
+      "Standard/Cut Cell"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 19,
+    "Label": "Copy Cell",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Copy Cell",
+      "Standard/Copy Cell"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 22,
+    "Label": "Paste",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Paste",
+      "Standard/Paste"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 755,
+    "Label": "Paste Special",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Paste Special..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2787,
+    "Label": "Paste as Hyperlink",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Paste as Hyperlink"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 372,
+    "Label": "Down",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Fill/Down"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 371,
+    "Label": "Right",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Fill/Right"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 867,
+    "Label": "Up",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Fill/Up"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 868,
+    "Label": "Left",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Fill/Left"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1964,
+    "Label": "All",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/All"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 368,
+    "Label": "Formats",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/Formats"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 873,
+    "Label": "Contents",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/Contents"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 874,
+    "Label": "Notes",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/Notes"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2955,
+    "Label": "Hyperlinks",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/Hyperlinks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50143,
+    "Label": "Entire Task",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Clear/Entire Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 478,
+    "Label": "Delete Task",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Delete Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2169,
+    "Label": "Link Tasks",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Link Tasks",
+      "Standard/Link Tasks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2137,
+    "Label": "Unlink Tasks",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Unlink Tasks",
+      "Standard/Unlink Tasks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3202,
+    "Label": "Split Task",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Split Task",
+      "Standard/Split Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 141,
+    "Label": "Find",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Find..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 313,
+    "Label": "Replace",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Replace..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 757,
+    "Label": "Go To",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Go To..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 759,
+    "Label": "Links",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Links..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1967,
+    "Label": "Convert",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Edit/Object/Convert..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50291,
+    "Label": "More Views",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/More Views..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50275,
+    "Label": "More Tables",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Table: /More Tables..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 761,
+    "Label": "Standard",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Toolbars/Standard",
+      "Menu Bar/View/Toolbars/Formatting",
+      "Menu Bar/View/Toolbars/ ",
+      "Menu Bar/View/Toolbars/Collaborate",
+      "Menu Bar/View/Toolbars/Custom Forms",
+      "Menu Bar/View/Toolbars/Data Selector",
+      "Menu Bar/View/Toolbars/Drawing",
+      "Menu Bar/View/Toolbars/Help",
+      "Menu Bar/View/Toolbars/Insert From File",
+      "Menu Bar/View/Toolbars/Inspector",
+      "Menu Bar/View/Toolbars/Online Content",
+      "Menu Bar/View/Toolbars/Researcher",
+      "Menu Bar/View/Toolbars/Resource Management",
+      "Menu Bar/View/Toolbars/Smart Lookup",
+      "Menu Bar/View/Toolbars/Tracking",
+      "Menu Bar/View/Toolbars/Visual Basic",
+      "Menu Bar/View/Toolbars/Web"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50531,
+    "Label": "Turn On Project Guide",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Turn On Project Guide"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50293,
+    "Label": "View Bar",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/View Bar"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50503,
+    "Label": "Hide Change Highlighting",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Hide Change Highlighting"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 762,
+    "Label": "Header and Footer",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Header and Footer..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 925,
+    "Label": "Zoom",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/View/Zoom..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 296,
+    "Label": "New Task",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/New Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50428,
+    "Label": "Active Directory",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/New Resource From/Active Directory...",
+      "Resource Management/New Resource From/Active Directory..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 353,
+    "Label": "Address Book",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/New Resource From/Address Book...",
+      "Resource Management/New Resource From/Address Book...",
+      "Resource Management/Address Book..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50418,
+    "Label": "Project Web App",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/New Resource From/Project Web App...",
+      "Resource Management/New Resource From/Project Web App..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 2685,
+    "Label": "Recurring Task",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Recurring Task..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50532,
+    "Label": "Project",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Project..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 297,
+    "Label": "Column",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Column..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 143,
+    "Label": "Insert Page Break",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Insert Page Break"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 204,
+    "Label": "Drawing",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Drawing"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 546,
+    "Label": "Object",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Object..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1576,
+    "Label": "Hyperlink",
+    "Group": "Task",
+    "Paths": [
+      "Menu Bar/Insert/Hyperlink...",
+      "Standard/Hyperlink..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 253,
+    "Label": "Font",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Font..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50317,
+    "Label": "Bar Format",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Bar Format..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50277,
+    "Label": "Timescale",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Timescale..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50221,
+    "Label": "Gridlines",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Gridlines..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2138,
+    "Label": "Gantt Chart Wizard",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Gantt Chart Wizard...",
+      "Formatting/Gantt Chart Wizard..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50241,
+    "Label": "Text Styles",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Text Styles..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50227,
+    "Label": "Bar Styles",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Bar Styles..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50180,
+    "Label": "Layout",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Layout..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50223,
+    "Label": "Layout Now",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Layout Now"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 166,
+    "Label": "Bring to Front",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Drawing/Bring to Front",
+      "Drawing/Draw/Bring to Front"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 167,
+    "Label": "Send To Back",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Drawing/Send To Back",
+      "Drawing/Draw/Send To Back"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50217,
+    "Label": "Properties",
+    "Group": "Format",
+    "Paths": [
+      "Menu Bar/Format/Drawing/Properties"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2,
+    "Label": "Spelling",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Spelling...",
+      "Standard/Spelling..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2978,
+    "Label": "Hangul Hanja Conversion",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Hangul Hanja Conversion..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 793,
+    "Label": "AutoCorrect Options",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/AutoCorrect Options..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50481,
+    "Label": "Document Management",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Document Management"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50183,
+    "Label": "Links Between Projects",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Links Between Projects..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50409,
+    "Label": "Import Outlook Tasks",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Import Outlook Tasks..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50191,
+    "Label": "Change Working Time",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Change Working Time..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2131,
+    "Label": "Assign Resources",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Assign Resources...",
+      "Standard/Assign Resources...",
+      "Resource Management/Assign Resources..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50417,
+    "Label": "Build Team from Enterprise",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Build Team from Enterprise..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50412,
+    "Label": "Substitute Resources",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Substitute Resources...",
+      "Resource Management/Resource Substitution Wizard"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3198,
+    "Label": "Share Resources",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Resource Sharing/Share Resources...",
+      "Resource Management/Share Resources..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3199,
+    "Label": "Update Resource Pool",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Resource Sharing/Update Resource Pool",
+      "Resource Management/Update Resource Pool"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3200,
+    "Label": "Refresh Resource Pool",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Resource Sharing/Refresh Resource Pool",
+      "Resource Management/Refresh Resource Pool"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50196,
+    "Label": "Level Resources",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Level Resources..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2129,
+    "Label": "Update Tasks",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Update Tasks...",
+      "Tracking/Update Tasks..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50202,
+    "Label": "Update Project",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Update Project..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50482,
+    "Label": "Sync to Protected Actuals",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Sync to Protected Actuals"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50210,
+    "Label": "Progress Lines",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Progress Lines..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50203,
+    "Label": "Set Baseline",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Set Baseline..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50309,
+    "Label": "Clear Baseline",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Tracking/Clear Baseline..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 186,
+    "Label": "Macros",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Macro/Macros...",
+      "Visual Basic/Macros..."
+    ],
+    "Reason": "Macros and the Visual Basic editor are not available in this app."
+  },
+  {
+    "Id": 184,
+    "Label": "Record New Macro",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Macro/Record New Macro...",
+      "Visual Basic/Record New Macro..."
+    ],
+    "Reason": "Macros and the Visual Basic editor are not available in this app."
+  },
+  {
+    "Id": 3627,
+    "Label": "Security",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Macro/Security...",
+      "Visual Basic/Security..."
+    ],
+    "Reason": "Macros and the Visual Basic editor are not available in this app."
+  },
+  {
+    "Id": 1695,
+    "Label": "Visual Basic Editor",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Macro/Visual Basic Editor",
+      "Visual Basic/Visual Basic Editor"
+    ],
+    "Reason": "Macros and the Visual Basic editor are not available in this app."
+  },
+  {
+    "Id": 2171,
+    "Label": "Organizer",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Organizer..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 797,
+    "Label": "Toolbars",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Customize/Toolbars..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50271,
+    "Label": "Fields",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Customize/Fields..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2136,
+    "Label": "Forms",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Customize/Forms...",
+      "Custom Forms/Forms..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 522,
+    "Label": "Options",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Options..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50422,
+    "Label": "Microsoft Project Web App Accounts",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Enterprise Options/Microsoft Project Web App Accounts..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50421,
+    "Label": "Open Enterprise Global",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Enterprise Options/Open Enterprise Global"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50413,
+    "Label": "Open Enterprise Resource Pool",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Enterprise Options/Open Enterprise Resource Pool..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50416,
+    "Label": "Import Project to Enterprise",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Enterprise Options/Import Project to Enterprise..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50414,
+    "Label": "Import Resources to Enterprise",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Tools/Enterprise Options/Import Resources to Enterprise..."
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 928,
+    "Label": "Sort by",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Sort/Sort by..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50181,
+    "Label": "More Filters",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Filtered for:  /More Filters..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 899,
+    "Label": "AutoFilter",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Filtered for:  /AutoFilter",
+      "Formatting/AutoFilter"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50310,
+    "Label": "More Groups",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Group by: /More Groups..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50314,
+    "Label": "Customize Group By",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Group by: /Customize Group By..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 133,
+    "Label": "Indent",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Indent",
+      "Formatting/Indent"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 132,
+    "Label": "Outdent",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Outdent",
+      "Formatting/Outdent"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 137,
+    "Label": "Show Subtasks",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show Subtasks",
+      "Formatting/Show Subtasks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 138,
+    "Label": "Hide Subtasks",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Hide Subtasks",
+      "Formatting/Hide Subtasks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3203,
+    "Label": "Hide Assignments",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Hide Assignments",
+      "Formatting/Hide Assignments"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2134,
+    "Label": "All Subtasks",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/All Subtasks",
+      "Formatting/Show/All Subtasks"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 71,
+    "Label": "Outline Level 1",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 1",
+      "Formatting/Show/Outline Level 1"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 72,
+    "Label": "Outline Level 2",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 2",
+      "Formatting/Show/Outline Level 2"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 73,
+    "Label": "Outline Level 3",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 3",
+      "Formatting/Show/Outline Level 3"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 74,
+    "Label": "Outline Level 4",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 4",
+      "Formatting/Show/Outline Level 4"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 75,
+    "Label": "Outline Level 5",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 5",
+      "Formatting/Show/Outline Level 5"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 76,
+    "Label": "Outline Level 6",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 6",
+      "Formatting/Show/Outline Level 6"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 77,
+    "Label": "Outline Level 7",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 7",
+      "Formatting/Show/Outline Level 7"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 78,
+    "Label": "Outline Level 8",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 8",
+      "Formatting/Show/Outline Level 8"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 79,
+    "Label": "Outline Level 9",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Show/Outline Level 9",
+      "Formatting/Show/Outline Level 9"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2135,
+    "Label": "Hide Outline Symbols",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Outline/Hide Outline Symbols"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50303,
+    "Label": "Define Code",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/WBS/Define Code..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50302,
+    "Label": "Renumber",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/WBS/Renumber..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2478,
+    "Label": "Task Information",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Task Information...",
+      "Standard/Task Information..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1758,
+    "Label": "Task Notes",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Task Notes...",
+      "Standard/Task Notes..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50516,
+    "Label": "Task Drivers",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Task Drivers",
+      "Standard/Task Drivers"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50198,
+    "Label": "Project Information",
+    "Group": "Project",
+    "Paths": [
+      "Menu Bar/Project/Project Information..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 6717,
+    "Label": "Visual Reports",
+    "Group": "Report",
+    "Paths": [
+      "Menu Bar/Report/Visual Reports..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2479,
+    "Label": "Copy Picture",
+    "Group": "Report",
+    "Paths": [
+      "Menu Bar/Report/Copy Picture...",
+      "Standard/Copy Picture..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 591,
+    "Label": "Reports",
+    "Group": "Report",
+    "Paths": [
+      "Menu Bar/Report/Reports..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 303,
+    "Label": "New Window",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/Window/New Window..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 298,
+    "Label": "Arrange All",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/Window/Arrange All"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 865,
+    "Label": "Hide",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/Window/Hide"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 866,
+    "Label": "Unhide",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/Window/Unhide..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 302,
+    "Label": "Remove Split",
+    "Group": "View",
+    "Paths": [
+      "Menu Bar/Window/Remove Split"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 984,
+    "Label": "Help",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Help",
+      "Standard/Help"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1004,
+    "Label": "Hide Assistant",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Hide Assistant"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3775,
+    "Label": "Microsoft Office Online",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Microsoft Office Online"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50525,
+    "Label": "Activate Product",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Activate Product..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50476,
+    "Label": "Customer Feedback Options",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Customer Feedback Options..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50530,
+    "Label": "Privacy Statement",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/Privacy Statement"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 927,
+    "Label": "About Microsoft Project",
+    "Group": "Help",
+    "Paths": [
+      "Menu Bar/Help/About Microsoft Project"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1728,
+    "Label": "Font:",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Font:"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 1731,
+    "Label": "Font Size:",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Font Size:"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 113,
+    "Label": "Bold",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Bold"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 114,
+    "Label": "Italic",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Italic"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 115,
+    "Label": "Underline",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Underline"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 120,
+    "Label": "Align Left",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Align Left"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 122,
+    "Label": "Center",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Center"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 121,
+    "Label": "Align Right",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Align Right"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50151,
+    "Label": "Filter:",
+    "Group": "Format",
+    "Paths": [
+      "Formatting/Filter:"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2520,
+    "Label": "New",
+    "Group": "Project",
+    "Paths": [
+      "Standard/New"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2521,
+    "Label": "Print",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Print"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 108,
+    "Label": "Format Painter",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Format Painter"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50397,
+    "Label": "Group By:",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Group By:"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 444,
+    "Label": "Zoom In",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Zoom In"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 445,
+    "Label": "Zoom Out",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Zoom Out"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2168,
+    "Label": "Scroll to Task",
+    "Group": "Project",
+    "Paths": [
+      "Standard/Scroll to Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2098,
+    "Label": "Entry",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Entry"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2096,
+    "Label": "Cost Tracking",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Cost Tracking"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2102,
+    "Label": "Work Tracking",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Work Tracking"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2097,
+    "Label": "Task Earned Value",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Task Earned Value"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2099,
+    "Label": "Schedule Tracking",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Schedule Tracking"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2100,
+    "Label": "Task Relationships",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Task Relationships"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2101,
+    "Label": "Tracking",
+    "Group": "Project",
+    "Paths": [
+      "Custom Forms/Tracking"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 170,
+    "Label": "Bring Forward",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Draw/Bring Forward"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 171,
+    "Label": "Send Backward",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Draw/Send Backward"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 206,
+    "Label": "Edit Points",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Draw/Edit Points"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 130,
+    "Label": "Line",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Line"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 243,
+    "Label": "Arrow",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Arrow"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 412,
+    "Label": "Rectangle",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Rectangle"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 413,
+    "Label": "Oval",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Oval"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 414,
+    "Label": "Arc",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Arc"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 415,
+    "Label": "Polygon",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Polygon"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 139,
+    "Label": "Text Box",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Text Box"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2167,
+    "Label": "Cycle Fill Color",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Cycle Fill Color"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2095,
+    "Label": "Attach to Task",
+    "Group": "Format",
+    "Paths": [
+      "Drawing/Attach to Task"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2114,
+    "Label": "Resource Allocation View",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Resource Allocation View"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2124,
+    "Label": "Task Entry View",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Task Entry View"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2128,
+    "Label": "Go To Next Overallocation",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Go To Next Overallocation"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2132,
+    "Label": "Resource Details",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Resource Details..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 362,
+    "Label": "User Logon Account from Address Book",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/User Logon Account from Address Book"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2127,
+    "Label": "Using Resource",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Using Resource"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2104,
+    "Label": "Leveling Help",
+    "Group": "Resource",
+    "Paths": [
+      "Resource Management/Leveling Help"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2130,
+    "Label": "Project Statistics",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Project Statistics..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2107,
+    "Label": "Update as Scheduled",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Update as Scheduled"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2108,
+    "Label": "Reschedule Work",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Reschedule Work"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 3201,
+    "Label": "Add Progress Line",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Add Progress Line"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2118,
+    "Label": "0% Complete",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/0% Complete"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2119,
+    "Label": "25% Complete",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/25% Complete"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2120,
+    "Label": "50% Complete",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/50% Complete"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2121,
+    "Label": "75% Complete",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/75% Complete"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2122,
+    "Label": "100% Complete",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/100% Complete"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 273,
+    "Label": "Set Reminder",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Set Reminder..."
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 2126,
+    "Label": "Collaborate Toolbar",
+    "Group": "Project",
+    "Paths": [
+      "Tracking/Collaborate Toolbar"
+    ],
+    "Reason": "Not implemented in this version."
+  },
+  {
+    "Id": 50427,
+    "Label": "Update Project Progress",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Update Project Progress"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50430,
+    "Label": "Project Center",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Project Center"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50431,
+    "Label": "Resource Center",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Resource Center"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 3894,
+    "Label": "Data Analysis",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Data Analysis"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 5769,
+    "Label": "Documents",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Documents"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50429,
+    "Label": "Issues",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Issues"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50526,
+    "Label": "Status Reports",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Status Reports"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 50483,
+    "Label": "Risks",
+    "Group": "Project",
+    "Paths": [
+      "Collaborate/Risks"
+    ],
+    "Reason": "Requires an online Microsoft Project service."
+  },
+  {
+    "Id": 3746,
+    "Label": "Envelope",
+    "Group": "Project",
+    "Paths": [
+      "Envelope/Envelope"
+    ],
+    "Reason": "Not implemented in this version."
+  }
+]

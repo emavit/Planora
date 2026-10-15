@@ -1,0 +1,368 @@
+[CmdletBinding()]
+param(
+    [string] $RepositoryRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path,
+    [string] $CatalogPath = '',
+    [string] $JsonOutputPath = ''
+)
+
+$ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($CatalogPath)) {
+    $CatalogPath = Join-Path $RepositoryRoot 'Website\data\documentation_catalog.json'
+}
+
+$libraryHostPath = Join-Path $RepositoryRoot 'OfficeIMO.All.AotSmoke\OfficeIMO.All.AotSmoke.csproj'
+[xml] $libraryHost = Get-Content -LiteralPath $libraryHostPath -Raw
+
+$referencedLibraries = @($libraryHost.Project.ItemGroup.ProjectReference |
+    Where-Object { [string] $_.ReferenceOutputAssembly -ne 'false' } |
+    ForEach-Object { [string] $_.Include } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_.Replace('\', '/')) } |
+    Sort-Object -Unique)
+$rootedLibraries = @($libraryHost.Project.ItemGroup.TrimmerRootAssembly |
+    ForEach-Object { [string] $_.Include } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    Sort-Object -Unique)
+$securityHostPath = Join-Path $RepositoryRoot 'OfficeIMO.Security.AotSmoke\OfficeIMO.Security.AotSmoke.csproj'
+[xml] $securityHost = Get-Content -LiteralPath $securityHostPath -Raw
+$securityRootedLibraries = @($securityHost.Project.ItemGroup.ProjectReference |
+    ForEach-Object { [string] $_.Include } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_.Replace('\', '/')) } |
+    Sort-Object -Unique)
+$c2paHostPath = Join-Path $RepositoryRoot 'OfficeIMO.Provenance.C2pa.AotSmoke\OfficeIMO.Provenance.C2pa.AotSmoke.csproj'
+[xml] $c2paHost = Get-Content -LiteralPath $c2paHostPath -Raw
+$c2paRootedLibraries = @($c2paHost.Project.ItemGroup.ProjectReference |
+    ForEach-Object { [string] $_.Include } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_.Replace('\', '/')) } |
+    Sort-Object -Unique)
+$fullyRootedLibraries = @($rootedLibraries + $securityRootedLibraries + $c2paRootedLibraries | Sort-Object -Unique)
+$boundedLibraries = @($referencedLibraries | Where-Object { $_ -notin $rootedLibraries })
+
+$nativeTools = @(
+    [ordered]@{
+        name = 'OfficeIMO.Tool'
+        evidence = 'The unified native executable starts and exposes namespaced HTML, Reader, and Markup commands.'
+    }
+)
+$nativeDrivers = @(
+    [ordered]@{
+        name = 'OfficeIMO.Odbc'
+        evidence = 'The optional Windows x64 shared library publishes with NativeAOT and executes through Windows ODBC manager and an independent System.Data.Odbc client in the Excel ODBC contracts workflow.'
+    }
+)
+$nonNativeValidated = @(
+    [ordered]@{
+        name = 'OfficeIMO.Archives'
+        classification = 'managed-cross-platform'
+        evidence = 'Cabinet and passive MSI extraction uses managed .NET and is qualified through bounded extraction and malformed-input contracts; no NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Reader.Dbf'
+        classification = 'managed-cross-platform'
+        evidence = 'DBF ingestion is qualified through managed .NET 8 and 10 extraction and CSV/XLSX conversion tests; the DBAClientX.Dbf owner and Reader adapter are not rooted in a NativeAOT qualification host.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Chm'
+        classification = 'managed-cross-platform'
+        evidence = 'Bounded CHM archive reading is qualified through managed .NET 8 and 10 contracts and independent entry extraction; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Chm.Markdown'
+        classification = 'managed-cross-platform'
+        evidence = 'The CHM Markdown adapter is qualified through managed .NET 8 and 10 conversion contracts; no complete-adapter NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Chm.Epub'
+        classification = 'managed-cross-platform'
+        evidence = 'The CHM EPUB adapter is qualified through managed conversion contracts, reopened publications and EPUBCheck; no complete-adapter NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Chm.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'The CHM PDF adapter is qualified through managed conversion and reopened artifact tests; the PDF owner NativeAOT host does not qualify the complete adapter.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Reader.Chm'
+        classification = 'managed-cross-platform'
+        evidence = 'The modular CHM Reader adapter is qualified through managed extraction and registration contracts; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.OpenDocument.Odg.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'The Draw PDF bridge is qualified through managed conversion tests and packed .NET consumers; no complete-bridge NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Access'
+        classification = 'managed-cross-platform'
+        evidence = 'Native MDB/ACCDB reading, inert application inspection, unchanged preservation and Jet 4/ACE 12 creation are qualified through managed .NET tests and independent Access/DAO evidence; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Publisher'
+        classification = 'managed-cross-platform'
+        evidence = 'Bounded native Publisher decoding, styled text flow and page SVG reconstruction are qualified through managed .NET tests and independent-producer fixtures; no dedicated whole-library NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Publisher.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'The Publisher PDF bridge is qualified through managed conversion tests and packed .NET consumers; the PDF owner NativeAOT host does not qualify the complete bridge.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Reader.Publisher'
+        classification = 'managed-cross-platform'
+        evidence = 'The modular Publisher Reader adapter is qualified through managed extraction, registration, transport and packed-consumer tests; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.DjVu'
+        classification = 'managed-cross-platform'
+        evidence = 'Managed DjVu source, Reader and searchable PDF contracts are qualified through .NET tests and independent artifact comparisons; no complete NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.DjVu.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'Managed DjVu source, Reader and searchable PDF contracts are qualified through .NET tests and independent artifact comparisons; no complete NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Reader.DjVu'
+        classification = 'managed-cross-platform'
+        evidence = 'Managed DjVu source, Reader and searchable PDF contracts are qualified through .NET tests and independent artifact comparisons; no complete NativeAOT qualification is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Xps'
+        classification = 'managed-cross-platform'
+        evidence = 'XPS/OpenXPS lifecycle and rendering are qualified through managed .NET tests; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Xps.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'The optional XPS PDF bridge is qualified through managed conversion and artifact tests; the PDF owner NativeAOT host does not qualify the complete bridge.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Reader.Xps'
+        classification = 'managed-cross-platform'
+        evidence = 'The modular XPS Reader adapter is qualified through managed extraction and registration tests; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.ChartForgeX.Markdown'
+        classification = 'managed-cross-platform'
+        evidence = 'Static Mermaid Word/PDF/HTML/PowerPoint integration, packed .NET 8 and 10 consumers and .NET Framework 4.7.2 cross-compilation are validated; complete adapter NativeAOT qualification is separate.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Browser'
+        classification = 'managed-cross-platform'
+        evidence = 'Embedded JavaScript assets and content hashes are qualified by managed tests and packed .NET 8 and 10 consumers; no NativeAOT host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Workflows.IWork'
+        classification = 'managed-cross-platform'
+        evidence = 'Opt-in iWork workflow routes are qualified through managed .NET 8 and 10 tests; destination converter NativeAOT evidence does not qualify the complete workflow surface.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Invoicing.KSeF'
+        classification = 'managed-cross-platform'
+        evidence = 'KSeF transport, cryptography and receipt contracts are qualified through managed .NET 8 and 10 tests; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Project'
+        classification = 'managed-cross-platform'
+        evidence = 'Project has managed cross-platform coverage and bounded Linux NativeAOT lifecycle smoke evidence; the complete library is not rooted in the coordinated NativeAOT qualification hosts.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Invoicing.Pdf'
+        classification = 'managed-cross-platform'
+        evidence = 'The optional typed invoice PDF adapter is qualified through managed .NET artifact tests; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Invoicing.Validation'
+        classification = 'managed-cross-platform'
+        evidence = 'Pinned XML schema and Java/Saxon business-rule validation are qualified through managed .NET tests; no NativeAOT contract is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Invoicing'
+        classification = 'managed-cross-platform'
+        evidence = 'Electronic invoice contracts are validated by managed .NET suites; no dedicated NativeAOT qualification host is claimed.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.AI'
+        classification = 'managed-cross-platform'
+        evidence = 'The document AI engine targets managed .NET 10 and is validated by its engine contract suite; it has no NativeAOT qualification host.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.AI.IntelligenceX'
+        classification = 'managed-cross-platform'
+        evidence = 'The optional IntelligenceX transport adapter targets managed .NET 10; the SDK dependency is not qualified by the repository NativeAOT hosts.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.AI.Example'
+        classification = 'managed-cross-platform'
+        evidence = 'The document assistant example is a managed .NET 10 executable and is not distributed as a NativeAOT application.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Html.Pdf.Browser'
+        classification = 'managed-cross-platform'
+        evidence = 'The optional Chromium bridge builds and executes as managed code on supported operating systems; its HtmlTinkerX and Playwright browser runtime is not advertised as NativeAOT-compatible.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Html.Pdf.Workbench'
+        classification = 'managed-cross-platform'
+        evidence = 'The local ASP.NET Core workbench is validated as a managed browser-hosted tool and is not distributed or advertised as NativeAOT-compatible.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Studio.Core'
+        classification = 'managed-cross-platform'
+        evidence = 'The UI-independent Studio core targets managed .NET 10 and passes trim and AOT analyzers; it is not rooted in a NativeAOT qualification host.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Studio'
+        classification = 'managed-cross-platform'
+        evidence = 'The Avalonia desktop application is distributed through managed cross-platform publish profiles and is not advertised as NativeAOT-compatible.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.Studio.iOS'
+        classification = 'ios-host-unqualified'
+        evidence = 'The Avalonia iPhone and iPad host has Debug ARM64 simulator evidence. Release trimming, device AOT, signing and physical-device acceptance remain unqualified; the simulator interpreter does not establish NativeAOT compatibility.'
+    }
+    [ordered]@{
+        name = 'OfficeIMO.MarkdownRenderer.Wpf'
+        classification = 'managed-windows'
+        evidence = 'WPF executable publishing rejects trimming with NETSDK1168; validate this UI package with the managed Windows test lane.'
+    }
+)
+$buildAnalyzers = @(
+    [ordered]@{
+        name = 'OfficeIMO.Data.Generators'
+        evidence = 'The analyzer generates an explicit row-mapping plan that compiles into and executes from the main NativeAOT host; the analyzer itself is a build-time component, not a runtime assembly.'
+    }
+)
+
+if ($securityRootedLibraries.Count -ne 1 -or $securityRootedLibraries[0] -ne 'OfficeIMO.Security') {
+    throw "The optional security NativeAOT host must root exactly OfficeIMO.Security; found $($securityRootedLibraries -join ', ')."
+}
+if ($c2paRootedLibraries.Count -ne 1 -or $c2paRootedLibraries[0] -ne 'OfficeIMO.Provenance.C2pa') {
+    throw "The optional C2PA NativeAOT host must root exactly OfficeIMO.Provenance.C2pa; found $($c2paRootedLibraries -join ', ')."
+}
+if ($fullyRootedLibraries.Count -ne 114) {
+    throw "Expected 114 fully rooted production libraries across the ordinary and optional-adapter hosts, found $($fullyRootedLibraries.Count)."
+}
+if ($boundedLibraries.Count -ne 1 -or $boundedLibraries[0] -ne 'OfficeIMO.GoogleWorkspace.Auth.GoogleApis') {
+    throw "The bounded NativeAOT library set changed: $($boundedLibraries -join ', ')."
+}
+
+$catalog = Get-Content -LiteralPath $CatalogPath -Raw | ConvertFrom-Json
+$productionNames = @($catalog.components.name | Sort-Object -Unique)
+$classifiedNames = @(
+    $fullyRootedLibraries
+    $boundedLibraries
+    $nativeTools.name
+    $nativeDrivers.name
+    $nonNativeValidated.name
+    $buildAnalyzers.name
+) | Sort-Object -Unique
+
+$missing = @(Compare-Object -ReferenceObject $productionNames -DifferenceObject $classifiedNames |
+    Where-Object SideIndicator -EQ '<=' |
+    ForEach-Object InputObject)
+$unexpected = @(Compare-Object -ReferenceObject $productionNames -DifferenceObject $classifiedNames |
+    Where-Object SideIndicator -EQ '=>' |
+    ForEach-Object InputObject)
+if ($missing.Count -gt 0 -or $unexpected.Count -gt 0) {
+    throw "NativeAOT coverage does not match the production catalog. Missing: $($missing -join ', '); unexpected: $($unexpected -join ', ')."
+}
+
+$components = foreach ($component in @($catalog.components | Sort-Object name)) {
+    $name = [string] $component.name
+    if ($name -in $rootedLibraries) {
+        $classification = 'native-full-surface'
+        $nativeValidated = $true
+        $evidence = 'The complete assembly is rooted in the cross-platform NativeAOT host, compiled into native code, and the host starts successfully.'
+    } elseif ($name -in $securityRootedLibraries) {
+        $classification = 'native-full-surface'
+        $nativeValidated = $true
+        $evidence = 'The optional security provider is rooted in its dedicated NativeAOT host, then executes CMS and XML DSig signing and verification without changing the ordinary format-consumer graph.'
+    } elseif ($name -in $c2paRootedLibraries) {
+        $classification = 'native-full-surface'
+        $nativeValidated = $true
+        $evidence = 'The optional C2PA process adapter is rooted in its dedicated NativeAOT host and exercises the provider-unavailable boundary without adding it to the ordinary format or security dependency graph.'
+    } elseif ($name -eq 'OfficeIMO.GoogleWorkspace.Auth.GoogleApis') {
+        $classification = 'native-bounded-workflow'
+        $nativeValidated = $true
+        $evidence = 'The token-store adapter round-trips from the native host. Google authorization APIs remain subject to Google.Apis and Newtonsoft.Json trimming warnings when the entire dependency is rooted.'
+    } elseif ($name -in $nativeTools.name) {
+        $classification = 'native-executable'
+        $nativeValidated = $true
+        $evidence = [string] ($nativeTools | Where-Object name -EQ $name).evidence
+    } elseif ($name -in $nativeDrivers.name) {
+        $classification = 'native-windows-driver'
+        $nativeValidated = $true
+        $evidence = [string] ($nativeDrivers | Where-Object name -EQ $name).evidence
+    } elseif ($name -in $buildAnalyzers.name) {
+        $classification = 'native-build-analyzer'
+        $nativeValidated = $true
+        $evidence = [string] ($buildAnalyzers | Where-Object name -EQ $name).evidence
+    } elseif ($name -in $nonNativeValidated.name) {
+        $nonNativeEntry = @($nonNativeValidated | Where-Object name -EQ $name)[0]
+        $classification = [string] $nonNativeEntry.classification
+        $nativeValidated = $false
+        $evidence = [string] $nonNativeEntry.evidence
+    } else {
+        throw "Production project '$name' has no NativeAOT classification."
+    }
+
+    [ordered]@{
+        name = $name
+        category = [string] $component.category
+        classification = $classification
+        nativeAotValidated = $nativeValidated
+        evidence = $evidence
+    }
+}
+
+$matrix = [ordered]@{
+    schemaVersion = 1
+    format = 'officeimo.nativeaot-project-matrix'
+    summary = [ordered]@{
+        productionProjectCount = $productionNames.Count
+        nativeAotValidatedProjectCount = @($components | Where-Object nativeAotValidated).Count
+        fullyRootedLibraryCount = $fullyRootedLibraries.Count
+        boundedWorkflowLibraryCount = $boundedLibraries.Count
+        nativeExecutableCount = $nativeTools.Count
+        nativeWindowsDriverCount = $nativeDrivers.Count
+        nativeBuildAnalyzerCount = $buildAnalyzers.Count
+        managedCrossPlatformProjectCount = @($nonNativeValidated | Where-Object classification -EQ 'managed-cross-platform').Count
+        managedWindowsProjectCount = @($nonNativeValidated | Where-Object classification -EQ 'managed-windows').Count
+        iosHostUnqualifiedProjectCount = @($nonNativeValidated | Where-Object classification -EQ 'ios-host-unqualified').Count
+    }
+    definitions = [ordered]@{
+        nativeFullSurface = 'The production library is retained as a complete assembly in the NativeAOT compile graph.'
+        nativeBoundedWorkflow = 'A customer-facing workflow publishes and runs natively, but the complete optional third-party dependency surface is not claimed.'
+        nativeExecutable = 'The production CLI publishes as a native executable and starts successfully.'
+        nativeWindowsDriver = 'The Windows x64 shared library publishes with NativeAOT and executes through the operating system driver manager.'
+        nativeBuildAnalyzer = 'The build-time analyzer emits code that compiles into and executes from a NativeAOT consumer; the analyzer is not deployed as a runtime assembly.'
+        managedCrossPlatform = 'The package is validated in its supported cross-platform managed deployment model rather than advertised for NativeAOT.'
+        managedWindows = 'The package is validated in its supported managed Windows deployment model rather than advertised for NativeAOT.'
+        iosHostUnqualified = 'The iOS host has simulator evidence, without Release trimming, device AOT, signing or physical-device qualification.'
+    }
+    components = @($components)
+}
+
+if (-not [string]::IsNullOrWhiteSpace($JsonOutputPath)) {
+    $resolvedOutputPath = [System.IO.Path]::GetFullPath($JsonOutputPath)
+    New-Item -ItemType Directory -Path (Split-Path -Parent $resolvedOutputPath) -Force | Out-Null
+    $json = ($matrix | ConvertTo-Json -Depth 8).Replace("`r`n", "`n") + "`n"
+    [System.IO.File]::WriteAllText($resolvedOutputPath, $json, [System.Text.UTF8Encoding]::new($false))
+}
+
+[pscustomobject]@{
+    ProductionProjectCount = $matrix.summary.productionProjectCount
+    NativeAotValidatedProjectCount = $matrix.summary.nativeAotValidatedProjectCount
+    FullyRootedLibraryCount = $matrix.summary.fullyRootedLibraryCount
+    BoundedWorkflowLibraryCount = $matrix.summary.boundedWorkflowLibraryCount
+    NativeExecutableCount = $matrix.summary.nativeExecutableCount
+    NativeBuildAnalyzerCount = $matrix.summary.nativeBuildAnalyzerCount
+    ManagedCrossPlatformProjectCount = $matrix.summary.managedCrossPlatformProjectCount
+    ManagedWindowsProjectCount = $matrix.summary.managedWindowsProjectCount
+    IosHostUnqualifiedProjectCount = $matrix.summary.iosHostUnqualifiedProjectCount
+    Status = 'passed'
+}

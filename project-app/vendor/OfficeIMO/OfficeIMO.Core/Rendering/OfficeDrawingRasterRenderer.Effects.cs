@@ -1,0 +1,375 @@
+namespace OfficeIMO.Drawing;
+
+public static partial class OfficeDrawingRasterRenderer {
+    private static void RenderEffectGroup(
+        OfficeRasterCanvas canvas,
+        OfficeDrawingEffectGroup effectGroup,
+        double scale,
+        IOfficeRasterImageCodec? imageCodec,
+        long maximumRasterPixels,
+        System.Threading.CancellationToken cancellationToken) {
+        if (effectGroup.Opacity <= 0D) return;
+        canvas = canvas.WithDrawingTextProfile(effectGroup.InnerDrawing);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!effectGroup.Transform.TryInvert(out _)) return;
+        EffectTextLayerPlan layerPlan = PlanEffectTextLayer(effectGroup, canvas, scale,
+            canvas.CoordinateScaleX, canvas.CoordinateScaleY);
+        double scaleX = layerPlan.ScaleX, scaleY = layerPlan.ScaleY;
+        double layerScale = System.Math.Max(scaleX, scaleY);
+        if (scaleX <= 0D || scaleY <= 0D) return;
+        double width = System.Math.Ceiling(layerPlan.Drawing.Width * scaleX);
+        double height = System.Math.Ceiling(layerPlan.Drawing.Height * scaleY);
+        OfficeTransform transform = OfficeTransform.Translate(layerPlan.Left, 0D).Then(effectGroup.Transform);
+        OfficeTransform pixelTransform = new OfficeTransform(
+            transform.M11 * scale / scaleX, transform.M12 * scale / scaleX,
+            transform.M21 * scale / scaleY, transform.M22 * scale / scaleY,
+            transform.OffsetX * scale, transform.OffsetY * scale);
+        // Cull the complete expanded and rounded layer before charging storage.
+        if (!double.IsInfinity(width) && !double.IsInfinity(height) &&
+            !canvas.IntersectsVisibleSurface(pixelTransform, width, height, includePartialCoverage: layerPlan.Interpolate)) return;
+        if (width > long.MaxValue || height > long.MaxValue || width * height > long.MaxValue) {
+            throw new OfficeImageExportLimitException(layerScale, long.MaxValue, maximumRasterPixels,
+                OfficeRasterImageEncoder.GetMaximumDimension(OfficeImageExportFormat.Png));
+        }
+        canvas.ChargeIntermediateSurfacePixels((long)width * (long)height, maximumRasterPixels);
+        OfficeRasterImage layer = RenderEffectLayer(layerPlan.Drawing, canvas, scaleX, scaleY,
+            imageCodec, maximumRasterPixels, cancellationToken);
+        if (effectGroup.SoftMask != null) {
+            layer = ApplySoftMask(
+                layer,
+                effectGroup.SoftMask,
+                layerPlan.Left,
+                canvas.Fonts,
+                scaleX, scaleY,
+                imageCodec,
+                canvas.TextShapingProvider,
+                canvas.TextShapingLanguage,
+                canvas.DiagnosticSink,
+                canvas.DiagnosticSource,
+                canvas.TransformedTextBudget,
+                maximumRasterPixels,
+                cancellationToken);
+        }
+        canvas.DrawAffineImage(layer, pixelTransform, effectGroup.Opacity, effectGroup.BlendMode, layerPlan.Interpolate);
+    }
+
+    private static OfficeRasterImage RenderEffectLayer(OfficeDrawing drawing, OfficeRasterCanvas canvas,
+        double scaleX, double scaleY, IOfficeRasterImageCodec? imageCodec, long maximumRasterPixels,
+        System.Threading.CancellationToken cancellationToken) =>
+        RenderCore(drawing, new OfficeDrawingRasterRenderOptions {
+            Scale = System.Math.Max(scaleX, scaleY),
+            ImageCodec = imageCodec,
+            TextShapingProvider = canvas.TextShapingProvider,
+            TextShapingLanguage = canvas.TextShapingLanguage,
+            DiagnosticSink = canvas.DiagnosticSink,
+            DiagnosticSource = canvas.DiagnosticSource,
+            TransformedTextBudget = canvas.TransformedTextBudget,
+            MaximumRasterPixels = maximumRasterPixels,
+            CancellationToken = cancellationToken
+        }, scaleX, scaleY, fonts: canvas.Fonts);
+
+    private static (double X, double Y) GetEffectAxisScales(OfficeTransform transform, double parentX, double parentY) {
+        double a = transform.M11 * parentX, b = transform.M12 * parentY;
+        double c = transform.M21 * parentX, d = transform.M22 * parentY;
+        double maximumX = System.Math.Max(System.Math.Abs(a), System.Math.Abs(b));
+        double maximumY = System.Math.Max(System.Math.Abs(c), System.Math.Abs(d));
+        a /= maximumX; b /= maximumX; c /= maximumY; d /= maximumY;
+        double x = System.Math.Sqrt(a * a + b * b), y = System.Math.Sqrt(c * c + d * d);
+        // Normalized columns have largest singular value sqrt(1 + |dot|).
+        // This bounded shear factor prevents undersampling without imposing one
+        // axis's potentially enormous stretch on the other orthogonal axis.
+        double correlation = System.Math.Min(1D, System.Math.Abs((a / x) * (c / y) + (b / x) * (d / y)));
+        if (correlation < 1E-12D) correlation = 0D;
+        double shear = System.Math.Sqrt(1D + correlation);
+        return (NormalizeAxisDensity(maximumX * x * shear), NormalizeAxisDensity(maximumY * y * shear));
+    }
+
+    private static double NormalizeAxisDensity(double value) {
+        // Rotating an exact unit (or integer) density can introduce a few ulps
+        // of norm error. Do not let that error add a whole row and column.
+        const double roundingTolerance = 4D * 2.2204460492503131E-16D;
+        double nearest = System.Math.Round(value);
+        return nearest > 0D && System.Math.Abs(value - nearest) <= value * roundingTolerance ? nearest : value;
+    }
+    private static bool ContainsNonInterpolatedImage(OfficeDrawing drawing) {
+        return ContainsNonInterpolatedImage(
+            drawing,
+            visibleBounds: null,
+            new SamplingInspectionContext(System.Threading.CancellationToken.None));
+    }
+
+    private static bool ContainsNonInterpolatedImage(
+        OfficeDrawing drawing,
+        (double Left, double Top, double Right, double Bottom)? visibleBounds,
+        SamplingInspectionContext inspection) {
+        if (!visibleBounds.HasValue) return ContainsAnyNonInterpolatedImage(drawing, inspection);
+        if (!ContainsAnyNonInterpolatedImage(drawing, inspection)) return false;
+        for (int index = 0; index < drawing.Elements.Count; index++) {
+            if (!inspection.TryConsume()) return true;
+            OfficeDrawingElement element = drawing.Elements[index];
+            if (element is OfficeDrawingImage { Interpolate: false, Opacity: > 0D } image &&
+                IntersectsVisibleBounds(image.Projection.GetDestinationBounds(), visibleBounds)) return true;
+            if (element is OfficeDrawingGroup group && ContainsVisibleNonInterpolatedImage(group, visibleBounds, inspection)) return true;
+            if (element is OfficeDrawingEffectGroup { Opacity: > 0D } effectGroup &&
+                ContainsVisibleNonInterpolatedImage(effectGroup, visibleBounds, inspection)) return true;
+            if (element is OfficeDrawingTilingPattern { Opacity: > 0D } pattern &&
+                ContainsVisibleNonInterpolatedImage(pattern, visibleBounds, inspection)) return true;
+        }
+
+        return false;
+    }
+
+    private static bool ContainsVisibleNonInterpolatedImage(
+        OfficeDrawingGroup group,
+        (double Left, double Top, double Right, double Bottom)? parentVisibleBounds,
+        SamplingInspectionContext inspection) {
+        if (group.ClipPath.Kind == OfficeClipPathKind.Empty || group.ClipPath.Width <= 0D || group.ClipPath.Height <= 0D) return false;
+        var groupBounds = (
+            Left: group.X,
+            Top: group.Y,
+            Right: group.X + group.ClipPath.Width,
+            Bottom: group.Y + group.ClipPath.Height);
+        (double Left, double Top, double Right, double Bottom)? effectiveParentBounds = parentVisibleBounds;
+        if (parentVisibleBounds.HasValue && group.FrameTransform.HasValue && group.FrameTransform.Value.HasTransform) {
+            OfficeTransform frameTransform = group.FrameTransform.Value.CreateDestinationTransform();
+            var transformedGroupBounds = frameTransform.TransformRectangleBounds(
+                group.X,
+                group.Y,
+                group.ClipPath.Width,
+                group.ClipPath.Height);
+            if (!TryIntersectBounds(transformedGroupBounds, parentVisibleBounds, out var transformedVisibleBounds) ||
+                !frameTransform.TryInvert(out OfficeTransform inverseFrameTransform)) return false;
+            effectiveParentBounds = inverseFrameTransform.TransformRectangleBounds(
+                transformedVisibleBounds.Left,
+                transformedVisibleBounds.Top,
+                transformedVisibleBounds.Right - transformedVisibleBounds.Left,
+                transformedVisibleBounds.Bottom - transformedVisibleBounds.Top);
+        }
+
+        if (!TryIntersectBounds(groupBounds, effectiveParentBounds, out var visibleGroupBounds)) return false;
+
+        double contentX = group.X + group.ContentOffsetX;
+        double contentY = group.Y + group.ContentOffsetY;
+        var childVisibleBounds = (
+            Left: visibleGroupBounds.Left - contentX,
+            Top: visibleGroupBounds.Top - contentY,
+            Right: visibleGroupBounds.Right - contentX,
+            Bottom: visibleGroupBounds.Bottom - contentY);
+        return ContainsNonInterpolatedImage(group.InnerDrawing, childVisibleBounds, inspection);
+    }
+
+    private static bool ContainsVisibleNonInterpolatedImage(
+        OfficeDrawingEffectGroup effectGroup,
+        (double Left, double Top, double Right, double Bottom)? parentVisibleBounds,
+        SamplingInspectionContext inspection) {
+        if (!parentVisibleBounds.HasValue) {
+            return ContainsAnyNonInterpolatedImage(effectGroup.InnerDrawing, inspection) ||
+                (effectGroup.SoftMask != null && ContainsAnyNonInterpolatedImage(effectGroup.SoftMask.InnerDrawing, inspection));
+        }
+
+        OfficeDrawing inner = effectGroup.InnerDrawing;
+        var transformedBounds = effectGroup.Transform.TransformRectangleBounds(0D, 0D, inner.Width, inner.Height);
+        if (!TryIntersectBounds(transformedBounds, parentVisibleBounds, out var transformedVisibleBounds) ||
+            !effectGroup.Transform.TryInvert(out OfficeTransform inverseTransform)) return false;
+        var childVisibleBounds = inverseTransform.TransformRectangleBounds(
+            transformedVisibleBounds.Left,
+            transformedVisibleBounds.Top,
+            transformedVisibleBounds.Right - transformedVisibleBounds.Left,
+            transformedVisibleBounds.Bottom - transformedVisibleBounds.Top);
+        return ContainsNonInterpolatedImage(inner, childVisibleBounds, inspection) ||
+            (effectGroup.SoftMask != null && ContainsVisibleNonInterpolatedImage(effectGroup.SoftMask, childVisibleBounds, inspection));
+    }
+
+    private static bool ContainsVisibleNonInterpolatedImage(
+        OfficeDrawingSoftMask softMask,
+        (double Left, double Top, double Right, double Bottom)? parentVisibleBounds,
+        SamplingInspectionContext inspection) {
+        if (!parentVisibleBounds.HasValue) return ContainsAnyNonInterpolatedImage(softMask.InnerDrawing, inspection);
+        OfficeDrawing inner = softMask.InnerDrawing;
+        var transformedBounds = softMask.Transform.TransformRectangleBounds(0D, 0D, inner.Width, inner.Height);
+        if (!TryIntersectBounds(transformedBounds, parentVisibleBounds, out var transformedVisibleBounds) ||
+            !softMask.Transform.TryInvert(out OfficeTransform inverseTransform)) return false;
+        var childVisibleBounds = inverseTransform.TransformRectangleBounds(
+            transformedVisibleBounds.Left,
+            transformedVisibleBounds.Top,
+            transformedVisibleBounds.Right - transformedVisibleBounds.Left,
+            transformedVisibleBounds.Bottom - transformedVisibleBounds.Top);
+        return ContainsNonInterpolatedImage(inner, childVisibleBounds, inspection);
+    }
+
+    private static bool ContainsVisibleNonInterpolatedImage(
+        OfficeDrawingTilingPattern pattern,
+        (double Left, double Top, double Right, double Bottom)? parentVisibleBounds,
+        SamplingInspectionContext inspection) {
+        if (pattern.Area.Width <= 0D || pattern.Area.Height <= 0D) return false;
+        if (!ContainsAnyNonInterpolatedImage(pattern.InnerTile, inspection)) return false;
+        if (!parentVisibleBounds.HasValue) return true;
+        var patternBounds = (
+            Left: pattern.Area.X,
+            Top: pattern.Area.Y,
+            Right: pattern.Area.X + pattern.Area.Width,
+            Bottom: pattern.Area.Y + pattern.Area.Height);
+        if (!TryIntersectBounds(patternBounds, parentVisibleBounds, out var visiblePatternBounds)) return false;
+
+        OfficeDrawing tile = pattern.InnerTile;
+        System.Collections.Generic.IReadOnlyList<OfficeTransform> transforms = pattern.GetTileTransforms(pattern.MaximumTileCount);
+        for (int index = 0; index < transforms.Count; index++) {
+            if (!inspection.TryConsume()) return true;
+            OfficeTransform transform = transforms[index];
+            var transformedTileBounds = transform.TransformRectangleBounds(0D, 0D, tile.Width, tile.Height);
+            if (!TryIntersectBounds(transformedTileBounds, visiblePatternBounds, out var transformedVisibleBounds) ||
+                !transform.TryInvert(out OfficeTransform inverseTransform)) continue;
+            var tileVisibleBounds = inverseTransform.TransformRectangleBounds(
+                transformedVisibleBounds.Left,
+                transformedVisibleBounds.Top,
+                transformedVisibleBounds.Right - transformedVisibleBounds.Left,
+                transformedVisibleBounds.Bottom - transformedVisibleBounds.Top);
+            if (ContainsNonInterpolatedImage(tile, tileVisibleBounds, inspection)) return true;
+        }
+
+        return false;
+    }
+
+    private static bool ContainsAnyNonInterpolatedImage(
+        OfficeDrawing drawing,
+        SamplingInspectionContext inspection) {
+        if (inspection.TryGetCached(drawing, out bool cached)) return cached;
+        inspection.Cache(drawing, value: true);
+        for (int index = 0; index < drawing.Elements.Count; index++) {
+            if (!inspection.TryConsume()) return true;
+            OfficeDrawingElement element = drawing.Elements[index];
+            if (element is OfficeDrawingImage { Interpolate: false, Opacity: > 0D }) return true;
+            if (element is OfficeDrawingGroup group && ContainsAnyNonInterpolatedImage(group.InnerDrawing, inspection)) return true;
+            if (element is OfficeDrawingEffectGroup { Opacity: > 0D } effectGroup &&
+                (ContainsAnyNonInterpolatedImage(effectGroup.InnerDrawing, inspection) ||
+                 effectGroup.SoftMask != null && ContainsAnyNonInterpolatedImage(effectGroup.SoftMask.InnerDrawing, inspection))) return true;
+            if (element is OfficeDrawingTilingPattern { Opacity: > 0D } pattern &&
+                ContainsAnyNonInterpolatedImage(pattern.InnerTile, inspection)) return true;
+        }
+
+        inspection.Cache(drawing, value: false);
+        return false;
+    }
+
+    private sealed class SamplingInspectionContext {
+        private const long MaximumWork = 1_000_000L;
+        private readonly System.Collections.Generic.Dictionary<OfficeDrawing, bool> _drawingResults = new System.Collections.Generic.Dictionary<OfficeDrawing, bool>();
+        private readonly System.Threading.CancellationToken _cancellationToken;
+        private long _work;
+
+        internal SamplingInspectionContext(System.Threading.CancellationToken cancellationToken) {
+            _cancellationToken = cancellationToken;
+        }
+
+        internal bool TryConsume() {
+            _cancellationToken.ThrowIfCancellationRequested();
+            if (_work >= MaximumWork) return false;
+            _work++;
+            return true;
+        }
+
+        internal bool TryGetCached(OfficeDrawing drawing, out bool value) =>
+            _drawingResults.TryGetValue(drawing, out value);
+
+        internal void Cache(OfficeDrawing drawing, bool value) => _drawingResults[drawing] = value;
+    }
+
+    private static bool IntersectsVisibleBounds(
+        (double Left, double Top, double Right, double Bottom) bounds,
+        (double Left, double Top, double Right, double Bottom)? visibleBounds) =>
+        bounds.Right > bounds.Left && bounds.Bottom > bounds.Top &&
+        (!visibleBounds.HasValue ||
+        bounds.Right >= visibleBounds.Value.Left &&
+        bounds.Left <= visibleBounds.Value.Right &&
+        bounds.Bottom >= visibleBounds.Value.Top &&
+        bounds.Top <= visibleBounds.Value.Bottom);
+
+    private static bool TryIntersectBounds(
+        (double Left, double Top, double Right, double Bottom) bounds,
+        (double Left, double Top, double Right, double Bottom)? visibleBounds,
+        out (double Left, double Top, double Right, double Bottom) intersection) {
+        if (bounds.Right <= bounds.Left || bounds.Bottom <= bounds.Top) {
+            intersection = bounds;
+            return false;
+        }
+        if (!visibleBounds.HasValue) {
+            intersection = bounds;
+            return bounds.Right > bounds.Left && bounds.Bottom > bounds.Top;
+        }
+
+        intersection = (
+            System.Math.Max(bounds.Left, visibleBounds.Value.Left),
+            System.Math.Max(bounds.Top, visibleBounds.Value.Top),
+            System.Math.Min(bounds.Right, visibleBounds.Value.Right),
+            System.Math.Min(bounds.Bottom, visibleBounds.Value.Bottom));
+        // A reflected source can include its maximum edge at a destination pixel
+        // centre. Touching bounds therefore remain inconclusive for nearest sampling.
+        return intersection.Right >= intersection.Left && intersection.Bottom >= intersection.Top;
+    }
+
+    private static OfficeRasterImage ApplySoftMask(
+        OfficeRasterImage source,
+        OfficeDrawingSoftMask softMask,
+        double sourceLeft,
+        OfficeFontFaceCollection? fonts,
+        double scaleX, double scaleY,
+        IOfficeRasterImageCodec? imageCodec,
+        IOfficeTextShapingProvider? textShapingProvider,
+        string? textShapingLanguage,
+        System.Collections.Generic.ICollection<OfficeImageExportDiagnostic>? diagnosticSink,
+        string? diagnosticSource,
+        OfficeRasterTransformedTextBudget transformedTextBudget,
+        long maximumRasterPixels,
+        System.Threading.CancellationToken cancellationToken) {
+        long surfacePixels = (long)source.Width * source.Height;
+        transformedTextBudget.ChargeIntermediateSurfacePixels(surfacePixels * 2L, maximumRasterPixels);
+        OfficeDrawing maskScene = new OfficeDrawing(source.Width / scaleX, source.Height / scaleY);
+        // A mask canvas remains an explicit coverage boundary, including text overflow.
+        OfficeDrawing clippedMask = new OfficeDrawing(softMask.InnerDrawing.Width, softMask.InnerDrawing.Height);
+        clippedMask.AddClippedDrawing(softMask.InnerDrawing, 0D, 0D,
+            OfficeClipPath.Rectangle(softMask.InnerDrawing.Width, softMask.InnerDrawing.Height));
+        clippedMask.TextShapingProvider = softMask.InnerDrawing.TextShapingProvider;
+        clippedMask.TextShapingLanguage = softMask.InnerDrawing.TextShapingLanguage;
+        maskScene.AddEffectDrawing(clippedMask, softMask.Transform.Then(OfficeTransform.Translate(-sourceLeft, 0D)));
+        // The source already fixes the mask dimensions. Reuse that exact grid
+        // rather than rounding a fractional density into an extra row or column.
+        OfficeRasterExportPlan maskPlan = OfficeRasterExportPlanner.Resolve(source.Width, source.Height,
+            OfficeImageExportFormat.Png, new OfficeImageExportOptions {
+                MaximumRasterPixels = maximumRasterPixels,
+                RasterOverflowBehavior = OfficeRasterOverflowBehavior.Throw
+            });
+        OfficeRasterImage mask = RenderCore(maskScene, new OfficeDrawingRasterRenderOptions {
+            Scale = System.Math.Max(scaleX, scaleY),
+            ImageCodec = imageCodec,
+            TextShapingProvider = textShapingProvider,
+            TextShapingLanguage = textShapingLanguage,
+            DiagnosticSink = diagnosticSink,
+            DiagnosticSource = diagnosticSource,
+            TransformedTextBudget = transformedTextBudget,
+            MaximumRasterPixels = maximumRasterPixels,
+            CancellationToken = cancellationToken
+        }, scaleX, scaleY, maskPlan, fonts);
+        OfficeRasterImage result = new OfficeRasterImage(source.Width, source.Height);
+        double backdrop = GetMaskFactor(softMask.BackdropColor, softMask.Mode, softMask.LuminosityStandard);
+        for (int y = 0; y < source.Height; y++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            for (int x = 0; x < source.Width; x++) {
+                OfficeColor sourcePixel = source.GetPixel(x, y);
+                OfficeColor maskPixel = mask.GetPixel(x, y);
+                double maskAlpha = maskPixel.A / 255D;
+                double coverage = GetMaskFactor(maskPixel, softMask.Mode, softMask.LuminosityStandard) + ((1D - maskAlpha) * backdrop);
+                result.SetPixel(x, y, OfficeColor.FromRgba(sourcePixel.R, sourcePixel.G, sourcePixel.B, (byte)System.Math.Round(sourcePixel.A * coverage)));
+            }
+        }
+        return result;
+    }
+
+    private static double GetMaskFactor(OfficeColor color, OfficeSoftMaskMode mode, OfficeSoftMaskLuminosityStandard luminosityStandard) {
+        double alpha = color.A / 255D;
+        if (mode == OfficeSoftMaskMode.Alpha) return alpha;
+        double redWeight = luminosityStandard == OfficeSoftMaskLuminosityStandard.PdfDeviceRgb ? 0.3D : 0.2126D;
+        double greenWeight = luminosityStandard == OfficeSoftMaskLuminosityStandard.PdfDeviceRgb ? 0.59D : 0.7152D;
+        double blueWeight = luminosityStandard == OfficeSoftMaskLuminosityStandard.PdfDeviceRgb ? 0.11D : 0.0722D;
+        return alpha * (((redWeight * color.R) + (greenWeight * color.G) + (blueWeight * color.B)) / 255D);
+    }
+}

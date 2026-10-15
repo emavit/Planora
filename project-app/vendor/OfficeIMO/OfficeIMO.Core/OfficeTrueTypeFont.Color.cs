@@ -1,0 +1,172 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+namespace OfficeIMO.Drawing;
+
+internal sealed class OfficeColorGlyphContours {
+    internal OfficeColorGlyphContours(List<List<OfficePoint>> contours, OfficeColor color) {
+        Contours = contours;
+        Color = color;
+    }
+
+    internal List<List<OfficePoint>> Contours { get; }
+    internal OfficeColor Color { get; }
+}
+
+public sealed partial class OfficeTrueTypeFont {
+    /// <summary>Whether this program has palette layers that shaped glyph substitution can select.</summary>
+    internal bool HasColorGlyphs => _colorGlyphs != null;
+
+    internal bool TryGetColorTextContours(
+        string text,
+        double x,
+        double y,
+        double fontSize,
+        string? palette,
+        OfficeColor foreground,
+        int maximumPointCount,
+        CancellationToken cancellationToken,
+        out List<OfficeColorGlyphContours> paintedLayers) {
+        paintedLayers = new List<OfficeColorGlyphContours>();
+        if (_colorGlyphs == null || string.IsNullOrEmpty(text)) return false;
+
+        var glyphs = new List<(ushort Glyph, int Scalar)>();
+        var indexes = new List<int>();
+        for (int textIndex = 0; textIndex < text.Length;) {
+            cancellationToken.ThrowIfCancellationRequested();
+            int sourceIndex = textIndex;
+            int glyph = ReadMappedGlyph(text, ref textIndex, out int scalar);
+            if (glyph > 0 || glyph == 0 && HasPaintedNotdefMapping(scalar)) {
+                indexes.Add(sourceIndex);
+                glyphs.Add((checked((ushort)glyph), scalar));
+            }
+        }
+        if (glyphs.Count == 0 || !glyphs.Exists(item => _colorGlyphs.HasColorGlyph(item.Glyph))) return false;
+
+        var glyphIds = new List<int>(glyphs.Count);
+        var scalars = new List<int>(glyphs.Count);
+        foreach ((ushort glyph, int scalar) in glyphs) {
+            glyphIds.Add(glyph);
+            scalars.Add(scalar);
+        }
+        OfficeOpenTypeGlyphPositioning[] positioning = _kerning.PositionRun(glyphIds, scalars);
+        bool[]? boundaries = TrackingBoundaries(text, indexes);
+        var positioned = new PositionedGlyph[glyphs.Count];
+        OfficeTrueTypeVariations.WorkBudget? variationBudget = _variations?.CreateWorkBudget();
+        for (int index = 0; index < glyphs.Count; index++) {
+            positioned[index] = new PositionedGlyph(
+                glyphs[index].Glyph,
+                checked(AdvanceWidth(glyphs[index].Glyph, variationBudget, cancellationToken) + positioning[index].XAdvance),
+                0,
+                positioning[index].XPlacement,
+                0);
+            positioned[index].TrackingBoundary = boundaries == null || boundaries[index];
+        }
+        return TryGetPositionedColorContours(positioned, OfficeTextDirection.LeftToRight, x, y, fontSize, palette, foreground, maximumPointCount, cancellationToken, out paintedLayers);
+    }
+
+    internal bool TryGetShapedColorTextContours(
+        string text,
+        OfficeTextShapingResult shapingResult,
+        double x,
+        double y,
+        double fontSize,
+        string? palette,
+        OfficeColor foreground,
+        int maximumPointCount,
+        CancellationToken cancellationToken,
+        out List<OfficeColorGlyphContours> paintedLayers) {
+        paintedLayers = new List<OfficeColorGlyphContours>();
+        if (_colorGlyphs == null) return false;
+        ShapedTextRun run = CreateShapedTextRun(text, shapingResult, cancellationToken: cancellationToken);
+        if (!Array.Exists(run._glyphs, glyph => _colorGlyphs.HasColorGlyph(glyph.GlyphId))) return false;
+        return TryGetPositionedColorContours(run._glyphs, run.Direction, x, y, fontSize, palette, foreground, maximumPointCount, cancellationToken, out paintedLayers);
+    }
+
+    private bool TryGetPositionedColorContours(
+        PositionedGlyph[] glyphs,
+        OfficeTextDirection direction,
+        double x,
+        double y,
+        double fontSize,
+        string? palette,
+        OfficeColor foreground,
+        int maximumPointCount,
+        CancellationToken cancellationToken,
+        out List<OfficeColorGlyphContours> paintedLayers) {
+        paintedLayers = new List<OfficeColorGlyphContours>();
+        if (_colorGlyphs == null || glyphs.Length == 0) return false;
+        if (maximumPointCount <= 0) throw new ArgumentOutOfRangeException(nameof(maximumPointCount));
+
+        double scale = ScaleFor(fontSize);
+        if (direction == OfficeTextDirection.TopToBottom) {
+            double verticalCursor = y;
+            int verticalPointCount = 0;
+            OfficeTrueTypeVariations.WorkBudget? verticalVariationBudget = _variations?.CreateWorkBudget();
+            for (int index = 0; index < glyphs.Length; index++) {
+                cancellationToken.ThrowIfCancellationRequested();
+                PositionedGlyph glyph = glyphs[index];
+                double glyphX = x + glyph.OffsetX * scale;
+                double glyphBaseline = verticalCursor - glyph.OffsetY * scale;
+                IReadOnlyList<OfficeColorGlyphLayer> layers;
+                if (!_colorGlyphs.TryGetLayers(glyph.GlyphId, palette, foreground, out layers)) {
+                    layers = new[] { new OfficeColorGlyphLayer(glyph.GlyphId, foreground) };
+                }
+                foreach (OfficeColorGlyphLayer layer in layers) {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    List<List<OfficePoint>> contours = ReadGlyphContours(
+                        checked((ushort)layer.GlyphId),
+                        new FontTransform(scale, 0D, 0D, -scale, glyphX, glyphBaseline),
+                        0,
+                        verticalVariationBudget,
+                        maximumPointCount,
+                        ref verticalPointCount,
+                        cancellationToken,
+                        attachmentPoints: null);
+                    if (contours.Count > 0 && layer.Color.A > 0) paintedLayers.Add(new OfficeColorGlyphContours(contours, layer.Color));
+                }
+                verticalCursor -= glyph.AdvanceHeight * scale;
+            }
+            return paintedLayers.Count > 0;
+        }
+        long totalAdvance = 0;
+        int trackingCount = 0;
+        foreach (PositionedGlyph glyph in glyphs) {
+            totalAdvance = checked(totalAdvance + glyph.AdvanceWidth);
+            if (glyph.TrackingBoundary) trackingCount++;
+        }
+        bool negativeDirection = totalAdvance < 0;
+        double tracking = (negativeDirection ? -1D : 1D) * HorizontalTracking(fontSize);
+        double cursor = negativeDirection ? x - (totalAdvance * scale + tracking * trackingCount) : x;
+        double baseline = y + _ascender * scale;
+        int pointCount = 0;
+        OfficeTrueTypeVariations.WorkBudget? variationBudget = _variations?.CreateWorkBudget();
+        for (int index = 0; index < glyphs.Length; index++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            PositionedGlyph glyph = glyphs[index];
+            if (negativeDirection) cursor += glyph.AdvanceWidth * scale + (glyph.TrackingBoundary ? tracking : 0D);
+            double glyphX = cursor + glyph.OffsetX * scale;
+            double glyphBaseline = baseline - glyph.OffsetY * scale;
+            IReadOnlyList<OfficeColorGlyphLayer> layers;
+            if (!_colorGlyphs.TryGetLayers(glyph.GlyphId, palette, foreground, out layers)) {
+                layers = new[] { new OfficeColorGlyphLayer(glyph.GlyphId, foreground) };
+            }
+            foreach (OfficeColorGlyphLayer layer in layers) {
+                cancellationToken.ThrowIfCancellationRequested();
+                List<List<OfficePoint>> contours = ReadGlyphContours(
+                    checked((ushort)layer.GlyphId),
+                    new FontTransform(scale, 0D, 0D, -scale, glyphX, glyphBaseline),
+                    0,
+                    variationBudget,
+                    maximumPointCount,
+                    ref pointCount,
+                    cancellationToken,
+                    attachmentPoints: null);
+                if (contours.Count > 0 && layer.Color.A > 0) paintedLayers.Add(new OfficeColorGlyphContours(contours, layer.Color));
+            }
+            if (!negativeDirection) cursor += glyph.AdvanceWidth * scale + (glyph.TrackingBoundary ? tracking : 0D);
+        }
+        return paintedLayers.Count > 0;
+    }
+}

@@ -1,0 +1,704 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+
+namespace OfficeIMO.Drawing;
+
+/// <summary>
+/// Exports dependency-free OfficeIMO drawings to SVG for consumers that need a portable visual fallback.
+/// </summary>
+public static partial class OfficeDrawingSvgExporter {
+    /// <summary>
+    /// Converts a drawing to an SVG document.
+    /// </summary>
+    /// <param name="drawing">Drawing to export.</param>
+    /// <returns>SVG markup representing the drawing.</returns>
+    public static string ToSvg(OfficeDrawing drawing) {
+        return ToSvg(drawing, 1D);
+    }
+
+    /// <summary>
+    /// Converts a drawing to an SVG document with a scaled output surface.
+    /// </summary>
+    /// <param name="drawing">Drawing to export.</param>
+    /// <param name="scale">Scale applied to the exported SVG width and height.</param>
+    /// <returns>SVG markup representing the drawing.</returns>
+    public static string ToSvg(OfficeDrawing drawing, double scale) {
+        return ToSvg(drawing, scale, OfficeSvgSizeUnit.Point);
+    }
+
+    /// <summary>
+    /// Converts a drawing to UTF-8 SVG bytes.
+    /// </summary>
+    /// <param name="drawing">Drawing to export.</param>
+    /// <returns>UTF-8 encoded SVG bytes.</returns>
+    public static byte[] ToSvgBytes(OfficeDrawing drawing) => Encoding.UTF8.GetBytes(ToSvg(drawing));
+
+    /// <summary>
+    /// Converts a drawing to UTF-8 SVG bytes with a scaled output surface.
+    /// </summary>
+    /// <param name="drawing">Drawing to export.</param>
+    /// <param name="scale">Scale applied to the exported SVG width and height.</param>
+    /// <returns>UTF-8 encoded SVG bytes.</returns>
+    public static byte[] ToSvgBytes(OfficeDrawing drawing, double scale) => Encoding.UTF8.GetBytes(ToSvg(drawing, scale));
+
+    internal static void AppendEmbeddedFonts(
+        StringBuilder sb,
+        OfficeFontFaceCollection fonts,
+        System.Threading.CancellationToken cancellationToken,
+        string familyPrefix = "") {
+        if (fonts.Faces.Count == 0) {
+            return;
+        }
+
+        sb.Append("<defs><style type=\"text/css\">");
+        foreach (OfficeFontFace face in fonts.Faces) {
+            cancellationToken.ThrowIfCancellationRequested();
+            AppendEmbeddedFontFace(
+                sb,
+                face,
+                familyPrefix + face.ResourceFamilyName,
+                includeUnicodeRange: false,
+                cancellationToken);
+            if (!string.Equals(face.ResourceFamilyName, face.FamilyName, StringComparison.Ordinal)) {
+                AppendEmbeddedFontFace(
+                    sb,
+                    face,
+                    familyPrefix + face.FamilyName,
+                    includeUnicodeRange: true,
+                    cancellationToken);
+            }
+        }
+
+        sb.Append("</style></defs>");
+    }
+
+    private static void AppendEmbeddedFontFace(
+        StringBuilder sb,
+        OfficeFontFace face,
+        string familyName,
+        bool includeUnicodeRange,
+        System.Threading.CancellationToken cancellationToken) {
+        byte[] fontData = face.DataSnapshot;
+        EnsureBase64PayloadFits(sb, fontData.LongLength);
+        sb.Append("@font-face{font-family:\"")
+            .Append(EscapeCssString(familyName))
+            .Append("\";src:url(data:font/ttf;base64,");
+        OfficeSvgImageRenderer.AppendBase64(sb, fontData, cancellationToken);
+        sb.Append(") format(\"truetype\");font-weight:")
+            .Append(face.Descriptor.Weight.ToString(CultureInfo.InvariantCulture))
+            .Append(";font-stretch:")
+            .Append(face.Descriptor.StretchPercent.ToString("0.###", CultureInfo.InvariantCulture))
+            .Append('%')
+            .Append(";font-style:")
+            .Append(face.Descriptor.Slant == OfficeFontSlant.Oblique
+                ? "oblique " + face.Descriptor.ObliqueAngleDegrees.ToString("0.###", CultureInfo.InvariantCulture) + "deg"
+                : face.Descriptor.Slant == OfficeFontSlant.Italic ? "italic" : "normal");
+        if (includeUnicodeRange && !face.UnicodeRanges.IsAll) {
+            sb.Append(";unicode-range:");
+            for (int index = 0; index < face.UnicodeRanges.Ranges.Count; index++) {
+                if (index > 0) sb.Append(',');
+                OfficeFontUnicodeRange range = face.UnicodeRanges.Ranges[index];
+                sb.Append("U+")
+                    .Append(range.Start.ToString("X", CultureInfo.InvariantCulture));
+                if (range.End != range.Start) {
+                    sb.Append('-').Append(range.End.ToString("X", CultureInfo.InvariantCulture));
+                }
+            }
+        }
+        sb.Append(";}");
+    }
+
+    private static void EnsureBase64PayloadFits(StringBuilder builder, long payloadBytes) {
+        long base64Characters = checked(((payloadBytes + 2L) / 3L) * 4L);
+        long remainingCharacters = builder.MaxCapacity - (long)builder.Length;
+        if (base64Characters > remainingCharacters) {
+            throw new ArgumentOutOfRangeException(nameof(payloadBytes), "The encoded SVG exceeds its configured character ceiling.");
+        }
+    }
+
+    private static string EscapeCssString(string value) {
+        var escaped = new StringBuilder(value.Length);
+        foreach (char character in value) {
+            if (character == '\\' || character == '"' || character == '<' || character == '>' || character == '&' || char.IsControl(character)) {
+                escaped.Append('\\')
+                    .Append(((int)character).ToString("X", CultureInfo.InvariantCulture))
+                    .Append(' ');
+            } else {
+                escaped.Append(character);
+            }
+        }
+
+        return escaped.ToString();
+    }
+
+    private static void AppendElements(
+        StringBuilder sb,
+        IReadOnlyList<OfficeDrawingElement> elements,
+        IOfficeRasterImageCodec? imageCodec,
+        string idPrefix,
+        ref int gradientId,
+        ref int clipPathId,
+        System.Threading.CancellationToken cancellationToken,
+        SvgTilingExpansionBudget tilingExpansionBudget,
+        SvgNearestNeighborRectangleBudget nearestNeighborRectangleBudget, OfficeRasterCanvas textMetrics) {
+        for (int i = 0; i < elements.Count; i++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            switch (elements[i]) {
+                case OfficeDrawingShape drawingShape:
+                    string? fillGradientId = null;
+                    if (drawingShape.Shape.FillRadialGradient != null) {
+                        fillGradientId = idPrefix + "officeimo-gradient-" + (++gradientId).ToString(CultureInfo.InvariantCulture);
+                        AppendRadialPaintDefinition(sb, fillGradientId, drawingShape.Shape.FillRadialGradient, drawingShape, cancellationToken);
+                    } else if (drawingShape.Shape.FillGradient != null) {
+                        fillGradientId = idPrefix + "officeimo-gradient-" + (++gradientId).ToString(CultureInfo.InvariantCulture);
+                        sb.AppendLinearGradientDefinition(fillGradientId, drawingShape.Shape.FillGradient);
+                    }
+
+                    string? strokeGradientId = null;
+                    if (drawingShape.Shape.StrokeRadialGradient != null) {
+                        strokeGradientId = idPrefix + "officeimo-gradient-" + (++gradientId).ToString(CultureInfo.InvariantCulture);
+                        AppendStrokeRadialPaintDefinition(sb, strokeGradientId, drawingShape.Shape.StrokeRadialGradient, drawingShape, cancellationToken);
+                    } else if (drawingShape.Shape.StrokeGradient != null) {
+                        strokeGradientId = idPrefix + "officeimo-gradient-" + (++gradientId).ToString(CultureInfo.InvariantCulture);
+                        AppendStrokeLinearPaintDefinition(sb, strokeGradientId, drawingShape.Shape.StrokeGradient, drawingShape);
+                    }
+
+                    string? shapeClipPathId = null;
+                    if (drawingShape.Shape.ClipPath != null) {
+                        shapeClipPathId = idPrefix + "officeimo-clip-" + (++clipPathId).ToString(CultureInfo.InvariantCulture);
+                        AppendClipPathDefinition(sb, shapeClipPathId, drawingShape.Shape.ClipPath);
+                    }
+
+                    AppendShape(sb, drawingShape, fillGradientId, strokeGradientId, shapeClipPathId);
+                    break;
+                case OfficeDrawingText drawingText:
+                    AppendText(sb, drawingText, textMetrics, idPrefix, ref clipPathId);
+                    break;
+                case OfficeDrawingRichText drawingRichText:
+                    AppendRichText(sb, drawingRichText, textMetrics);
+                    break;
+                case OfficeDrawingImage drawingImage:
+                    string? imageClipPathId = drawingImage.Projection.HasCrop
+                        ? idPrefix + "officeimo-image-clip-" + (++clipPathId).ToString(CultureInfo.InvariantCulture)
+                        : null;
+                    AppendImage(sb, drawingImage, imageClipPathId, imageCodec, cancellationToken, nearestNeighborRectangleBudget);
+                    break;
+                case OfficeDrawingImagePattern imagePattern:
+                    AppendImagePattern(sb, imagePattern, imageCodec, idPrefix, ref clipPathId, cancellationToken);
+                    break;
+                case OfficeDrawingTilingPattern tilingPattern:
+                    AppendTilingPattern(sb, tilingPattern, imageCodec, idPrefix, ref gradientId, ref clipPathId, cancellationToken, tilingExpansionBudget, nearestNeighborRectangleBudget, textMetrics);
+                    break;
+                case OfficeDrawingGroup drawingGroup:
+                    AppendGroup(sb, drawingGroup, imageCodec, idPrefix, ref gradientId, ref clipPathId, cancellationToken, tilingExpansionBudget, nearestNeighborRectangleBudget, textMetrics);
+                    break;
+                case OfficeDrawingEffectGroup effectGroup:
+                    AppendEffectGroup(sb, effectGroup, imageCodec, idPrefix, ref gradientId, ref clipPathId, cancellationToken, tilingExpansionBudget, nearestNeighborRectangleBudget, textMetrics);
+                    break;
+                case OfficeDrawingLink link:
+                    if (!OfficeDrawingLinkPolicy.TryNormalize(link.Uri, out string safeUri)) {
+                        throw new InvalidOperationException("Drawing contains an unsafe interactive link URI.");
+                    }
+                    sb.Append("<a").AppendAttribute("href", safeUri);
+                    if (link.AlternativeText != null) sb.AppendAttribute("aria-label", link.AlternativeText);
+                    sb.Append("><rect x=\"").Append(Format(link.X))
+                        .Append("\" y=\"").Append(Format(link.Y))
+                        .Append("\" width=\"").Append(Format(link.Width))
+                        .Append("\" height=\"").Append(Format(link.Height))
+                        .Append("\" fill=\"transparent\" pointer-events=\"all\"/></a>");
+                    break;
+            }
+        }
+    }
+
+    private static void AppendGroup(StringBuilder sb, OfficeDrawingGroup drawingGroup, IOfficeRasterImageCodec? imageCodec, string idPrefix, ref int gradientId, ref int clipPathId, System.Threading.CancellationToken cancellationToken, SvgTilingExpansionBudget tilingExpansionBudget, SvgNearestNeighborRectangleBudget nearestNeighborRectangleBudget, OfficeRasterCanvas textMetrics) {
+        textMetrics = textMetrics.WithDrawingTextProfile(drawingGroup.InnerDrawing);
+        string groupClipPathId = idPrefix + "officeimo-group-clip-" + (++clipPathId).ToString(CultureInfo.InvariantCulture);
+        AppendClipPathDefinition(sb, groupClipPathId, drawingGroup.ClipPath);
+        string transform = BuildGroupTransformAttribute(drawingGroup);
+        sb.Append("<g");
+        if (drawingGroup.ActualText != null) {
+            sb.AppendAttribute("role", "img")
+                .AppendAttribute("aria-label", drawingGroup.ActualText);
+        }
+        sb.AppendClipPathReference(groupClipPathId)
+            .Append(transform)
+            .Append('>');
+        bool hasContentOffset = Math.Abs(drawingGroup.ContentOffsetX) > 0.0000001D || Math.Abs(drawingGroup.ContentOffsetY) > 0.0000001D;
+        if (hasContentOffset) {
+            sb.Append("<g transform=\"translate(")
+                .Append(Format(drawingGroup.ContentOffsetX))
+                .Append(' ')
+                .Append(Format(drawingGroup.ContentOffsetY))
+                .Append(")\">");
+        }
+        AppendElements(sb, drawingGroup.InnerDrawing.Elements, imageCodec, idPrefix, ref gradientId, ref clipPathId, cancellationToken, tilingExpansionBudget, nearestNeighborRectangleBudget, textMetrics);
+        if (hasContentOffset) sb.Append("</g>");
+        sb.Append("</g>");
+    }
+
+    private static void AppendShape(StringBuilder sb, OfficeDrawingShape drawingShape, string? fillGradientId, string? strokeGradientId, string? clipPathId) {
+        IReadOnlyList<OfficeDrawingShape> glowShapes = CreateGlowShapes(drawingShape);
+        for (int i = 0; i < glowShapes.Count; i++) {
+            AppendShapeGeometry(sb, glowShapes[i], fillGradientId: null, strokeGradientId: null, clipPathId);
+        }
+
+        IReadOnlyList<OfficeDrawingShape> shadowShapes = CreateShadowShapes(drawingShape);
+        for (int i = 0; i < shadowShapes.Count; i++) {
+            AppendShapeGeometry(sb, shadowShapes[i], fillGradientId: null, strokeGradientId: null, clipPathId);
+        }
+
+        AppendShapeGeometry(sb, drawingShape, fillGradientId, strokeGradientId, clipPathId);
+    }
+
+    private static void AppendShapeGeometry(StringBuilder sb, OfficeDrawingShape drawingShape, string? fillGradientId, string? strokeGradientId, string? clipPathId) {
+        OfficeShape shape = drawingShape.Shape;
+        string paint = BuildPaintAttributes(shape, fillGradientId, strokeGradientId);
+        bool useLocalCoordinates = clipPathId != null || HasNonIdentityTransform(shape.Transform);
+        double originX = useLocalCoordinates ? 0D : drawingShape.X;
+        double originY = useLocalCoordinates ? 0D : drawingShape.Y;
+        string transform = clipPathId == null
+            ? BuildTransformAttribute(shape.Transform, drawingShape.X, drawingShape.Y)
+            : string.Empty;
+
+        if (clipPathId != null) {
+            sb.Append("<g")
+                .AppendClipPathReference(clipPathId)
+                .Append(BuildPlacementTransformAttribute(shape.Transform, drawingShape.X, drawingShape.Y))
+                .Append('>');
+        }
+
+        switch (shape.Kind) {
+            case OfficeShapeKind.Rectangle:
+                sb.AppendRectElement(originX, originY, shape.Width, shape.Height, paint + transform);
+                break;
+            case OfficeShapeKind.RoundedRectangle:
+                sb.AppendRectElement(originX, originY, shape.Width, shape.Height, shape.CornerRadius, shape.CornerRadius, paint + transform);
+                break;
+            case OfficeShapeKind.Ellipse:
+                sb.AppendEllipseElement(
+                    originX + shape.Width / 2D,
+                    originY + shape.Height / 2D,
+                    shape.Width / 2D,
+                    shape.Height / 2D,
+                    paint + transform);
+                break;
+            case OfficeShapeKind.Line:
+                AppendLine(sb, drawingShape, paint, transform, originX, originY, strokeGradientId);
+                break;
+            case OfficeShapeKind.Polygon:
+                AppendPolygon(sb, drawingShape, paint, transform, originX, originY);
+                break;
+            case OfficeShapeKind.Path:
+                AppendPath(sb, drawingShape, paint, transform, originX, originY, strokeGradientId);
+                break;
+        }
+
+        if (clipPathId != null) {
+            sb.Append("</g>");
+        }
+    }
+
+    private static IReadOnlyList<OfficeDrawingShape> CreateGlowShapes(OfficeDrawingShape drawingShape) {
+        OfficeShape shape = drawingShape.Shape;
+        OfficeGlow? glow = shape.Glow;
+        if (glow == null || glow.Radius <= 0D || glow.Opacity <= 0D || glow.Color.A == 0) {
+            return Array.Empty<OfficeDrawingShape>();
+        }
+
+        const int layers = 4;
+        var glowShapes = new List<OfficeDrawingShape>(layers);
+        double baseStrokeWidth = Math.Max(0D, shape.StrokeWidth);
+        for (int i = layers; i >= 1; i--) {
+            double factor = i / (double)layers;
+            OfficeShape glowShape = shape.Clone();
+            glowShape.Shadow = null;
+            glowShape.Glow = null;
+            glowShape.FillColor = null;
+            glowShape.FillGradient = null;
+            glowShape.FillRadialGradient = null;
+            glowShape.StrokeColor = glow.Color;
+            glowShape.StrokeWidth = Math.Max(1D, baseStrokeWidth + glow.Radius * 2D * factor);
+            glowShape.StrokeDashStyle = OfficeStrokeDashStyle.Solid;
+            glowShape.StrokeStartMarker = null;
+            glowShape.StrokeEndMarker = null;
+            glowShape.StrokeOpacity = ComputeGlowLayerOpacity(glow.Opacity, layers - i + 1);
+            glowShapes.Add(new OfficeDrawingShape(glowShape, drawingShape.X, drawingShape.Y));
+        }
+
+        return glowShapes;
+    }
+
+    private static double ComputeGlowLayerOpacity(double opacity, int layerDepth) {
+        double clamped = opacity < 0D ? 0D : opacity > 1D ? 1D : opacity;
+        return 1D - Math.Pow(1D - clamped, layerDepth + 1);
+    }
+
+    private static IReadOnlyList<OfficeDrawingShape> CreateShadowShapes(OfficeDrawingShape drawingShape) {
+        OfficeShape shape = drawingShape.Shape;
+        OfficeShadow? shadow = shape.Shadow;
+        if (shadow == null || shadow.Opacity <= 0D || shadow.Color.A == 0) {
+            return Array.Empty<OfficeDrawingShape>();
+        }
+
+        bool hasStroke = shape.Kind == OfficeShapeKind.Line ||
+            (shape.StrokeWidth > 0D &&
+                (shape.StrokeRadialGradient != null ||
+                 shape.StrokeGradient != null ||
+                 (shape.StrokeColor.HasValue && shape.StrokeColor.Value.A > 0)));
+        bool hasFill = shape.Kind != OfficeShapeKind.Line &&
+            (shape.FillRadialGradient != null || shape.FillGradient != null || (shape.FillColor.HasValue && shape.FillColor.Value.A > 0));
+        double baseStrokeWidth = Math.Max(0D, shape.StrokeWidth);
+        IReadOnlyList<OfficeShadowLayer> layers = OfficeShadowLayerPlanner.Create(
+            shadow.Opacity,
+            shadow.BlurRadius,
+            baseStrokeWidth,
+            hasFill,
+            hasStroke,
+            OfficeShadowLayerPlanner.CanExpand(shape),
+            Math.Min(shape.Width, shape.Height));
+        var shadowShapes = new List<OfficeDrawingShape>(layers.Count);
+        for (int index = 0; index < layers.Count; index++) {
+            OfficeShadowLayer layer = layers[index];
+            shadowShapes.Add(CreateShadowShape(drawingShape, shadow, layer));
+        }
+        return shadowShapes;
+    }
+
+    private static OfficeDrawingShape CreateShadowShape(OfficeDrawingShape drawingShape, OfficeShadow shadow, OfficeShadowLayer layer) {
+        OfficeShape shape = drawingShape.Shape;
+        OfficeShape shadowShape = Math.Abs(layer.Expansion) > 0.000000001D
+            ? OfficeShadowLayerPlanner.CreateExpandedShape(shape, layer.Expansion)
+            : shape.Clone();
+        shadowShape.Shadow = null;
+        shadowShape.Glow = null;
+        shadowShape.FillGradient = null;
+        shadowShape.FillRadialGradient = null;
+        shadowShape.FillColor = layer.HasFill || !layer.HasStroke ? shadow.Color : null;
+        shadowShape.FillOpacity = layer.Opacity;
+        shadowShape.StrokeColor = layer.HasStroke ? shadow.Color : null;
+        shadowShape.StrokeGradient = null;
+        shadowShape.StrokeRadialGradient = null;
+        shadowShape.StrokeWidth = layer.StrokeWidth;
+        shadowShape.StrokeDashStyle = OfficeStrokeDashStyle.Solid;
+        shadowShape.StrokeStartMarker = null;
+        shadowShape.StrokeEndMarker = null;
+        shadowShape.StrokeOpacity = layer.Opacity;
+
+        return CreateOffsetEffectShape(
+            shadowShape,
+            drawingShape.X + shadow.OffsetX - layer.Expansion,
+            drawingShape.Y + shadow.OffsetY - layer.Expansion);
+    }
+
+    private static OfficeDrawingShape CreateOffsetEffectShape(OfficeShape shape, double x, double y) {
+        double clampedX = Math.Max(0D, x);
+        double clampedY = Math.Max(0D, y);
+        double offsetX = x - clampedX;
+        double offsetY = y - clampedY;
+        if (offsetX != 0D || offsetY != 0D) {
+            shape = shape.Clone();
+            OfficeTransform offsetTransform = OfficeTransform.Translate(offsetX, offsetY);
+            shape.Transform = shape.Transform.HasValue ? offsetTransform.Then(shape.Transform.Value) : offsetTransform;
+        }
+
+        return new OfficeDrawingShape(shape, clampedX, clampedY);
+    }
+
+    private static void AppendImage(
+        StringBuilder sb,
+        OfficeDrawingImage drawingImage,
+        string? clipPathId,
+        IOfficeRasterImageCodec? imageCodec,
+        System.Threading.CancellationToken cancellationToken,
+        SvgNearestNeighborRectangleBudget nearestNeighborRectangleBudget) {
+        if (drawingImage.Opacity == 0D) return;
+        byte[] bytes = drawingImage.EncodedBytes;
+        string dataUri = string.Empty;
+        OfficeRasterImage? nearestNeighborRaster = null;
+        if (drawingImage.Interpolate) {
+            if (!OfficeSvgImageRenderer.TryCreateDataUri(
+                    drawingImage.ContentType,
+                    bytes,
+                    null,
+                    imageCodec,
+                    sb.MaxCapacity - sb.Length,
+                    cancellationToken,
+                    out dataUri)) {
+                return;
+            }
+        } else if (!OfficeSvgImageRenderer.TryDecodeRasterForSvg(
+                       bytes, drawingImage.ContentType, imageCodec, cancellationToken, out nearestNeighborRaster)) {
+            throw new InvalidOperationException("SVG export cannot preserve nearest-neighbor sampling for an undecodable image.");
+        }
+
+        if (drawingImage.Opacity < 1D) {
+            sb.Append("<g")
+                .AppendAttribute("opacity", OfficeSvgFormatting.FormatNumber(drawingImage.Opacity))
+                .Append('>');
+        }
+
+        OfficeSvgImageRenderer.AppendImageWithSampling(
+            sb,
+            dataUri,
+            drawingImage.Projection,
+            drawingImage.Interpolate,
+            nearestNeighborRaster,
+            clipPathId,
+            drawingImage.Projection.HasCrop ? drawingImage.Projection.Placement : null,
+            "none",
+            cancellationToken,
+            nearestNeighborRectangleBudget);
+        if (drawingImage.Opacity < 1D) {
+            sb.Append("</g>");
+        }
+    }
+
+    private static void AppendLine(StringBuilder sb, OfficeDrawingShape drawingShape, string paint, string transform, double originX, double originY, string? strokeGradientId) {
+        OfficeShape shape = drawingShape.Shape;
+        if (shape.Points.Count != 2) {
+            return;
+        }
+
+        OfficePoint start = new OfficePoint(originX + shape.Points[0].X, originY + shape.Points[0].Y);
+        OfficePoint end = new OfficePoint(originX + shape.Points[1].X, originY + shape.Points[1].Y);
+        sb.AppendLineElement(
+            start.X,
+            start.Y,
+            end.X,
+            end.Y,
+            paint + transform);
+        AppendLineMarker(sb, shape.StrokeStartMarker, start, new OfficePoint(start.X - end.X, start.Y - end.Y), shape, transform, strokeGradientId);
+        AppendLineMarker(sb, shape.StrokeEndMarker, end, new OfficePoint(end.X - start.X, end.Y - start.Y), shape, transform, strokeGradientId);
+    }
+
+    private static void AppendLineMarker(StringBuilder sb, OfficeLineMarker? marker, OfficePoint tip, OfficePoint lineDirection, OfficeShape shape, string transform, string? strokeGradientId) {
+        IReadOnlyList<OfficePoint> contour = OfficeLineMarkerGeometry.CreateContour(marker, tip, lineDirection);
+        if (contour.Count == 0) {
+            return;
+        }
+
+        bool open = marker!.Kind == OfficeLineMarkerKind.Arrow;
+        string? paint = BuildLineMarkerPaintAttributes(shape, strokeGradientId, open);
+        if (paint == null) {
+            return;
+        }
+
+        if (open) sb.AppendPolylineElement(contour, paint + transform);
+        else sb.AppendPolygonElement(contour, paint + transform);
+    }
+
+    private static void AppendPolygon(StringBuilder sb, OfficeDrawingShape drawingShape, string paint, string transform, double originX, double originY) {
+        OfficeShape shape = drawingShape.Shape;
+        if (shape.Points.Count < 3) {
+            return;
+        }
+
+        List<OfficePoint> points = OffsetPoints(shape.Points, originX, originY);
+        sb.AppendPolygonElement(points, paint + transform);
+    }
+
+    private static void AppendPath(StringBuilder sb, OfficeDrawingShape drawingShape, string paint, string transform, double originX, double originY, string? strokeGradientId) {
+        OfficeShape shape = drawingShape.Shape;
+        if (shape.PathCommands.Count == 0) {
+            return;
+        }
+
+        sb.AppendPaintPathElement(shape.PathCommands, originX, originY, paint + BuildFillRuleAttribute(shape.FillRule) + transform);
+        AppendPathMarkers(sb, shape, originX, originY, transform, strokeGradientId);
+    }
+
+    private static string BuildFillRuleAttribute(OfficeFillRule fillRule) =>
+        fillRule == OfficeFillRule.EvenOdd ? " fill-rule=\"evenodd\"" : string.Empty;
+
+    private static string BuildClipRuleAttribute(OfficeFillRule fillRule) =>
+        fillRule == OfficeFillRule.EvenOdd ? " clip-rule=\"evenodd\"" : string.Empty;
+
+    private static void AppendRichTextFrameGroupStart(StringBuilder sb, OfficeDrawingRichText text) {
+        string? transform = OfficeSvgFormatting.FormatImageFrameTransform(text.CreateFrameTransform());
+        if (string.IsNullOrWhiteSpace(transform)) {
+            sb.Append("<g>");
+            return;
+        }
+
+        sb.Append("<g")
+            .AppendAttribute("transform", transform)
+            .Append('>');
+    }
+
+    private static void AppendClipPathDefinition(StringBuilder sb, string id, OfficeClipPath clipPath) {
+        sb.Append("<defs><clipPath id=\"")
+            .Append(Escape(id))
+            .Append("\">");
+
+        switch (clipPath.Kind) {
+            case OfficeClipPathKind.Empty:
+                sb.Append("<path d=\"\"/>");
+                break;
+            case OfficeClipPathKind.Rectangle:
+                sb.AppendRectElement(0D, 0D, clipPath.Width, clipPath.Height);
+                break;
+            case OfficeClipPathKind.RoundedRectangle:
+                sb.AppendRectElement(0D, 0D, clipPath.Width, clipPath.Height, clipPath.CornerRadius, clipPath.CornerRadius);
+                break;
+            case OfficeClipPathKind.Path:
+                AppendClipPathPath(sb, clipPath);
+                break;
+        }
+
+        sb.Append("</clipPath></defs>");
+    }
+
+    private static void AppendClipPathPath(StringBuilder sb, OfficeClipPath clipPath) {
+        sb.AppendPathElement(clipPath.Commands, attributes: BuildClipRuleAttribute(clipPath.FillRule));
+    }
+
+    private static string BuildPaintAttributes(OfficeShape shape, string? fillGradientId, string? strokeGradientId) {
+        var sb = new StringBuilder();
+        if (fillGradientId != null) {
+            sb.Append(" fill=\"url(#").Append(Escape(fillGradientId)).Append(")\"");
+            double fillOpacity = shape.FillOpacity ?? 1D;
+            if (fillOpacity < 1D) {
+                sb.Append(" fill-opacity=\"").Append(Format(fillOpacity)).Append('"');
+            }
+        } else if (shape.FillColor.HasValue && shape.FillColor.Value.A > 0) {
+            sb.Append(" fill=\"").Append(ToCssColor(shape.FillColor.Value)).Append('"');
+            double fillOpacity = (shape.FillOpacity ?? 1D) * ToOpacity(shape.FillColor.Value);
+            if (fillOpacity < 1D) {
+                sb.Append(" fill-opacity=\"").Append(Format(fillOpacity)).Append('"');
+            }
+        } else {
+            sb.Append(" fill=\"none\"");
+        }
+
+        if (strokeGradientId != null && shape.StrokeWidth > 0) {
+            sb.Append(" stroke=\"url(#").Append(Escape(strokeGradientId)).Append(")\"")
+                .Append(" stroke-width=\"").Append(Format(shape.StrokeWidth)).Append('"');
+            double strokeOpacity = shape.StrokeOpacity ?? 1D;
+            if (strokeOpacity < 1D) {
+                sb.Append(" stroke-opacity=\"").Append(Format(strokeOpacity)).Append('"');
+            }
+
+            AppendStrokeStyle(sb, shape);
+        } else if (shape.StrokeColor.HasValue && shape.StrokeWidth > 0 && shape.StrokeColor.Value.A > 0) {
+            sb.Append(" stroke=\"").Append(ToCssColor(shape.StrokeColor.Value)).Append('"')
+                .Append(" stroke-width=\"").Append(Format(shape.StrokeWidth)).Append('"');
+            double strokeOpacity = (shape.StrokeOpacity ?? 1D) * ToOpacity(shape.StrokeColor.Value);
+            if (strokeOpacity < 1D) {
+                sb.Append(" stroke-opacity=\"").Append(Format(strokeOpacity)).Append('"');
+            }
+
+            AppendStrokeStyle(sb, shape);
+        } else {
+            sb.Append(" stroke=\"none\"");
+        }
+
+        return sb.ToString();
+    }
+
+    private static void AppendStrokeStyle(StringBuilder sb, OfficeShape shape) {
+        if (shape.StrokeDashArray.Count > 0) {
+            sb.Append(" stroke-dasharray=\"");
+            for (int index = 0; index < shape.StrokeDashArray.Count; index++) {
+                if (index > 0) sb.Append(' ');
+                sb.Append(Format(shape.StrokeDashArray[index]));
+            }
+            sb.Append('"');
+            if (Math.Abs(shape.StrokeDashOffset) > 0.000000000001D) {
+                sb.Append(" stroke-dashoffset=\"").Append(Format(shape.StrokeDashOffset)).Append('"');
+            }
+        } else {
+            sb.AppendStrokeDashStyleAttribute(shape.StrokeDashStyle, shape.StrokeWidth);
+        }
+
+        if (shape.StrokeLineCap.HasValue) {
+            sb.AppendStrokeLineCapAttribute(shape.StrokeLineCap.Value);
+        }
+
+        if (shape.StrokeLineJoin.HasValue) {
+            sb.AppendStrokeLineJoinAttribute(shape.StrokeLineJoin.Value);
+        }
+
+        if (Math.Abs(shape.StrokeMiterLimit - 4D) > 0.000000000001D) {
+            sb.Append(" stroke-miterlimit=\"").Append(Format(shape.StrokeMiterLimit)).Append('"');
+        }
+    }
+
+    private static string? BuildLineMarkerPaintAttributes(OfficeShape shape, string? strokeGradientId, bool open) {
+        if (shape.StrokeWidth <= 0D) return null;
+        OfficeColor? color = shape.StrokeColor;
+        if (strokeGradientId == null && (!color.HasValue || color.Value.A == 0)) return null;
+        string paint = open ? "stroke" : "fill";
+        var sb = new StringBuilder();
+        sb.Append(' ').Append(paint).Append("=\"");
+        if (strokeGradientId != null) sb.Append("url(#").Append(Escape(strokeGradientId)).Append(')');
+        else sb.Append(ToCssColor(color!.Value));
+        sb.Append('"');
+        double opacity = (shape.StrokeOpacity ?? 1D) * (strokeGradientId != null ? 1D : ToOpacity(color!.Value));
+        if (opacity < 1D) {
+            sb.Append(' ').Append(paint).Append("-opacity=\"").Append(Format(opacity)).Append('"');
+        }
+        if (open) {
+            sb.Append(" fill=\"none\" stroke-width=\"").Append(Format(shape.StrokeWidth)).Append('"');
+            if (shape.StrokeLineCap.HasValue) sb.AppendStrokeLineCapAttribute(shape.StrokeLineCap.Value);
+            if (shape.StrokeLineJoin.HasValue) sb.AppendStrokeLineJoinAttribute(shape.StrokeLineJoin.Value);
+            sb.Append(" stroke-miterlimit=\"").Append(Format(shape.StrokeMiterLimit)).Append('"');
+        } else sb.Append(" stroke=\"none\"");
+        return sb.ToString();
+    }
+
+    private static List<OfficePoint> OffsetPoints(IReadOnlyList<OfficePoint> points, double offsetX, double offsetY) {
+        var translated = new List<OfficePoint>(points.Count);
+        for (int i = 0; i < points.Count; i++) {
+            translated.Add(new OfficePoint(points[i].X + offsetX, points[i].Y + offsetY));
+        }
+
+        return translated;
+    }
+
+    private static bool HasNonIdentityTransform(OfficeTransform? transform) => transform.HasValue && transform.Value != OfficeTransform.Identity;
+
+    private static string BuildTransformAttribute(OfficeTransform? transform, double placementX, double placementY) {
+        if (!HasNonIdentityTransform(transform)) {
+            return string.Empty;
+        }
+
+        OfficeTransform value = transform!.Value;
+        return BuildMatrixTransformAttribute(value, placementX, placementY);
+    }
+
+    private static string BuildPlacementTransformAttribute(OfficeTransform? transform, double placementX, double placementY) {
+        OfficeTransform value = transform ?? OfficeTransform.Identity;
+        if (value == OfficeTransform.Identity && placementX == 0D && placementY == 0D) {
+            return string.Empty;
+        }
+
+        return BuildMatrixTransformAttribute(value, placementX, placementY);
+    }
+
+    private static string BuildGroupTransformAttribute(OfficeDrawingGroup drawingGroup) {
+        if (drawingGroup.FrameTransform.HasValue && drawingGroup.FrameTransform.Value.HasTransform) {
+            OfficeTransform transform = OfficeTransform.Translate(drawingGroup.X, drawingGroup.Y)
+                .Then(drawingGroup.FrameTransform.Value.CreateDestinationTransform());
+            return BuildMatrixTransformAttribute(transform, 0D, 0D);
+        }
+
+        return " transform=\"translate(" + Format(drawingGroup.X) + " " + Format(drawingGroup.Y) + ")\"";
+    }
+
+    private static string BuildMatrixTransformAttribute(OfficeTransform value, double placementX, double placementY) {
+        var builder = new StringBuilder();
+        builder.AppendMatrixTransformAttribute(value, placementX, placementY);
+        return builder.ToString();
+    }
+
+    private static string ToCssColor(OfficeColor color) => OfficeSvgFormatting.ToCssColor(color);
+
+    private static double ToOpacity(OfficeColor color) => OfficeSvgFormatting.ToOpacity(color);
+
+    private static string Format(double value) => OfficeSvgFormatting.FormatNumber(value);
+
+    private static string Escape(string? value) => OfficeSvgFormatting.Escape(value);
+}

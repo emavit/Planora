@@ -1,0 +1,212 @@
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+* text=auto
+
+# Published integration downloads are bound to raw-byte hashes, including EML,
+# executable source copies and ASCII PDF stream/xref offsets.
+Website/static/downloads/integrations/** -text -whitespace
+Website/static/downloads/integrations/**/*.pdf -diff
+
+# Imported PowerShell API components are bound to release fingerprints.
+Website/data/apidocs/powershell/PSWriteOffice.psd1 -text -diff
+Website/data/apidocs/powershell/PSWriteOffice-Help.xml -text -diff
+Website/data/apidocs/powershell/command-metadata.json -text -diff
+Website/data/apidocs/powershell/bundle-manifest.json text eol=lf
+
+# Access producer exports and expected-value captures have manifest-bound bytes.
+OfficeIMO.Access.Tests/Fixtures/** -text -whitespace
+OfficeIMO.Access.Tests/Fixtures/**/*.mdb -diff
+OfficeIMO.Access.Tests/Fixtures/**/*.accdb -diff
+OfficeIMO.Access.Tests/Fixtures/**/*.pdf -diff
+OfficeIMO.Access.Tests/Fixtures/**/manifest.json text eol=lf diff
+
+# DjVu inputs and decoded/text references have manifest-bound producer bytes.
+OfficeIMO.DjVu.Tests/Fixtures/** -text -whitespace
+OfficeIMO.DjVu.Tests/Fixtures/**/*.djvu -diff
+OfficeIMO.DjVu.Tests/Fixtures/**/*.iff -diff
+OfficeIMO.DjVu.Tests/Fixtures/**/*.bzz -diff
+OfficeIMO.DjVu.Tests/Fixtures/**/*.ppm -diff
+OfficeIMO.DjVu.Tests/Fixtures/**/*.pbm -diff
+
+# Browser assets are generated and hashed from canonical UTF-8/LF bytes.
+OfficeIMO.Browser/** text eol=lf
+OfficeIMO.JavaScript/** text eol=lf
+
+# Raw decoded raster evidence contains arbitrary bytes, including LF without NUL.
+# Windows checkout must not expand those sample values to CRLF.
+*.rgba -text -diff
+OfficeIMO.Html.Tests/Fixtures/ExcelRaster/*.webp -text -diff
+*.yuv16 -text -diff
+*.avif -text -diff
+*.obu -text -diff
+*.bin -text -diff
+OfficeIMO.Drawing.Tests/TestAssets/OpenSans-Bold.ttf -text -diff
+OfficeIMO.Studio.Tests/Run-StorageAcceptance.sh text eol=lf
+
+# Integrity-labelled document inputs and provider captures must survive Windows
+# checkout without line-ending conversion, including ASCII-only PDF containers.
+OfficeIMO.TestAssets/*Layout/*.pdf -text -diff
+OfficeIMO.TestAssets/EnglishLayout/*-provider.tsv -text -diff
+OfficeIMO.TestAssets/ScanQuality/*.pdf -text -diff
+OfficeIMO.TestAssets/ScanQuality/*.tif -text -diff
+OfficeIMO.TestAssets/ScanQuality/*.txt -text -diff
+OfficeIMO.TestAssets/*Layout/manifest.json text eol=lf
+OfficeIMO.TestAssets/ScanQuality/sources.json text eol=lf
+
+# Independent redaction fixtures include ASCII containers and embedded fonts.
+# Preserve source fingerprints and PDF stream/xref byte offsets on every OS.
+OfficeIMO.Pdf.Tests/Pdf/Fixtures/Interoperability/Redaction/*.pdf -text -diff
+
+# Frozen HTML qualification inputs and manifests identify exact source bytes.
+# Preserve their authored line endings rather than changing their integrity pins.
+OfficeIMO.TestAssets/Documents/Html/Qualification/** -text
+
+# RTF interoperability fixtures are byte-level evidence. Do not normalize their
+# producer line endings, because corpus SHA-256 checks must match on every OS.
+OfficeIMO.Rtf.Tests/Documents/RtfCorpus/**/*.rtf -text -diff
+
+# Native email exports are hash-bound producer evidence, including their line endings.
+OfficeIMO.Email.Tests/Corpora/native-apple-20261003/** -text -diff
+OfficeIMO.Email.Tests/Corpora/native-apple-20261003/manifest.json text eol=lf diff
+
+# Independent LaTeX input hashes identify the upstream bytes on every platform.
+OfficeIMO.Latex.Tests/Fixtures/latex2e/*.tex -text
+OfficeIMO.Latex.Tests/Fixtures/latex2e/*.txt -text
+
+# Hash-bound EPUB producer fixtures retain upstream bytes on every checkout platform.
+OfficeIMO.TestAssets/Documents/Epub/IdpfPublishing/childrens-literature/** -text -whitespace
+
+# Public showcase downloads are generated binary evidence. Preserve exact bytes
+# so the committed manifest hashes remain stable across platforms and checkouts.
+Website/static/downloads/showcase/** -text -diff
+
+# Showcase generation receipts bind the exact recipe and CSV input bytes.
+OfficeIMO.Examples/PowerShell/*.ps1 text eol=lf
+OfficeIMO.Examples/PowerShell/Data/*.csv text eol=lf
+Website/scripts/Invoke-ShowcasePowerShellExample.ps1 text eol=lf
+Website/scripts/Build-ShowcaseEvidence.ps1 text eol=lf
+Website/scripts/ShowcaseEvidence.Helpers.ps1 text eol=lf
+Website/scripts/ShowcaseEvidence.Provenance.ps1 text eol=lf
+
+# Published benchmark payloads are integrity-checked byte-for-byte against the
+# catalog. Keep their committed line endings unchanged on every platform.
+Website/static/data/benchmarks/library-comparisons/*.json text eol=lf -diff
+
+# Corpus publication hashes identify the original runner report bytes. Preserve
+# them exactly, including the measured producer's line endings, on every OS.
+Website/data/pdf_corpus_report.json -text -diff
+
+###############################################################################
+# Set default behavior for command prompt diff.
+#
+# This is need for earlier builds of msysgit that does not have it on by
+# default for csharp files.
+# Note: This is only used by command line
+###############################################################################
+#*.cs     diff=csharp
+
+###############################################################################
+# Set the merge driver for project and solution files
+#
+# Merging from the command prompt will add diff markers to the files if there
+# are conflicts (Merging from VS is not affected by the settings below, in VS
+# the diff markers are never inserted). Diff markers may cause the following 
+# file extensions to fail to load in VS. An alternative would be to treat
+# these files as binary and thus will always conflict and require user
+# intervention with every merge. To do so, just uncomment the entries below
+###############################################################################
+#*.sln       merge=binary
+#*.csproj    merge=binary
+#*.vbproj    merge=binary
+#*.vcxproj   merge=binary
+#*.vcproj    merge=binary
+#*.dbproj    merge=binary
+#*.fsproj    merge=binary
+#*.lsproj    merge=binary
+#*.wixproj   merge=binary
+#*.modelproj merge=binary
+#*.sqlproj   merge=binary
+#*.wwaproj   merge=binary
+
+###############################################################################
+# behavior for image files
+#
+# image files are treated as binary by default.
+###############################################################################
+#*.jpg   binary
+#*.png   binary
+#*.gif   binary
+
+###############################################################################
+# diff behavior for common document formats
+# 
+# Convert binary document formats to text before diffing them. This feature
+# is only available from the command line. Turn it on by uncommenting the 
+# entries below.
+###############################################################################
+#*.doc   diff=astextplain
+#*.DOC   diff=astextplain
+#*.docx  diff=astextplain
+#*.DOCX  diff=astextplain
+#*.dot   diff=astextplain
+#*.DOT   diff=astextplain
+#*.pdf   diff=astextplain
+#*.PDF   diff=astextplain
+#*.rtf   diff=astextplain
+#*.RTF   diff=astextplain
+
+# Preserve unmodified upstream invoice fixtures and Schematron compiler bytes.
+OfficeIMO.Invoicing.Validation/Compiler/*.xsl -text -diff
+OfficeIMO.Invoicing.Tests/Fixtures/KoSIT/*.xml -text -diff
+OfficeIMO.Invoicing.Tests/Fixtures/KoSIT/LICENSE.txt -text -diff
+# Official FA(3) XML and imported XSDs are pinned byte-level authority evidence.
+OfficeIMO.Invoicing.Tests/Fixtures/FA3/*.xml -text -diff
+OfficeIMO.Invoicing.Validation.Tests/Fixtures/FA3/Schemas/*.xsd -text -diff
+OfficeIMO.Invoicing.KSeF/Schemas/*.xsd -text -diff
+OfficeIMO.Invoicing.KSeF/Schemas/LICENSE.txt -text -diff
+OfficeIMO.Invoicing.KSeF.Tests/Fixtures/*.xml -text -diff
+
+# Hash-bound OCR inputs and independently reviewed labels must retain their original bytes.
+OfficeIMO.TestAssets/OcrQuality/*.pdf -text -diff
+OfficeIMO.TestAssets/OcrQuality/*.tif -text -diff
+OfficeIMO.TestAssets/OcrQuality/*.txt -text -whitespace
+OfficeIMO.TestAssets/OcrQuality/*.json -text
+
+# Reviewed upstream license texts are hash-bound packaging inputs. Preserve their
+# bytes and original whitespace across checkout platforms.
+OfficeIMO.Studio/Licenses/ThirdParty/* -text -whitespace
+
+# Legacy Visio producer inputs are hash-bound evidence, including line endings.
+OfficeIMO.Visio.Tests/Fixtures/LegacyXml/*.vdx -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyXml/*.vsx -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyXml/*.vtx -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyXml/*LICENSE.txt -text -whitespace
+OfficeIMO.Visio.Tests/Fixtures/LegacyXml/*.xml -text -whitespace
+# Binary Visio qualification pairs preserve the producer's exact original bytes.
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vsd -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vss -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vst -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vdx -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vsx -text -diff
+OfficeIMO.Visio.Tests/Fixtures/LegacyBinary/*.vtx -text -diff
+OfficeIMO.OpenDocument.Tests/Fixtures/Drawing/*.fodg -text
+OfficeIMO.OpenDocument.Tests/Fixtures/Drawing/*.fodp -text
+
+# Captured benchmark packets retain exact member bytes inside verified archives.
+Docs/benchmarks/excel-csv-broad-throughput-2026-10-04/raw-packets.zip -text -diff
+Docs/benchmarks/excel-csv-throughput-2026-10-04/raw-packets.zip -text -diff
+Docs/benchmarks/excel-large-typed-read-2026-10-04/raw-packets.zip -text -diff
+
+# Preserve the independent composite-font refusal fixture across checkout platforms.
+OfficeIMO.Pdf.Tests/Pdf/Fixtures/Interoperability/CompositeTextDecoding/*.pdf -text -diff
+
+# Predefined-font fixtures and pinned Adobe resources are byte-level evidence.
+OfficeIMO.Pdf.Tests/Pdf/Fixtures/Interoperability/PredefinedCjk/*.pdf -text -diff
+OfficeIMO.Pdf/Resources/AdobeCMaps/** -text -whitespace
+
+# The dated tabular publication manifest pins raw and derived member bytes,
+# including captured CRLF and native report whitespace.
+Docs/benchmarks/officeimo.excel-tabular-2026-10-08.md -text -whitespace
+Docs/benchmarks/officeimo.excel-tabular-2026-10-08/** -text -whitespace
+Docs/benchmarks/officeimo.excel-tabular-2026-10-08/raw-packets.zip -diff

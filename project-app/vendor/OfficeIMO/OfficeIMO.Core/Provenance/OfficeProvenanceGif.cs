@@ -1,0 +1,439 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Xml;
+using OfficeIMO.Drawing;
+
+namespace OfficeIMO.Provenance;
+
+internal static partial class OfficeProvenanceGif {
+    internal static void Inspect(byte[] data, OfficeProvenanceOptions options, OfficeProvenanceContext context) {
+        Walk(data, options, context, output: null, removalOptions: null, changes: null, out _);
+    }
+
+    internal static byte[] Remove(
+        byte[] data,
+        OfficeProvenanceRemovalOptions options,
+        List<OfficeProvenanceChange> changes,
+        out bool reserialized) {
+        reserialized = false;
+        if (!options.RemoveC2paManifests && !options.RemoveAiSourceMetadata) {
+            return OfficeProvenanceBinary.CloneForOutput(data, options.EffectiveMaxOutputBytes);
+        }
+        using var output = new OfficeProvenanceBoundedMemoryStream(options.EffectiveMaxOutputBytes, data.Length);
+        int bodyOffset = GetBodyOffset(data);
+        output.Write(data, 0, bodyOffset);
+        Walk(data, options.Limits, context: null, output, options, changes, out reserialized);
+        return output.ToArray();
+    }
+
+    private static void Walk(
+        byte[] data,
+        OfficeProvenanceOptions options,
+        OfficeProvenanceContext? context,
+        Stream? output,
+        OfficeProvenanceRemovalOptions? removalOptions,
+        List<OfficeProvenanceChange>? changes,
+        out bool reserialized) {
+        reserialized = false;
+        int offset = GetBodyOffset(data);
+        int c2paApplicationCount = CountC2paApplications(
+            data, offset, options, out int xmpApplicationCount, out bool validStructure);
+        bool foundTrailer = false;
+        int entryCount = 0;
+        int nextRawTrailer = -2;
+        while (offset < data.Length) {
+            options.CancellationToken.ThrowIfCancellationRequested();
+            ReserveEntry(ref entryCount, options.MaxContainerEntries);
+            int blockStart = offset;
+            byte introducer = data[offset++];
+            if (introducer == 0x3B) {
+                output?.Write(data, blockStart, 1);
+                foundTrailer = true;
+                break;
+            }
+            if (introducer == 0x2C) {
+                if (data.Length - offset < 9) throw new InvalidDataException("GIF image descriptor is truncated.");
+                byte packed = data[offset + 8];
+                offset += 9;
+                if ((packed & 0x80) != 0) {
+                    int tableBytes = 3 << ((packed & 0x07) + 1);
+                    if (tableBytes > data.Length - offset) throw new InvalidDataException("GIF local color table is truncated.");
+                    offset += tableBytes;
+                }
+                if (offset >= data.Length) throw new InvalidDataException("GIF image data is truncated.");
+                offset++; // LZW minimum code size.
+                offset = SkipSubBlocks(data, offset, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries, out _, options.CancellationToken);
+                output?.Write(data, blockStart, offset - blockStart);
+                continue;
+            }
+            if (introducer != 0x21 || offset >= data.Length) throw new InvalidDataException("GIF contains an unsupported or truncated block.");
+            byte label = data[offset++];
+            if (label == 0xFF) {
+                if (offset >= data.Length) throw new InvalidDataException("GIF application extension is truncated.");
+                int headerLength = data[offset++];
+                if (headerLength > data.Length - offset) throw new InvalidDataException("GIF application extension header is truncated.");
+                bool isGif89a = OfficeProvenanceBinary.MatchesAscii(data, 0, "GIF89a");
+                bool isC2paApplication = headerLength == 11 && OfficeProvenanceBinary.MatchesAscii(data, offset, "C2PA_GIF") &&
+                    data[offset + 8] == 0x01 && data[offset + 9] == 0x00 && data[offset + 10] == 0x00;
+                bool isXmp = headerLength == 11 && isGif89a &&
+                    OfficeProvenanceBinary.MatchesAscii(data, offset, "XMP DataXMP");
+                offset += headerLength;
+                int payloadStart = offset;
+                if (isXmp && TryReadXmpApplicationData(
+                    data, payloadStart, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries,
+                    options.CancellationToken, ref nextRawTrailer,
+                    out byte[] packet, out int extensionEnd, out int trailerStart, out bool usesSubBlocks)) {
+                    string location = $"GIF/XMP@{blockStart}";
+                    bool carrierValid = xmpApplicationCount == 1 && validStructure;
+                    if (context != null) OfficeProvenanceXmp.Inspect(packet, options, context, location, carrierValid);
+                    if (output != null && removalOptions != null && changes != null && removalOptions.RemoveAiSourceMetadata &&
+                        (carrierValid || !removalOptions.RequireStructurallyValidCarrier) &&
+                        OfficeProvenanceXmp.TryRemoveAiDeclarations(packet, removalOptions, location, changes, out byte[] cleaned)) {
+                        output.Write(data, blockStart, payloadStart - blockStart);
+                        if (usesSubBlocks) WriteSubBlocks(output, cleaned);
+                        else output.Write(cleaned, 0, cleaned.Length);
+                        output.Write(data, trailerStart, extensionEnd - trailerStart);
+                        reserialized = true;
+                    } else {
+                        output?.Write(data, blockStart, extensionEnd - blockStart);
+                    }
+                    offset = extensionEnd;
+                    continue;
+                }
+                offset = SkipSubBlocks(data, offset, isC2paApplication ? options.MaxManifestBytes : options.MaxAssetBytes,
+                    ref entryCount, options.MaxContainerEntries, out int payloadLength, options.CancellationToken);
+                if (isC2paApplication) {
+                    byte[] manifest = CollectSubBlocks(data, payloadStart, payloadLength, options.CancellationToken);
+                    bool valid = c2paApplicationCount == 1 && validStructure && isGif89a && OfficeC2paManifestStore.IsValid(
+                        manifest, 0, manifest.Length, options.MaxManifestBytes, options.MaxContainerEntries, out _);
+                    string location = $"GIF/C2PA_GIF@{blockStart}";
+                    context?.Add(new OfficeProvenanceEvidence(OfficeProvenanceCarrierKind.C2paManifest, location, valid, manifest.Length)
+                        .WithManifest(valid ? OfficeC2paManifestStore.TryDescribe(manifest, 0, manifest.Length) : null));
+                    bool remove = output != null && removalOptions != null && changes != null &&
+                        removalOptions.RemoveC2paManifests &&
+                        (valid || !removalOptions.RequireStructurallyValidCarrier);
+                    if (remove) changes!.Add(new OfficeProvenanceChange(OfficeProvenanceCarrierKind.C2paManifest, location, offset - blockStart));
+                    else output?.Write(data, blockStart, offset - blockStart);
+                } else {
+                    output?.Write(data, blockStart, offset - blockStart);
+                }
+            } else {
+                offset = SkipSubBlocks(data, offset, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries, out _, options.CancellationToken);
+                output?.Write(data, blockStart, offset - blockStart);
+            }
+        }
+        if (!foundTrailer) throw new InvalidDataException("GIF does not contain a trailer.");
+        if (offset < data.Length) output?.Write(data, offset, data.Length - offset);
+    }
+
+    private static int CountC2paApplications(
+        byte[] data,
+        int offset,
+        OfficeProvenanceOptions options,
+        out int xmpApplicationCount,
+        out bool validStructure) {
+        int count = 0;
+        xmpApplicationCount = 0;
+        validStructure = false;
+        int entryCount = 0;
+        int nextRawTrailer = -2;
+        bool foundImage = false;
+        while (offset < data.Length) {
+            options.CancellationToken.ThrowIfCancellationRequested();
+            ReserveEntry(ref entryCount, options.MaxContainerEntries);
+            byte introducer = data[offset++];
+            if (introducer == 0x3B) {
+                validStructure = offset == data.Length && foundImage && OfficeGifReader.TryValidateAllFrames(data, options.CancellationToken);
+                return count;
+            }
+            if (introducer == 0x2C) {
+                if (data.Length - offset < 9) throw new InvalidDataException("GIF image descriptor is truncated.");
+                byte packed = data[offset + 8];
+                offset += 9;
+                if ((packed & 0x80) != 0) {
+                    int tableBytes = 3 << ((packed & 0x07) + 1);
+                    if (tableBytes > data.Length - offset) throw new InvalidDataException("GIF local color table is truncated.");
+                    offset += tableBytes;
+                }
+                if (offset >= data.Length) throw new InvalidDataException("GIF image data is truncated.");
+                offset++;
+                offset = SkipSubBlocks(data, offset, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries, out _, options.CancellationToken);
+                foundImage = true;
+                continue;
+            }
+            if (introducer != 0x21 || offset >= data.Length) throw new InvalidDataException("GIF contains an unsupported or truncated block.");
+            byte label = data[offset++];
+            if (label == 0xFF) {
+                if (offset >= data.Length) throw new InvalidDataException("GIF application extension is truncated.");
+                int headerLength = data[offset++];
+                if (headerLength > data.Length - offset) throw new InvalidDataException("GIF application extension header is truncated.");
+                bool isC2paApplication = headerLength == 11 && OfficeProvenanceBinary.MatchesAscii(data, offset, "C2PA_GIF") &&
+                    data[offset + 8] == 0x01 && data[offset + 9] == 0x00 && data[offset + 10] == 0x00;
+                bool isXmp = headerLength == 11 && OfficeProvenanceBinary.MatchesAscii(data, 0, "GIF89a") &&
+                    OfficeProvenanceBinary.MatchesAscii(data, offset, "XMP DataXMP");
+                if (isC2paApplication) count++;
+                if (isXmp) xmpApplicationCount++;
+                offset += headerLength;
+                if (isXmp && TryReadXmpApplicationData(
+                    data, offset, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries,
+                    options.CancellationToken, ref nextRawTrailer,
+                    out _, out int extensionEnd, out _, out _)) {
+                    offset = extensionEnd;
+                    continue;
+                }
+                offset = SkipSubBlocks(data, offset, isC2paApplication ? options.MaxManifestBytes : options.MaxAssetBytes,
+                    ref entryCount, options.MaxContainerEntries, out _, options.CancellationToken);
+            } else {
+                offset = SkipSubBlocks(data, offset, options.MaxAssetBytes, ref entryCount, options.MaxContainerEntries, out _, options.CancellationToken);
+            }
+        }
+        throw new InvalidDataException("GIF does not contain a trailer.");
+    }
+
+    private static int GetBodyOffset(byte[] data) {
+        if (data.Length < 13 || !(OfficeProvenanceBinary.MatchesAscii(data, 0, "GIF87a") || OfficeProvenanceBinary.MatchesAscii(data, 0, "GIF89a"))) {
+            throw new InvalidDataException("GIF header is invalid.");
+        }
+        int offset = 13;
+        byte packed = data[10];
+        if ((packed & 0x80) != 0) {
+            int tableBytes = 3 << ((packed & 0x07) + 1);
+            if (tableBytes > data.Length - offset) throw new InvalidDataException("GIF global color table is truncated.");
+            offset += tableBytes;
+        }
+        return offset;
+    }
+
+    private static int SkipSubBlocks(
+        byte[] data,
+        int offset,
+        long maximumPayload,
+        ref int entryCount,
+        int maximumEntries,
+        out int payloadLength, CancellationToken cancellationToken = default) {
+        long total = 0;
+        while (true) {
+            cancellationToken.ThrowIfCancellationRequested();
+            ReserveEntry(ref entryCount, maximumEntries);
+            if (offset >= data.Length) throw new InvalidDataException("GIF data sub-blocks are truncated.");
+            int length = data[offset++];
+            if (length == 0) break;
+            if (length > data.Length - offset) throw new InvalidDataException("GIF data sub-block exceeds the asset bounds.");
+            total += length;
+            if (total > maximumPayload || total > int.MaxValue) {
+                throw OfficeProvenanceLimitException.Create("GIF data sub-blocks exceed the configured limit.");
+            }
+            offset += length;
+        }
+        payloadLength = (int)total;
+        return offset;
+    }
+
+    private static void ReserveEntry(ref int entryCount, int maximumEntries) {
+        if (entryCount >= maximumEntries) {
+            throw OfficeProvenanceLimitException.Create($"The GIF exceeds the configured container entry limit of {maximumEntries}.");
+        }
+        entryCount++;
+    }
+
+    private static byte[] CollectSubBlocks(byte[] data, int offset, int payloadLength, CancellationToken cancellationToken = default) {
+        byte[] result = new byte[payloadLength];
+        int target = 0;
+        while (target < result.Length) {
+            cancellationToken.ThrowIfCancellationRequested();
+            int length = data[offset++];
+            Buffer.BlockCopy(data, offset, result, target, length);
+            offset += length;
+            target += length;
+        }
+        return result;
+    }
+
+    private static bool TryReadXmpApplicationData(
+        byte[] data,
+        int payloadOffset,
+        long maximumPacketBytes,
+        ref int entryCount,
+        int maximumEntries,
+        CancellationToken cancellationToken,
+        ref int nextRawTrailer,
+        out byte[] packet,
+        out int extensionEnd,
+        out int trailerStart,
+        out bool usesSubBlocks) {
+        packet = Array.Empty<byte>();
+        extensionEnd = payloadOffset;
+        trailerStart = payloadOffset;
+        usesSubBlocks = false;
+        int cursor = payloadOffset;
+        if (cursor >= data.Length || HasXmpMagicTrailer(data, cursor)) return false;
+        int candidateEntryCount = entryCount;
+        bool couldBeRawXmp = LooksLikeRawXmpPacket(data, payloadOffset, cancellationToken);
+        using (var collected = new MemoryStream()) {
+            while (cursor < data.Length) {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (HasXmpMagicTrailer(data, cursor)) {
+                    if (collected.Length == 0) break;
+                    if (couldBeRawXmp &&
+                        IsWellFormedRawXmp(
+                            data, payloadOffset, cursor - payloadOffset, maximumPacketBytes,
+                            maximumEntries, cancellationToken)) {
+                        return TryReadRawXmpApplicationData(
+                            data, payloadOffset, maximumPacketBytes, ref entryCount, maximumEntries,
+                            cancellationToken, ref nextRawTrailer, out packet, out extensionEnd, out trailerStart);
+                    }
+                    if (candidateEntryCount > maximumEntries) {
+                        throw OfficeProvenanceLimitException.Create("GIF XMP data sub-blocks exceed the configured entry limit.");
+                    }
+                    packet = collected.ToArray();
+                    extensionEnd = cursor + 258;
+                    trailerStart = cursor;
+                    usesSubBlocks = true;
+                    entryCount = candidateEntryCount;
+                    return true;
+                }
+                candidateEntryCount++;
+                if (candidateEntryCount > maximumEntries) {
+                    if (couldBeRawXmp) {
+                        int rawEntryCount = entryCount;
+                        int rawTrailer = nextRawTrailer;
+                        if (TryReadRawXmpApplicationData(
+                                data, payloadOffset, maximumPacketBytes, ref rawEntryCount, maximumEntries,
+                                cancellationToken, ref rawTrailer, out byte[] rawPacket, out int rawEnd, out int rawStart) &&
+                            IsWellFormedRawXmp(data, payloadOffset, rawPacket.Length, maximumPacketBytes,
+                                maximumEntries, cancellationToken)) {
+                            entryCount = rawEntryCount;
+                            nextRawTrailer = rawTrailer;
+                            packet = rawPacket;
+                            extensionEnd = rawEnd;
+                            trailerStart = rawStart;
+                            return true;
+                        }
+                    }
+                    throw OfficeProvenanceLimitException.Create("GIF XMP data sub-blocks exceed the configured entry limit.");
+                }
+                int length = data[cursor++];
+                if (length == 0 || length > data.Length - cursor) break;
+                if (collected.Length > maximumPacketBytes - length) {
+                    throw OfficeProvenanceLimitException.Create("GIF XMP data sub-blocks exceed the configured asset limit.");
+                }
+                collected.Write(data, cursor, length);
+                cursor += length;
+            }
+        }
+        if (!couldBeRawXmp) return false;
+        return TryReadRawXmpApplicationData(
+            data, payloadOffset, maximumPacketBytes, ref entryCount, maximumEntries, cancellationToken, ref nextRawTrailer,
+            out packet, out extensionEnd, out trailerStart);
+    }
+
+    private static bool LooksLikeRawXmpPacket(byte[] data, int offset, CancellationToken cancellationToken) {
+        if (offset <= data.Length - 3 && data[offset] == 0xEF && data[offset + 1] == 0xBB && data[offset + 2] == 0xBF) {
+            offset += 3;
+        }
+        while (offset < data.Length && data[offset] is 0x09 or 0x0A or 0x0D or 0x20) {
+            if ((offset & 0xFFF) == 0) cancellationToken.ThrowIfCancellationRequested();
+            offset++;
+        }
+        if (offset >= data.Length || data[offset++] != (byte)'<' || offset >= data.Length) return false;
+        byte next = data[offset];
+        return next is (byte)'?' or (byte)'!' or (byte)'_' or (>= (byte)'A' and <= (byte)'Z') or (>= (byte)'a' and <= (byte)'z');
+    }
+
+    private static bool IsWellFormedRawXmp(
+        byte[] data,
+        int offset,
+        int length,
+        long maximumPacketBytes,
+        int maximumEntries,
+        CancellationToken cancellationToken) {
+        if (length <= 0 || length > maximumPacketBytes) return false;
+        try {
+            var settings = new XmlReaderSettings {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+                MaxCharactersInDocument = maximumPacketBytes,
+                MaxCharactersFromEntities = 0
+            };
+            using var stream = new MemoryStream(data, offset, length, writable: false);
+            using XmlReader reader = XmlReader.Create(stream, settings);
+            int nodes = 0;
+            while (true) {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (!reader.Read()) break;
+                if (reader.NodeType == XmlNodeType.Element && reader.Depth > 256) {
+                    throw OfficeProvenanceLimitException.Create("GIF XMP exceeds the configured XML depth limit.");
+                }
+                int current = reader.NodeType == XmlNodeType.Element
+                    ? 1 + reader.AttributeCount
+                    : reader.NodeType is XmlNodeType.Text or XmlNodeType.CDATA or XmlNodeType.ProcessingInstruction or
+                        XmlNodeType.Comment or XmlNodeType.Whitespace or XmlNodeType.SignificantWhitespace ? 1 : 0;
+                if (current > 0 && nodes > maximumEntries - current) {
+                    throw OfficeProvenanceLimitException.Create("GIF XMP exceeds the configured XML node limit.");
+                }
+                nodes += current;
+            }
+            return true;
+        } catch (XmlException) {
+            return false;
+        }
+    }
+
+    private static bool TryReadRawXmpApplicationData(
+        byte[] data,
+        int payloadOffset,
+        long maximumPacketBytes,
+        ref int entryCount,
+        int maximumEntries,
+        CancellationToken cancellationToken,
+        ref int nextRawTrailer,
+        out byte[] packet,
+        out int extensionEnd,
+        out int trailerStart) {
+        packet = Array.Empty<byte>();
+        extensionEnd = payloadOffset;
+        trailerStart = payloadOffset;
+        const int trailerLength = 258;
+        if (nextRawTrailer < payloadOffset) {
+            int start = Math.Max(payloadOffset, nextRawTrailer + 1);
+            nextRawTrailer = int.MaxValue;
+            for (int candidate = start; candidate <= data.Length - trailerLength; candidate++) {
+                if ((candidate & 0xFFF) == 0) cancellationToken.ThrowIfCancellationRequested();
+                if (!HasXmpMagicTrailer(data, candidate)) continue;
+                nextRawTrailer = candidate;
+                break;
+            }
+        }
+        long length = nextRawTrailer - (long)payloadOffset;
+        if (nextRawTrailer == int.MaxValue || length <= 0 || length > maximumPacketBytes || length > int.MaxValue) return false;
+        int rawEntries = entryCount;
+        ReserveEntry(ref rawEntries, maximumEntries);
+        packet = new byte[(int)length];
+        Buffer.BlockCopy(data, payloadOffset, packet, 0, packet.Length);
+        extensionEnd = nextRawTrailer + trailerLength;
+        trailerStart = nextRawTrailer;
+        entryCount = rawEntries;
+        return true;
+    }
+
+    private static bool HasXmpMagicTrailer(byte[] data, int offset) {
+        const int trailerLength = 258;
+        if (offset < 0 || offset > data.Length - trailerLength || data[offset] != 0x01 || data[offset + 1] != 0xFF) return false;
+        for (int index = 1; index <= 255; index++) {
+            if (data[offset + index] != 256 - index) return false;
+        }
+        return data[offset + 256] == 0 && data[offset + 257] == 0;
+    }
+
+    private static void WriteSubBlocks(Stream output, byte[] payload) {
+        int offset = 0;
+        while (offset < payload.Length) {
+            int length = Math.Min(255, payload.Length - offset);
+            output.WriteByte((byte)length);
+            output.Write(payload, offset, length);
+            offset += length;
+        }
+    }
+}

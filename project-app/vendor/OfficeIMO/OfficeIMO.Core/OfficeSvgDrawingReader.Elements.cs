@@ -1,0 +1,441 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+
+namespace OfficeIMO.Drawing;
+
+// Reads a bounded subset of SVG into the shared dependency-free drawing scene.
+public static partial class OfficeSvgDrawingReader {
+    private static void AddChildren(
+        XElement parent,
+        OfficeDrawing drawing,
+        SvgPaintContext inherited,
+        SvgPaintServerRegistry paintServers,
+        SvgElementReferenceRegistry references,
+        OfficeTransform inheritedTransform,
+        double viewX,
+        double viewY,
+        int maximumElements,
+        double maximumViewportDimension,
+        double maximumViewportPixels,
+        int depth,
+        ref int visited,
+        ref int pathCommands,
+        ref bool pathCommandLimitExceeded,
+        ref int unsupported) {
+        if (depth > MaximumSvgNestingDepth) {
+            unsupported++;
+            return;
+        }
+        foreach (XElement element in parent.Elements()) {
+            references.CancellationToken.ThrowIfCancellationRequested();
+            AddElement(element, drawing, inherited, paintServers, references, inheritedTransform, viewX, viewY,
+                maximumElements, maximumViewportDimension, maximumViewportPixels, depth,
+                ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported);
+            if (visited > maximumElements) return;
+        }
+    }
+
+    private static void AddElement(
+        XElement element,
+        OfficeDrawing drawing,
+        SvgPaintContext inherited,
+        SvgPaintServerRegistry paintServers,
+        SvgElementReferenceRegistry references,
+        OfficeTransform inheritedTransform,
+        double viewX,
+        double viewY,
+        int maximumElements,
+        double maximumViewportDimension,
+        double maximumViewportPixels,
+        int depth,
+        ref int visited,
+        ref int pathCommands,
+        ref bool pathCommandLimitExceeded,
+        ref int unsupported,
+        bool suppressElementClip = false) {
+        int first = drawing.Elements.Count;
+        try {
+            AddElementPaint(element, drawing, inherited, paintServers, references, inheritedTransform, viewX, viewY,
+                maximumElements, maximumViewportDimension, maximumViewportPixels, depth,
+                ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported, suppressElementClip);
+        } finally {
+            if (references.RetainSourceElementIds && element.Attribute("id")?.Value is string id && id.Length != 0) {
+                for (int i = first; i < drawing.Elements.Count; i++) drawing.Elements[i].RetainSourceElementId(id);
+            }
+        }
+    }
+
+    private static void AddElementPaint(
+        XElement element,
+        OfficeDrawing drawing,
+        SvgPaintContext inherited,
+        SvgPaintServerRegistry paintServers,
+        SvgElementReferenceRegistry references,
+        OfficeTransform inheritedTransform,
+        double viewX,
+        double viewY,
+        int maximumElements,
+        double maximumViewportDimension,
+        double maximumViewportPixels,
+        int depth,
+        ref int visited,
+        ref int pathCommands,
+        ref bool pathCommandLimitExceeded,
+        ref int unsupported,
+        bool suppressElementClip = false) {
+        visited++;
+        if (visited > maximumElements) return;
+        if (!IsNativeSvgElement(element, references.NativeNamespace)) {
+            unsupported++;
+            return;
+        }
+        string name = element.Name.LocalName;
+        if (name is "title" or "desc" or "metadata" or "style" or "linearGradient" or "radialGradient" or "pattern" or "stop") return;
+        if (name == "defs") return;
+
+        string? clipValue = ReadPresentationProperty(element, "clip-path");
+        if (name != "svg" && !suppressElementClip && !string.IsNullOrWhiteSpace(clipValue) &&
+            !clipValue!.Trim().Equals("none", StringComparison.OrdinalIgnoreCase)) {
+            var content = new OfficeDrawing(drawing.Width, drawing.Height);
+            content.Fonts.AddRange(drawing.Fonts);
+            AddElement(element, content, inherited, paintServers, references, inheritedTransform, viewX, viewY,
+                maximumElements, maximumViewportDimension, maximumViewportPixels, depth,
+                ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported, suppressElementClip: true);
+            OfficeTransform clipTransform = ResolveTransform(element, inheritedTransform, viewX, viewY, ref unsupported);
+            if (name == "use" && TryOptionalUseLength(element, "x", out double clipX) && TryOptionalUseLength(element, "y", out double clipY))
+                clipTransform = OfficeTransform.Translate(clipX, clipY).Then(clipTransform);
+            if (!TryApplySvgClip(content, clipValue!, references, paintServers, clipTransform, viewX, viewY,
+                    maximumElements, ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported, out OfficeDrawing? clipped)) {
+                unsupported++;
+            }
+            drawing.AddDrawingForClippedRendering(clipped ?? content, 0D, 0D, null);
+            return;
+        }
+
+        inherited.DashPercentageReference = NormalizedSvgDiagonal(drawing.Width, drawing.Height);
+        SvgPaintContext style = ResolvePaintContext(element, inherited, paintServers, ref unsupported);
+        if (!style.Displayed || style.Opacity <= 0D) return;
+        if (!style.VisibilityVisible && name is not "g" and not "a" and not "switch" and not "svg" and not "use" and not "text") return;
+        OfficeTransform transform = ResolveTransform(element, inheritedTransform, viewX, viewY, ref unsupported);
+        if (name == "foreignObject") {
+            TryAddForeignObject(
+                element,
+                drawing,
+                style,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                ref visited,
+                ref unsupported);
+            return;
+        }
+        if (name == "image") {
+            if (!TryAddEmbeddedSvgImage(element, drawing, style, references, transform, viewX, viewY)) unsupported++;
+            return;
+        }
+        if (name == "svg") {
+            if (!TryAddNestedSvgViewport(
+                    element, drawing, style, paintServers, references, transform, viewX, viewY,
+                    maximumElements, maximumViewportDimension, maximumViewportPixels, depth + 1,
+                    ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported)) {
+                unsupported++;
+            }
+            return;
+        }
+        if (name is "g" or "a" or "switch") {
+            double groupOpacity = style.Opacity;
+            style.Opacity = 1D;
+            var elementBudget = references.CaptureSurfaceBudget();
+            bool hasEffects = TryResolveSvgEffects(
+                element,
+                drawing.Width,
+                drawing.Height,
+                drawing.Fonts,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeBlendMode blendMode,
+                out OfficeDrawingSoftMask? softMask,
+                out SvgFilterEffect? filterEffect);
+            hasEffects |= groupOpacity < 1D;
+            bool capturesLink = name == "a";
+            if (hasEffects && !references.TryChargeEffectSurfaces(drawing.Width, drawing.Height, softMask != null)) {
+                references.RestoreSurfaceBudget(elementBudget);
+                unsupported++;
+                return;
+            }
+            OfficeDrawing target = hasEffects || capturesLink ? new OfficeDrawing(drawing.Width, drawing.Height) : drawing;
+            if (!ReferenceEquals(target, drawing)) target.Fonts.AddRange(drawing.Fonts);
+            if (name == "switch") {
+                AddFirstSupportedSwitchChild(element, target, style, paintServers, references, transform, viewX, viewY,
+                    maximumElements, maximumViewportDimension, maximumViewportPixels, depth + 1,
+                    ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported);
+            } else {
+                AddChildren(element, target, style, paintServers, references, transform, viewX, viewY,
+                    maximumElements, maximumViewportDimension, maximumViewportPixels, depth + 1,
+                    ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported);
+            }
+            OfficeDrawing linkContent = target;
+            if (hasEffects) {
+                bool applied = TryApplySvgFilter(target, filterEffect, references, transform, maximumElements, ref visited, ref unsupported, out target);
+                AddSvgFilteredDrawing(drawing, target, applied ? filterEffect : null, blendMode, softMask, groupOpacity);
+            } else if (capturesLink) {
+                drawing.AddDrawingForClippedRendering(target, 0D, 0D, null);
+            }
+            if (capturesLink) {
+                TryAddSvgLink(element, linkContent, drawing, ref unsupported);
+            }
+            return;
+        }
+        if (name is "use" or "text") {
+            double groupOpacity = style.Opacity;
+            style.Opacity = 1D;
+            var elementBudget = references.CaptureSurfaceBudget();
+            bool hasEffects = TryResolveSvgEffects(
+                element,
+                drawing.Width,
+                drawing.Height,
+                drawing.Fonts,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeBlendMode blendMode,
+                out OfficeDrawingSoftMask? softMask,
+                out SvgFilterEffect? filterEffect);
+            hasEffects |= groupOpacity < 1D;
+            if (hasEffects && !references.TryChargeEffectSurfaces(drawing.Width, drawing.Height, softMask != null)) {
+                references.RestoreSurfaceBudget(elementBudget);
+                unsupported++;
+                return;
+            }
+            OfficeDrawing target = hasEffects ? new OfficeDrawing(drawing.Width, drawing.Height) : drawing;
+            if (hasEffects) target.Fonts.AddRange(drawing.Fonts);
+            if (name == "use") {
+                AddReferencedElement(element, target, style, paintServers, references, transform, viewX, viewY,
+                    maximumElements, maximumViewportDimension, maximumViewportPixels, depth + 1,
+                    ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported);
+            } else {
+                AddText(
+                    element,
+                    target,
+                    style,
+                    paintServers,
+                    references,
+                    transform,
+                    viewX,
+                    viewY,
+                    maximumElements,
+                    maximumViewportDimension,
+                    maximumViewportPixels,
+                    depth,
+                    ref visited,
+                    ref pathCommands,
+                    ref pathCommandLimitExceeded,
+                    ref unsupported);
+            }
+            if (hasEffects) {
+                bool applied = TryApplySvgFilter(target, filterEffect, references, transform, maximumElements, ref visited, ref unsupported, out target);
+                AddSvgFilteredDrawing(drawing, target, applied ? filterEffect : null, blendMode, softMask, groupOpacity);
+            }
+            return;
+        }
+
+        double shapeOpacity = style.Opacity;
+        style.Opacity = 1D;
+        OfficeDrawingShape? shape = name switch {
+            "rect" => CreateRectangle(element, style, viewX, viewY, drawing.Width, drawing.Height, ref unsupported),
+            "circle" => CreateCircle(element, style, viewX, viewY, drawing.Width, drawing.Height),
+            "ellipse" => CreateEllipse(element, style, viewX, viewY, drawing.Width, drawing.Height),
+            "line" => CreateLine(element, style, viewX, viewY, drawing.Width, drawing.Height),
+            "polygon" => CreatePolygon(element, style, viewX, viewY, close: true, ref pathCommands, ref pathCommandLimitExceeded, references.MaximumGeometryCommands),
+            "polyline" => CreatePolygon(element, style, viewX, viewY, close: false, ref pathCommands, ref pathCommandLimitExceeded, references.MaximumGeometryCommands),
+            "path" => CreatePath(element, style, viewX, viewY, ref pathCommands, ref pathCommandLimitExceeded, references.MaximumGeometryCommands),
+            _ => null
+        };
+        if (shape == null) {
+            unsupported++;
+            return;
+        }
+
+        ApplyDeferredPaint(shape.Shape, style, shape.X, shape.Y, drawing.Width, drawing.Height, viewX, viewY, ref unsupported);
+
+        ApplyTransform(shape, transform);
+
+        var shapeBudget = references.CaptureSurfaceBudget();
+        try {
+            var featureBudget = references.CaptureSurfaceBudget();
+            bool hasPattern = TryAddSvgPatternFill(
+                style.FillPattern,
+                shape,
+                drawing,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeDrawing? patternLayer);
+            if (!hasPattern) references.RestoreSurfaceBudget(featureBudget);
+            featureBudget = references.CaptureSurfaceBudget();
+            bool hasStrokePattern = TryAddSvgPatternStroke(
+                style.StrokePattern,
+                shape,
+                drawing,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeDrawing? strokePatternLayer);
+            if (!hasStrokePattern) references.RestoreSurfaceBudget(featureBudget);
+            bool hasMarkers = TryAddSvgMarkers(
+                shape,
+                drawing,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeDrawing? markerLayer);
+            bool hasEffects = TryResolveSvgEffects(
+                element,
+                drawing.Width,
+                drawing.Height,
+                drawing.Fonts,
+                style,
+                paintServers,
+                references,
+                transform,
+                viewX,
+                viewY,
+                maximumElements,
+                maximumViewportDimension,
+                maximumViewportPixels,
+                depth,
+                ref visited,
+                ref pathCommands,
+                ref pathCommandLimitExceeded,
+                ref unsupported,
+                out OfficeBlendMode blendMode,
+                out OfficeDrawingSoftMask? softMask,
+                out SvgFilterEffect? filterEffect);
+            hasEffects |= shapeOpacity < 1D;
+            if (hasEffects || hasPattern || hasStrokePattern || hasMarkers) {
+                if (!references.TryChargeEffectSurfaces(drawing.Width, drawing.Height, softMask != null)) {
+                    references.RestoreSurfaceBudget(shapeBudget);
+                    unsupported++;
+                    return;
+                }
+                var target = new OfficeDrawing(drawing.Width, drawing.Height);
+                if (patternLayer != null) target.AddEffectDrawing(patternLayer, OfficeTransform.Identity);
+                target.AddShapeForClippedRendering(shape.Shape, shape.X, shape.Y);
+                if (strokePatternLayer != null) target.AddEffectDrawing(strokePatternLayer, OfficeTransform.Identity);
+                if (markerLayer != null) {
+                    target.AddEffectDrawing(markerLayer, OfficeTransform.Identity);
+                    ((OfficeDrawingEffectGroup)target.Elements[target.Elements.Count - 1]).IsSvgMarkerPaint = true;
+                }
+                bool applied = TryApplySvgFilter(target, filterEffect, references, transform, maximumElements, ref visited, ref unsupported, out target);
+                AddSvgFilteredDrawing(drawing, target, applied ? filterEffect : null, blendMode, softMask, shapeOpacity);
+            } else {
+                drawing.AddShapeForClippedRendering(shape.Shape, shape.X, shape.Y);
+            }
+        } catch (ArgumentOutOfRangeException) {
+            references.RestoreSurfaceBudget(shapeBudget);
+            unsupported++;
+        }
+    }
+
+    private static void AddFirstSupportedSwitchChild(
+        XElement element,
+        OfficeDrawing drawing,
+        SvgPaintContext inherited,
+        SvgPaintServerRegistry paintServers,
+        SvgElementReferenceRegistry references,
+        OfficeTransform inheritedTransform,
+        double viewX,
+        double viewY,
+        int maximumElements,
+        double maximumViewportDimension,
+        double maximumViewportPixels,
+        int depth,
+        ref int visited,
+        ref int pathCommands,
+        ref bool pathCommandLimitExceeded,
+        ref int unsupported) {
+        foreach (XElement child in element.Elements()) {
+            string childName = child.Name.LocalName;
+            if (childName is "title" or "desc" or "metadata" or "defs" or "style"
+                or "linearGradient" or "radialGradient" or "pattern" or "stop") {
+                continue;
+            }
+            if (child.Attribute("requiredExtensions") != null || child.Attribute("requiredFeatures") != null) {
+                continue;
+            }
+            if (!IsSupportedSwitchElement(childName)) continue;
+            AddElement(child, drawing, inherited, paintServers, references, inheritedTransform, viewX, viewY,
+                maximumElements, maximumViewportDimension, maximumViewportPixels, depth,
+                ref visited, ref pathCommands, ref pathCommandLimitExceeded, ref unsupported);
+            return;
+        }
+    }
+
+    private static bool IsSupportedSwitchElement(string name) => name is
+        "svg" or "g" or "a" or "switch" or "foreignObject" or "use" or "text"
+        or "image" or "rect" or "circle" or "ellipse" or "line" or "polygon" or "polyline" or "path";
+
+}

@@ -1,0 +1,33 @@
+name: Build and validate
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-validation:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and model checks
+        shell: pwsh
+        run: ./scripts/validate.ps1
+      - name: Windows headless UI checks
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/validate.ps1 -NoBuild -IncludeUi
+      - name: Retain diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-${{ matrix.os }}
+          path: artifacts/validation/
+          if-no-files-found: ignore

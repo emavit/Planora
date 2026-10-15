@@ -1,0 +1,506 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OfficeIMO.Drawing;
+
+public static partial class OfficeRasterResampler {
+    private const string ScratchLimitMessage = "High-quality raster resampling scratch space exceeds the managed image limit.";
+
+    // One float occupies the same four bytes as an RGBA pixel. The source buffer
+    // is already charged by its decoder; sampling adds the output and float scratch.
+    internal static long GetAdditionalHighQualityPixelBufferCost(int sourceWidth, int sourceHeight, int width, int height) =>
+        checked((long)width * height + GetSeparableScratchLength(sourceWidth, sourceHeight, width, height));
+
+    private static long GetSeparableScratchLength(int sourceWidth, int sourceHeight, int width, int height) =>
+        Math.Min(checked((long)width * sourceHeight * 4L), checked((long)sourceWidth * height * 4L));
+
+    private static OfficeRasterImage ResizeSeparable(
+        OfficeRasterImage source,
+        int width,
+        int height,
+        OfficeRasterResamplingMode mode,
+        OfficeRasterResamplingColorSpace colorSpace,
+        long retainedManagedBytes,
+        CancellationToken cancellationToken,
+        Action? resamplingWorkStarted) {
+        if (!TryMeasureSeparableWorkingSet(
+                source.Width,
+                source.Height,
+                width,
+                height,
+                mode,
+                retainedManagedBytes,
+                out int intermediateLength,
+                out int horizontalContributionCount,
+                out int verticalContributionCount,
+                out _, cancellationToken)) {
+            throw new ArgumentException(ScratchLimitMessage, nameof(source));
+        }
+        long horizontalFirstLength = (long)width * source.Height * 4L;
+        long verticalFirstLength = (long)source.Width * height * 4L;
+        AxisContributions horizontal = CreateContributions(
+            source.Width, width, mode, horizontalContributionCount, cancellationToken);
+        AxisContributions vertical = CreateContributions(
+            source.Height, height, mode, verticalContributionCount, cancellationToken);
+        var result = new OfficeRasterImage(width, height);
+        float[] intermediate = AllocateExactHighQualityScratch(intermediateLength);
+        if (horizontalFirstLength <= verticalFirstLength) {
+            ResampleHorizontal(source.PixelBuffer, source.Width, source.Height, width, horizontal, intermediate, colorSpace, cancellationToken, resamplingWorkStarted);
+            ResampleVertical(intermediate, width, height, vertical, result.PixelBuffer, colorSpace, cancellationToken);
+        } else {
+            ResampleVertical(source.PixelBuffer, source.Width, source.Height, height, vertical, intermediate, colorSpace, cancellationToken, resamplingWorkStarted);
+            ResampleHorizontal(intermediate, source.Width, width, height, horizontal, result.PixelBuffer, colorSpace, cancellationToken);
+        }
+        return result;
+    }
+
+    internal static float[] AllocateExactHighQualityScratch(int length) {
+        if (length <= 0) throw new ArgumentOutOfRangeException(nameof(length));
+#if NET8_0_OR_GREATER
+        return GC.AllocateUninitializedArray<float>(length);
+#else
+        return new float[length];
+#endif
+    }
+
+    internal static bool TryGetHighQualityWorkingSetBytes(
+        int sourceWidth,
+        int sourceHeight,
+        int width,
+        int height,
+        OfficeRasterResamplingMode mode,
+        out long workingSetBytes) =>
+        TryMeasureSeparableWorkingSet(
+            sourceWidth,
+            sourceHeight,
+            width,
+            height,
+            mode,
+            retainedManagedBytes: 0L,
+            out _,
+            out _,
+            out _,
+            out workingSetBytes);
+
+    internal static bool TryGetHighQualityWorkingSetBytes(
+        int sourceWidth,
+        int sourceHeight,
+        int width,
+        int height,
+        OfficeRasterResamplingMode mode,
+        long retainedManagedBytes,
+        out long workingSetBytes) =>
+        TryMeasureSeparableWorkingSet(
+            sourceWidth,
+            sourceHeight,
+            width,
+            height,
+            mode,
+            retainedManagedBytes,
+            out _,
+            out _,
+            out _,
+            out workingSetBytes);
+
+    private static bool TryMeasureSeparableWorkingSet(
+        int sourceWidth,
+        int sourceHeight,
+        int width,
+        int height,
+        OfficeRasterResamplingMode mode,
+        long retainedManagedBytes,
+        out int intermediateLength,
+        out int horizontalContributionCount,
+        out int verticalContributionCount,
+        out long workingSetBytes,
+        CancellationToken cancellationToken = default) {
+        intermediateLength = 0;
+        horizontalContributionCount = 0;
+        verticalContributionCount = 0;
+        workingSetBytes = 0L;
+        if (sourceWidth <= 0 || sourceHeight <= 0 || width <= 0 || height <= 0 ||
+            retainedManagedBytes < 0L) return false;
+        try {
+            long requiredIntermediate = GetSeparableScratchLength(sourceWidth, sourceHeight, width, height);
+            if (requiredIntermediate <= 0L || requiredIntermediate > int.MaxValue ||
+                !TryMeasureContributions(
+                    sourceWidth, width, mode, out horizontalContributionCount, out long horizontalBytes, cancellationToken) ||
+                !TryMeasureContributions(
+                    sourceHeight, height, mode, out verticalContributionCount, out long verticalBytes, cancellationToken)) {
+                return false;
+            }
+
+            long sourceBytes = checked((long)sourceWidth * sourceHeight * 4L);
+            long destinationBytes = checked((long)width * height * 4L);
+            workingSetBytes = checked(
+                sourceBytes + destinationBytes + requiredIntermediate * sizeof(float) +
+                horizontalBytes + verticalBytes + retainedManagedBytes + 64L * 1024L);
+            if (workingSetBytes > OfficeRasterGuards.MaximumDecodedBytes) return false;
+            intermediateLength = (int)requiredIntermediate;
+            return true;
+        } catch (OverflowException) {
+            return false;
+        }
+    }
+
+    private static bool TryMeasureContributions(
+        int sourceLength,
+        int destinationLength,
+        OfficeRasterResamplingMode mode,
+        out int contributionCount,
+        out long storageBytes,
+        CancellationToken cancellationToken) {
+        contributionCount = 0;
+        storageBytes = 0L;
+        long metadataBytes = (long)destinationLength * 3L * sizeof(int);
+        if (sourceLength <= 0 || destinationLength <= 0 ||
+            metadataBytes > OfficeRasterGuards.MaximumDecodedBytes) return false;
+        double scale = sourceLength / (double)destinationLength;
+        long total = 0L;
+        for (int destination = 0; destination < destinationLength; destination++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            GetContributionRange(sourceLength, destination, scale, mode, out _, out int count);
+            total += count;
+            if (total > int.MaxValue) return false;
+        }
+        storageBytes = checked(metadataBytes + total * sizeof(double));
+        if (storageBytes > OfficeRasterGuards.MaximumDecodedBytes) return false;
+        contributionCount = (int)total;
+        return total > 0L;
+    }
+
+    private static AxisContributions CreateContributions(
+        int sourceLength,
+        int destinationLength,
+        OfficeRasterResamplingMode mode,
+        int contributionCount, CancellationToken cancellationToken) {
+        var starts = new int[destinationLength];
+        var counts = new int[destinationLength];
+        var offsets = new int[destinationLength];
+        double scale = sourceLength / (double)destinationLength;
+        long total = 0L;
+        for (int destination = 0; destination < destinationLength; destination++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            GetContributionRange(
+                sourceLength,
+                destination,
+                scale,
+                mode,
+                out int start,
+                out int count);
+            starts[destination] = start;
+            counts[destination] = count;
+            offsets[destination] = (int)total;
+            total += count;
+        }
+        if (total != contributionCount) {
+            throw new ArgumentException(ScratchLimitMessage);
+        }
+        var weights = new double[contributionCount];
+        for (int destination = 0; destination < destinationLength; destination++) {
+            cancellationToken.ThrowIfCancellationRequested();
+            WriteContributionWeights(
+                sourceLength,
+                destination,
+                scale,
+                mode,
+                starts[destination],
+                counts[destination],
+                weights,
+                offsets[destination]);
+        }
+        return new AxisContributions(starts, counts, offsets, weights);
+    }
+
+    private static void GetContributionRange(
+        int sourceLength,
+        int destination,
+        double scale,
+        OfficeRasterResamplingMode mode,
+        out int start,
+        out int count) {
+        if (mode == OfficeRasterResamplingMode.Area && scale > 1D) {
+            double sourceStart = destination * scale;
+            double sourceEnd = (destination + 1D) * scale;
+            start = Clamp((int)Math.Floor(sourceStart), 0, sourceLength - 1);
+            int end = Clamp((int)Math.Ceiling(sourceEnd) - 1, start, sourceLength - 1);
+            count = end - start + 1;
+            return;
+        }
+
+        double center = ((destination + 0.5D) * scale) - 0.5D;
+        if (mode == OfficeRasterResamplingMode.Area) {
+            double sample = Clamp(center, 0D, sourceLength - 1D);
+            start = (int)Math.Floor(sample);
+            count = start < sourceLength - 1 && sample > start ? 2 : 1;
+            return;
+        }
+
+        double filterScale = Math.Max(1D, scale);
+        double support = KernelRadius(mode) * filterScale;
+        start = Math.Max(0, (int)Math.Ceiling(center - support));
+        int last = Math.Min(sourceLength - 1, (int)Math.Floor(center + support));
+        if (last < start) {
+            start = Clamp((int)Math.Round(center), 0, sourceLength - 1);
+            count = 1;
+        } else {
+            count = last - start + 1;
+        }
+    }
+
+    private static void WriteContributionWeights(
+        int sourceLength,
+        int destination,
+        double scale,
+        OfficeRasterResamplingMode mode,
+        int start,
+        int count,
+        double[] weights,
+        int offset) {
+        if (mode == OfficeRasterResamplingMode.Area && scale > 1D) {
+            double sourceStart = destination * scale;
+            double sourceEnd = (destination + 1D) * scale;
+            double sum = 0D;
+            for (int index = 0; index < count; index++) {
+                int source = start + index;
+                double weight = Math.Max(0D, Math.Min(sourceEnd, source + 1D) - Math.Max(sourceStart, source));
+                weights[offset + index] = weight;
+                sum += weight;
+            }
+            Normalize(weights, offset, count, sum);
+            return;
+        }
+
+        double center = ((destination + 0.5D) * scale) - 0.5D;
+        if (mode == OfficeRasterResamplingMode.Area) {
+            if (count == 1) {
+                weights[offset] = 1D;
+            } else {
+                double fraction = Clamp(center, 0D, sourceLength - 1D) - start;
+                weights[offset] = 1D - fraction;
+                weights[offset + 1] = fraction;
+            }
+            return;
+        }
+
+        double filterScale = Math.Max(1D, scale);
+        double total = 0D;
+        for (int index = 0; index < count; index++) {
+            double weight = ReconstructionKernel((center - (start + index)) / filterScale, mode);
+            weights[offset + index] = weight;
+            total += weight;
+        }
+        if (total <= 1E-12D) {
+            for (int index = 0; index < count; index++) weights[offset + index] = 0D;
+            int nearest = Clamp((int)Math.Round(center), start, start + count - 1);
+            weights[offset + nearest - start] = 1D;
+        } else {
+            Normalize(weights, offset, count, total);
+        }
+    }
+
+    private static void Normalize(double[] weights, int offset, int count, double total) {
+        if (total <= 0D) throw new InvalidOperationException("Raster resampling weights are empty.");
+        for (int index = 0; index < count; index++) weights[offset + index] /= total;
+    }
+
+    private static void ResampleHorizontal(
+        byte[] input,
+        int sourceWidth,
+        int sourceHeight,
+        int destinationWidth,
+        AxisContributions contributions,
+        float[] output,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken,
+        Action? resamplingWorkStarted) {
+        ResampleRows(sourceHeight, (long)contributions.Weights.Length * sourceHeight, cancellationToken, y => {
+            cancellationToken.ThrowIfCancellationRequested();
+            for (int x = 0; x < destinationWidth; x++) {
+                if ((x & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+                int target = ((y * destinationWidth) + x) * 4;
+                AccumulateBytes(input, (y * sourceWidth) * 4, 4, contributions, x, output, target, colorSpace, cancellationToken);
+            }
+            if (y == 0) resamplingWorkStarted?.Invoke();
+        });
+    }
+
+    private static void ResampleVertical(
+        byte[] input,
+        int sourceWidth,
+        int sourceHeight,
+        int destinationHeight,
+        AxisContributions contributions,
+        float[] output,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken,
+        Action? resamplingWorkStarted) {
+        ResampleRows(destinationHeight, (long)contributions.Weights.Length * sourceWidth, cancellationToken, y => {
+            cancellationToken.ThrowIfCancellationRequested();
+            for (int x = 0; x < sourceWidth; x++) {
+                if ((x & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+                int target = ((y * sourceWidth) + x) * 4;
+                AccumulateBytes(input, x * 4, sourceWidth * 4, contributions, y, output, target, colorSpace, cancellationToken);
+            }
+            if (y == 0) resamplingWorkStarted?.Invoke();
+        });
+    }
+
+    private static void ResampleHorizontal(
+        float[] input,
+        int sourceWidth,
+        int destinationWidth,
+        int height,
+        AxisContributions contributions,
+        byte[] output,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken) {
+        ResampleRows(height, (long)contributions.Weights.Length * height, cancellationToken, y => {
+            cancellationToken.ThrowIfCancellationRequested();
+            for (int x = 0; x < destinationWidth; x++) {
+                if ((x & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+                int target = ((y * destinationWidth) + x) * 4;
+                AccumulateFloats(input, (y * sourceWidth) * 4, 4, contributions, x, output, target, colorSpace, cancellationToken);
+            }
+        });
+    }
+
+    private static void ResampleVertical(
+        float[] input,
+        int width,
+        int destinationHeight,
+        AxisContributions contributions,
+        byte[] output,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken) {
+        ResampleRows(destinationHeight, (long)contributions.Weights.Length * width, cancellationToken, y => {
+            cancellationToken.ThrowIfCancellationRequested();
+            for (int x = 0; x < width; x++) {
+                if ((x & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+                int target = ((y * width) + x) * 4;
+                AccumulateFloats(input, x * 4, width * 4, contributions, y, output, target, colorSpace, cancellationToken);
+            }
+        });
+    }
+
+    // Rows write disjoint ranges into pre-budgeted buffers. Parallel work never changes
+    // a pixel's tap order, and completion of each pass precedes reading its output.
+    // Keep small images sequential and bound workers so one resize cannot occupy all
+    // cores of a large host. The same token gives callers OperationCanceledException.
+    private static void ResampleRows(int rowCount, long contributionCount, CancellationToken cancellationToken, Action<int> processRow) {
+        int workers = Math.Min(8, Environment.ProcessorCount);
+        if (workers <= 1 || rowCount < 4 || contributionCount < 262_144L) {
+            for (int row = 0; row < rowCount; row++) processRow(row);
+            return;
+        }
+        Parallel.For(0, rowCount, new ParallelOptions {
+            MaxDegreeOfParallelism = workers,
+            CancellationToken = cancellationToken
+        }, processRow);
+    }
+
+    private static void AccumulateBytes(
+        byte[] input,
+        int baseOffset,
+        int stride,
+        AxisContributions contributions,
+        int destination,
+        float[] output,
+        int target,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken) {
+#if NET8_0_OR_GREATER
+        if (colorSpace == OfficeRasterResamplingColorSpace.EncodedSrgb && System.Runtime.Intrinsics.X86.Avx2.IsSupported) {
+            AccumulateBytesVector(input, baseOffset, stride, contributions, destination, output, target, cancellationToken);
+            return;
+        }
+#endif
+        int start = contributions.Starts[destination];
+        int count = contributions.Counts[destination];
+        int weights = contributions.Offsets[destination];
+        double red = 0D;
+        double green = 0D;
+        double blue = 0D;
+        double alpha = 0D;
+        for (int index = 0; index < count; index++) {
+            if ((index & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+            int source = baseOffset + ((start + index) * stride);
+            double weight = contributions.Weights[weights + index];
+            double sourceAlpha = input[source + 3];
+            double premultiply = weight * sourceAlpha / 255D;
+            red += DecodeChannel(input[source], colorSpace) * premultiply;
+            green += DecodeChannel(input[source + 1], colorSpace) * premultiply;
+            blue += DecodeChannel(input[source + 2], colorSpace) * premultiply;
+            alpha += sourceAlpha * weight;
+        }
+        output[target] = (float)red;
+        output[target + 1] = (float)green;
+        output[target + 2] = (float)blue;
+        output[target + 3] = (float)alpha;
+    }
+
+    private static void AccumulateFloats(
+        float[] input,
+        int baseOffset,
+        int stride,
+        AxisContributions contributions,
+        int destination,
+        byte[] output,
+        int target,
+        OfficeRasterResamplingColorSpace colorSpace, CancellationToken cancellationToken) {
+#if NET8_0_OR_GREATER
+        if (System.Runtime.Intrinsics.X86.Avx.IsSupported) {
+            AccumulateFloatsVector(input, baseOffset, stride, contributions, destination, output, target, colorSpace, cancellationToken);
+            return;
+        }
+#endif
+        int start = contributions.Starts[destination];
+        int count = contributions.Counts[destination];
+        int weights = contributions.Offsets[destination];
+        double red = 0D;
+        double green = 0D;
+        double blue = 0D;
+        double alpha = 0D;
+        for (int index = 0; index < count; index++) {
+            if ((index & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+            int source = baseOffset + ((start + index) * stride);
+            double weight = contributions.Weights[weights + index];
+            red += input[source] * weight;
+            green += input[source + 1] * weight;
+            blue += input[source + 2] * weight;
+            alpha += input[source + 3] * weight;
+        }
+        WriteStraightRgba(output, target, red, green, blue, alpha, colorSpace);
+    }
+
+    private static void WriteStraightRgba(
+        byte[] output,
+        int target,
+        double premultipliedRed,
+        double premultipliedGreen,
+        double premultipliedBlue,
+        double alpha,
+        OfficeRasterResamplingColorSpace colorSpace) {
+        if (alpha <= 1E-6D) {
+            output[target] = output[target + 1] = output[target + 2] = output[target + 3] = 0;
+            return;
+        }
+        output[target] = EncodeChannel(premultipliedRed * 255D / alpha, colorSpace);
+        output[target + 1] = EncodeChannel(premultipliedGreen * 255D / alpha, colorSpace);
+        output[target + 2] = EncodeChannel(premultipliedBlue * 255D / alpha, colorSpace);
+        output[target + 3] = ToByte(alpha);
+    }
+
+    private static byte ToByte(double value) =>
+        (byte)Math.Round(Clamp(value, 0D, 255D));
+
+    private sealed class AxisContributions {
+        internal AxisContributions(int[] starts, int[] counts, int[] offsets, double[] weights) {
+            Starts = starts;
+            Counts = counts;
+            Offsets = offsets;
+            Weights = weights;
+        }
+
+        internal int[] Starts { get; }
+        internal int[] Counts { get; }
+        internal int[] Offsets { get; }
+        internal double[] Weights { get; }
+    }
+}
