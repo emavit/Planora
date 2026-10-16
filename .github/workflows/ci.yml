@@ -17,6 +17,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      - name: Verify public example integrity
+        shell: pwsh
+        run: ./scripts/verify-public-examples.ps1
       - name: Build and model checks
         shell: pwsh
         run: ./scripts/validate.ps1

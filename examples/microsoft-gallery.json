@@ -1,0 +1,36 @@
+{
+  "checked_date": "2026-10-16",
+  "kind": "Public Microsoft documentation references, not downloaded gallery binaries",
+  "official_page": "https://www.microsoft.com/en-us/microsoft-365/planner/project-planning-templates",
+  "template_help": "https://support.microsoft.com/en-us/project/save-a-project-file-as-a-template",
+  "verified_public_categories": [
+    {
+      "name": "Simple project planning",
+      "source": "https://www.microsoft.com/en-us/microsoft-365/planner/project-planning-templates",
+      "download_url": null
+    },
+    {
+      "name": "Agile project planning",
+      "source": "https://www.microsoft.com/en-us/microsoft-365/planner/project-planning-templates",
+      "download_url": null
+    },
+    {
+      "name": "Product development and launch",
+      "source": "https://www.microsoft.com/en-us/microsoft-365/planner/project-planning-templates",
+      "download_url": null
+    },
+    {
+      "name": "Project goals and objectives",
+      "source": "https://www.microsoft.com/en-us/microsoft-365/planner/project-planning-templates",
+      "download_url": null
+    }
+  ],
+  "complete_file_new_gallery": false,
+  "gallery_files_bundled": 0,
+  "reason": "No complete downloadable desktop File > New gallery with redistribution permission was verified. No account-only, installed, private or unlicensed template binaries were copied.",
+  "public_compatibility_fixtures": {
+    "mpp": 14,
+    "producer_xml": 4,
+    "path": "public-mpp"
+  }
+}

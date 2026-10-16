@@ -2,6 +2,8 @@
 
 ## Unreleased documentation
 
+- Added 18 provenance-checked public compatibility files (14 MPP + 4 producer XML), upstream license/manifest, integrity verification and official Microsoft template-gallery references. Private examples and unverified gallery binaries are excluded.
+
 - Confirmed future Android and iOS apps after macOS completion and validation; added the mobile roadmap, platform requirements and implementation tasks. Mobile implementation has not started.
 
 ## 0.2.1 — release candidate

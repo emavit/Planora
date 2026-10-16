@@ -1,0 +1,146 @@
+[
+  {
+    "name": "sample1.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/legacy/sample1.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 118784,
+    "sha256": "7BDBFDC31DD398BCBFCB1D1A8ACE8C6781E0D4F2600C87A9E30DB2C78AF9B676"
+  },
+  {
+    "name": "mpp9task.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp9task.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 108544,
+    "sha256": "D27D6A9D3D6D6538B1E33194F31EECAF83FFF00CDFA214FE16DD74FD26AD3860"
+  },
+  {
+    "name": "mpp12task.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp12task.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 150528,
+    "sha256": "56DC0F6DD1B15707C3880603EB5E89865672642580F0A4536913A7ECFC8C34F3"
+  },
+  {
+    "name": "mpp14task.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14task.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 210432,
+    "sha256": "AAEF495DC99BE1735DE02940A6FB506573035E99DE4ACF0FA2FFE96344C8BE4A"
+  },
+  {
+    "name": "mpp14calendar.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14calendar.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 188416,
+    "sha256": "98C8A0FB569BE058C0A76EC61D2918F4D81A2A6AF9CDCC3FFD1E5640B888E8EC"
+  },
+  {
+    "name": "mpp14baselines.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14baselines.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 197120,
+    "sha256": "D71244D2C8F15B1D007D11523045DF61F14E79D5F522A52437481F36D850AC5F"
+  },
+  {
+    "name": "mpp14resource.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14resource.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 301568,
+    "sha256": "3FC8D51A7E1270C897C0C933ABAAD05D1DF1683B6C1B476B54880708268F6E79"
+  },
+  {
+    "name": "mpp14assignmentfields.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14assignmentfields.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 290304,
+    "sha256": "8C7A98076FB15CF988F4593B970E888915094908C9672D8BD3A7843FF134C28C"
+  },
+  {
+    "name": "mpp14relations.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp14relations.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 180736,
+    "sha256": "8F33CDB774AA090B664D90145879ACC8A289057CA45A6575884EB0DA9FD91F30"
+  },
+  {
+    "name": "mpp12subproject.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/mpp12subproject.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 140800,
+    "sha256": "84FE8F47FE5AC504A1843EBEFDFEAD03D4BCE3484DC33E3D2FC0881C230AED7F"
+  },
+  {
+    "name": "task-links-project2019-mpp14.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-links/task-links-project2019-mpp14.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 255488,
+    "sha256": "B2592BE8D205ACAF3D02C240C8A68D33DF00C62BAD27477B6F93A3C950D0DB5A"
+  },
+  {
+    "name": "task-baselines-project2019-mpp14.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-baselines/task-baselines-project2019-mpp14.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 369152,
+    "sha256": "19A4A7A6D3FE510E9F2A71EE827E25D1C9E705C6E24B831F4943FD73FF80C9A7"
+  },
+  {
+    "name": "task-durations-project2019-mpp14.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-durations/task-durations-project2019-mpp14.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 363008,
+    "sha256": "801206E2B5976FAF411E7B5DE3BB829D105FDDF79579417A793176B0055513A3"
+  },
+  {
+    "name": "assignment-assignments-project2019-mpp14.mpp",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/assignment-assignments/assignment-assignments-project2019-mpp14.mpp",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 243712,
+    "sha256": "D5BBDA5704838AFCC171493425197167671EE57D3BB051CDFDF55613D240C953"
+  },
+  {
+    "name": "task-links-project2019-mspdi.xml",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-links/task-links-project2019-mspdi.xml",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 88808,
+    "sha256": "0F62AEE93BF52DF56B0726151B7E9CFA973FE9F2FCF77B89F52E6DBE81BC7C2D"
+  },
+  {
+    "name": "task-baselines-project2019-mspdi.xml",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-baselines/task-baselines-project2019-mspdi.xml",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 558596,
+    "sha256": "9814F728E2D88C742CAC5917CD758E1DD094C827D9B2F92D5EADFA4B3C50880C"
+  },
+  {
+    "name": "task-durations-project2019-mspdi.xml",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/task-durations/task-durations-project2019-mspdi.xml",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 568853,
+    "sha256": "ACBCD44D9A159A8B7F931B5CB4E476873F879AD5C489EF5754F8A7F25EFC1CEA"
+  },
+  {
+    "name": "assignment-assignments-project2019-mspdi.xml",
+    "source": "https://raw.githubusercontent.com/joniles/mpxj/01c5bd162e0b83c57a118f865daa9462b1c0fa8b/junit/data/generated/assignment-assignments/assignment-assignments-project2019-mspdi.xml",
+    "repository": "https://github.com/joniles/mpxj",
+    "commit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "bytes": 38478,
+    "sha256": "7DD6168F9207C2FB208F67D558C28E781BCE67C829035F58DC3B189F2B8FFA3F"
+  }
+]

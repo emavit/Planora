@@ -10,3 +10,7 @@ The root MIT license covers Planora's own code, not a relicensing of third-party
 Before distributing compiled builds, inventory the resolved packages and include applicable runtime notices. This repository does not include proprietary Microsoft/Apple binaries, commercial project documents or reference screenshots. UI command labels describe interoperability/workflows; they do not establish affiliation or full compatibility.
 
 [Resolved dependency/version/license metadata inventory](docs/DEPENDENCIES.md).
+
+## Public example fixtures
+
+The unmodified MPXJ data under examples/public-mpp has separate [upstream notices](examples/public-mpp/NOTICE.md), [LGPL 2.1 license text](examples/public-mpp/LICENSE-MPXJ.txt) and pinned sources/checksums. These files are not covered by Planora's MIT license. Microsoft gallery files are not bundled; official links are references only.

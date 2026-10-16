@@ -48,6 +48,12 @@ Recovery checks every 15 seconds during normal use. File → Recovery opens reta
 
 AI/MCP are optional. Credentials belong in platform credential storage, never in the repository or project packages. Provider fixture tests do not qualify real sign-in/inference, and subscriptions do not automatically include API usage.
 
+## Public examples
+
+See [examples/](examples/README.md) for 14 public MPP fixtures, 4 producer XML references, provenance/license/checksums and official Microsoft gallery links. No private projects are included. The complete Microsoft File → New gallery is not bundled.
+
+Verify with ./scripts/verify-public-examples.ps1 before using checked-in fixtures.
+
 ## Repository
 
 - `project-app/ProjectDesk/`: app source; legacy folder/namespace retained to preserve build and test paths.

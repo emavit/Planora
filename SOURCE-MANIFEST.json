@@ -7,8 +7,8 @@
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 121,
-      "sha256": "d8b174986a68248245e9f3a92337963e1b21208008939754068cbfa8fcc9f675"
+      "bytes": 237,
+      "sha256": "1b1e4cbc001eb913c48a7b2fc3e1bf34de03ce13caa9cfc5c411d8d745786386"
     },
     {
       "path": ".github/ISSUE_TEMPLATE/bug_report.md",
@@ -27,13 +27,13 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 874,
-      "sha256": "35b08a77dcc78731a1a2411da89ea976538dd51696c3a86ca07d7a7309df67ff"
+      "bytes": 990,
+      "sha256": "4cb17757e3173568642df90d15c9a209331455dcecce3032f2a83b8212c33e7a"
     },
     {
       "path": ".gitignore",
-      "bytes": 332,
-      "sha256": "0954537878a0c0275ae97fa6b8672528d1679c29c3b6b50e720adca080cc16f0"
+      "bytes": 417,
+      "sha256": "0ebfecfb0aae7090aa95c655a8d5189172136b0739a41f8c2f2745e2d3ca977d"
     },
     {
       "path": "AGENTS.md",
@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1001,
-      "sha256": "0e43c724858d028bb82ad0fd15731deed1cfa5de25825e1b8643dbb879a2065f"
+      "bytes": 1251,
+      "sha256": "9cc2c5261698ba26fdbfbce0ec9ffbe25cbebf3f7039e5177fb737729922107b"
     },
     {
       "path": "CLAUDE.md",
@@ -72,13 +72,13 @@
     },
     {
       "path": "PACKAGE-CHECKS.json",
-      "bytes": 1642,
-      "sha256": "f0fc6e634a6d32c150d471b066d434e0b6c5941e4bc9baa771b53cd97eaafb98"
+      "bytes": 2125,
+      "sha256": "6b8bd11722104aeb21424005f9a4bc31604ab4f476cc38ac6c57432c01fa7d69"
     },
     {
       "path": "README.md",
-      "bytes": 5567,
-      "sha256": "f558350b5a4c4a46e8268834138c586bcec1e8cbdffe5c4347a4708f1bbda4d9"
+      "bytes": 5924,
+      "sha256": "a0d70ecd25080a9d65d5c35da031ec69def17499a8471f10631aec7b8c36ec55"
     },
     {
       "path": "SECURITY.md",
@@ -87,8 +87,8 @@
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
-      "bytes": 1513,
-      "sha256": "9d8471fe09b816096581b37185db74b77efb2852b18d97e976433ac2e59614a4"
+      "bytes": 1868,
+      "sha256": "0abf99c86d98829283107328893193789abc01bce7b404c0e80ab163d099331f"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -137,8 +137,8 @@
     },
     {
       "path": "docs/RELEASE.md",
-      "bytes": 1423,
-      "sha256": "aa9a0ae99de01ef35bb39a429936a6bc59905c3852be6753343db84e6d33f8fe"
+      "bytes": 1634,
+      "sha256": "33da9ae504dfad7f4eac19c8ed60b9c29168bf43210776a88ceed91a9389c5b5"
     },
     {
       "path": "docs/ROADMAP.md",
@@ -152,8 +152,128 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 9014,
-      "sha256": "497868ff30e841d62116cb59fd3b0431ddc412faf950bb3ec0e70cf22d1b20ab"
+      "bytes": 9392,
+      "sha256": "ddfee0685f7a5d1fc62690fd8e0c9e2a491121eca8ce9ee424e6550fc337d050"
+    },
+    {
+      "path": "examples/README.md",
+      "bytes": 3059,
+      "sha256": "0aedcc93ee9670595b7e093521c8339631f0893eb002f24ff42bb9df2c676d3b"
+    },
+    {
+      "path": "examples/microsoft-gallery.json",
+      "bytes": 1465,
+      "sha256": "8e478c1722dfa5369147669e41a3b04a750740eab25fa7338ee2a98bd8fc2c6a"
+    },
+    {
+      "path": "examples/public-mpp/LICENSE-MPXJ.txt",
+      "bytes": 26526,
+      "sha256": "20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331"
+    },
+    {
+      "path": "examples/public-mpp/NOTICE.md",
+      "bytes": 1039,
+      "sha256": "0c8a8e0df39f1b3e48dd61d764a0a988a3791efd03a9892167030447ed1d8ed1"
+    },
+    {
+      "path": "examples/public-mpp/assignment-assignments-project2019-mpp14.mpp",
+      "bytes": 243712,
+      "sha256": "d5bbda5704838afcc171493425197167671ee57d3bb051cdfdf55613d240c953"
+    },
+    {
+      "path": "examples/public-mpp/assignment-assignments-project2019-mspdi.xml",
+      "bytes": 38478,
+      "sha256": "7dd6168f9207c2fb208f67d558c28e781bce67c829035f58dc3b189f2b8ffa3f"
+    },
+    {
+      "path": "examples/public-mpp/license-provenance.json",
+      "bytes": 244,
+      "sha256": "94b1e2f00cb54b49f791074fc15a9f6c176c94e0a8700022342a3737f7ff9c16"
+    },
+    {
+      "path": "examples/public-mpp/manifest.json",
+      "bytes": 7524,
+      "sha256": "5ac93bdbb1f796e1c3936a7fbeff3ca98f6d92a2518e7f9e39c5025d9f6c8bf0"
+    },
+    {
+      "path": "examples/public-mpp/mpp12subproject.mpp",
+      "bytes": 140800,
+      "sha256": "84fe8f47fe5ac504a1843ebefdfead03d4bce3484dc33e3d2fc0881c230aed7f"
+    },
+    {
+      "path": "examples/public-mpp/mpp12task.mpp",
+      "bytes": 150528,
+      "sha256": "56dc0f6dd1b15707c3880603eb5e89865672642580f0a4536913a7ecfc8c34f3"
+    },
+    {
+      "path": "examples/public-mpp/mpp14assignmentfields.mpp",
+      "bytes": 290304,
+      "sha256": "8c7a98076fb15cf988f4593b970e888915094908c9672d8bd3a7843ff134c28c"
+    },
+    {
+      "path": "examples/public-mpp/mpp14baselines.mpp",
+      "bytes": 197120,
+      "sha256": "d71244d2c8f15b1d007d11523045df61f14e79d5f522a52437481f36d850ac5f"
+    },
+    {
+      "path": "examples/public-mpp/mpp14calendar.mpp",
+      "bytes": 188416,
+      "sha256": "98c8a0fb569be058c0a76ec61d2918f4d81a2a6af9cdcc3ffd1e5640b888e8ec"
+    },
+    {
+      "path": "examples/public-mpp/mpp14relations.mpp",
+      "bytes": 180736,
+      "sha256": "8f33cdb774aa090b664d90145879acc8a289057ca45a6575884eb0da9fd91f30"
+    },
+    {
+      "path": "examples/public-mpp/mpp14resource.mpp",
+      "bytes": 301568,
+      "sha256": "3fc8d51a7e1270c897c0c933abaad05d1df1683b6c1b476b54880708268f6e79"
+    },
+    {
+      "path": "examples/public-mpp/mpp14task.mpp",
+      "bytes": 210432,
+      "sha256": "aaef495dc99be1735de02940a6fb506573035e99de4acf0fa2ffe96344c8be4a"
+    },
+    {
+      "path": "examples/public-mpp/mpp9task.mpp",
+      "bytes": 108544,
+      "sha256": "d27d6a9d3d6d6538b1e33194f31eecaf83fff00cdfa214fe16dd74fd26ad3860"
+    },
+    {
+      "path": "examples/public-mpp/sample1.mpp",
+      "bytes": 118784,
+      "sha256": "7bdbfdc31dd398bcbfcb1d1a8ace8c6781e0d4f2600c87a9e30db2c78af9b676"
+    },
+    {
+      "path": "examples/public-mpp/task-baselines-project2019-mpp14.mpp",
+      "bytes": 369152,
+      "sha256": "19a4a7a6d3fe510e9f2a71ee827e25d1c9e705c6e24b831f4943fd73ff80c9a7"
+    },
+    {
+      "path": "examples/public-mpp/task-baselines-project2019-mspdi.xml",
+      "bytes": 558596,
+      "sha256": "9814f728e2d88c742cac5917cd758e1dd094c827d9b2f92d5eadfa4b3c50880c"
+    },
+    {
+      "path": "examples/public-mpp/task-durations-project2019-mpp14.mpp",
+      "bytes": 363008,
+      "sha256": "801206e2b5976faf411e7b5de3bb829d105fddf79579417a793176b0055513a3"
+    },
+    {
+      "path": "examples/public-mpp/task-durations-project2019-mspdi.xml",
+      "bytes": 568853,
+      "sha256": "acbcd44d9a159a8b7f931b5cb4e476873f879ad5c489ef5754f8a7f25efc1cea"
+    },
+    {
+      "path": "examples/public-mpp/task-links-project2019-mpp14.mpp",
+      "bytes": 255488,
+      "sha256": "b2592be8d205acaf3d02c240c8a68d33df00c62bad27477b6f93a3c950d0db5a"
+    },
+    {
+      "path": "examples/public-mpp/task-links-project2019-mspdi.xml",
+      "bytes": 88808,
+      "sha256": "0f62aee93bf52df56b0726151b7e9cfa973fe9f2fcf77b89f52e6dbe81bc7c2d"
     },
     {
       "path": "global.json",
@@ -7594,6 +7714,11 @@
       "path": "scripts/validate.ps1",
       "bytes": 1095,
       "sha256": "a9c66112ca642326a1052df1432fbdb28f67e1ab363f0393a88fa7e01670e55e"
+    },
+    {
+      "path": "scripts/verify-public-examples.ps1",
+      "bytes": 2027,
+      "sha256": "ba2417bb2d119572705125a352e8da94ff3e81336785e2f30e6e8e6881bcf1ef"
     }
   ]
 }

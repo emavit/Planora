@@ -43,5 +43,16 @@
     ],
     "mobileImplementation": "not started",
     "scope": "Roadmap/documentation update; application source unchanged"
+  },
+  "publicExamples": {
+    "date": "2026-10-16",
+    "mpp": 14,
+    "producerXml": 4,
+    "sourceRepository": "https://github.com/joniles/mpxj",
+    "sourceCommit": "01c5bd162e0b83c57a118f865daa9462b1c0fa8b",
+    "upstreamLicenseRetained": true,
+    "privateInputsIncluded": false,
+    "integrityChecks": "passed for both Git checkout and standard local folder",
+    "microsoftGallery": "Official reference catalog only; full gallery binaries not verified or bundled"
   }
 }

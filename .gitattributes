@@ -6,3 +6,6 @@
 *.png binary
 *.ico binary
 *.bin binary
+# Preserve exact fixture bytes for SHA-256 checks.
+examples/public-mpp/*.mpp binary
+examples/public-mpp/*.xml -text

@@ -107,3 +107,7 @@ Connectors provides general MCP setup. Configure a trusted server's supported UR
 | App instability | Use synthetic reproduction data; retain redacted diagnostics and report version/OS |
 
 See [all improvement areas](IMPROVEMENTS.md) and [open implementation tasks](TASKS.md). Never attach confidential project files or API keys to a public issue.
+
+## Public practice files
+
+Open the MPP files under [examples/public-mpp](../examples/public-mpp/) for public compatibility practice. Read [provenance, license and Microsoft gallery coverage](../examples/README.md) first. The XML files are producer references, not additional UI-open templates. Do not overwrite checked-in files; save a new copy. Private examples are excluded.

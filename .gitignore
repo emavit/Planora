@@ -27,3 +27,6 @@ project-app/WindowsPreview*/
 **/*credentials*.json
 **/*secrets*.json
 **/recovery/
+
+# Only reviewed public fixture MPP files may be tracked.
+!examples/public-mpp/*.mpp
