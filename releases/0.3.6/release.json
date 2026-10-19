@@ -1,0 +1,13 @@
+{
+  "version": "0.3.6",
+  "previousVersion": "0.3.5",
+  "features": [
+    "Grouped ribbon redesign with explicit overflow navigation",
+    "Planning ribbon with Gantt and timeline shortcuts"
+  ],
+  "checks": [
+    "workspace-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}

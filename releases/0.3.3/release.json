@@ -1,0 +1,14 @@
+{
+  "version": "0.3.3",
+  "previousVersion": "0.3.1",
+  "features": [
+    "Apple-inspired Gantt-first adaptive workspace",
+    "Compact and comfortable row density",
+    "Planning focus with exact preference restoration",
+    "Resizable grouped inspector with scheduling selector"
+  ],
+  "checks": [
+    "workspace-test",
+    "planning-library-test"
+  ]
+}

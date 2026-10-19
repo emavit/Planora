@@ -1,0 +1,6 @@
+{
+  "version": "0.3.1",
+  "previousVersion": "0.3.0",
+  "features": ["Saved workspace views", "Original starter-template library"],
+  "checks": ["workspace-test", "planning-library-test"]
+}

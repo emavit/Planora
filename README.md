@@ -1,8 +1,30 @@
 # Planora
 
+**Clarity, from plan to progress.**
+
+[Visual identity](docs/BRAND.md) · [Brand preview](docs/design/planora-brand.html)
+
 An offline desktop project planner with spreadsheet-style task editing, linked Gantt charts, resources, baselines, multiple timelines, PDF export, local recovery and optional AI/MCP connections.
 
-**Status:** Windows preview, version 0.2.1. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. The latest candidate passed automated checks; its native Windows stress gate remains pending.
+**Status:** Windows preview, version 0.3.10. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. Versions 0.3.0, 0.3.1 and 0.3.3 passed automated and native Windows stress checks on this machine. The public MPP regression corpus retains 10 pre-existing failures; full compatibility is not qualified.
+
+## Latest additions
+
+0.3.10 adds one-click Hide timelines / Show timelines above the Gantt and table. [Download the Windows preview](https://github.com/emavit/Planora/releases/tag/v0.3.10) · [Release notes](releases/0.3.10/release.md).
+
+0.3.9 adds the Microsoft Project Entry column preset, colored command icons and coordinated dropdown styling. [Release notes](releases/0.3.9/release.md).
+
+0.3.8 introduces the modern Planora identity and Apple/Office hybrid ribbon and Gantt styling. [Release notes](releases/0.3.8/release.md).
+
+0.3.7 modernizes timeline controls and adds Fit panel to reclaim Gantt space without changing chart dates. [Release notes](releases/0.3.7/release.md).
+
+0.3.6 redesigns the ribbon into clear command groups and adds a Planning tab for Gantt, timeline, scheduling and presentation controls. Click Show ribbon to use it. [Release notes](releases/0.3.6/release.md).
+
+0.3.5 keeps inspector dates and Apply/Cancel visible while fields scroll, and adds adjacent validation errors for typed task values. [Release notes](releases/0.3.5/release.md).
+
+0.3.4 fixes unnecessary whole-project refresh after Resource Sheet edits. See [bugfix notes](releases/0.3.4/release.md) for the tested scope and remaining investigation.
+
+Compact workspace navigation, an editable task inspector, saved workspace views and a searchable library of ten original schedule starters. [Release history and changes](releases/release.md). Version 0.3.3 adds an Apple-inspired Gantt-first workspace, row density, planning focus and a resizable grouped inspector. The broader selection/editing acceptance criteria remain open. Next: [UI-first release plan](docs/UI-RELEASE-PLAN.md) and [interactive design concept](docs/design/planora-next.html). The concept is not the released desktop UI.
 
 ## Build and run
 

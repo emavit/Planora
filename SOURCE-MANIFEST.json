@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1251,
-      "sha256": "9cc2c5261698ba26fdbfbce0ec9ffbe25cbebf3f7039e5177fb737729922107b"
+      "bytes": 6372,
+      "sha256": "0c6382f581338563297cf0dcbaf82e4e951849af98bca4fb5b621a1c37ee675a"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5924,
-      "sha256": "a0d70ecd25080a9d65d5c35da031ec69def17499a8471f10631aec7b8c36ec55"
+      "bytes": 7943,
+      "sha256": "94852d34866d132f68001bc5445991a7ce239fc4e6295b455a8b96a44de8df14"
     },
     {
       "path": "SECURITY.md",
@@ -96,9 +96,14 @@
       "sha256": "fa8b194469b9887961305fe330b55fe3ecd7574a9e4125d3d292fe5f077b464b"
     },
     {
+      "path": "docs/BRAND.md",
+      "bytes": 1566,
+      "sha256": "2f7fd1d18cd55a348fcf68b2c030340c0a770f8c6d2ad69346acd8d81c0c30ae"
+    },
+    {
       "path": "docs/CODE-INVENTORY.md",
-      "bytes": 5897,
-      "sha256": "48b64cd837de257ae95ada91620dce47163cf456a61bda441fd98d67e56ff0f1"
+      "bytes": 6421,
+      "sha256": "256ae243bc569ea015f884fd1647eb405febc51386177b26641187566f82ffcf"
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
@@ -116,9 +121,14 @@
       "sha256": "cd9f14497c85164a9d14356a42e8789c3fa8149a31717ce02bc75bc612ffbc19"
     },
     {
+      "path": "docs/DESIGN-DIRECTION.md",
+      "bytes": 7989,
+      "sha256": "c61094805a1577d97427fd9d8ac110636adf3d6e6bcdb53b00b73015a3110388"
+    },
+    {
       "path": "docs/IMPROVEMENTS.md",
-      "bytes": 17992,
-      "sha256": "0b13041bbfeb974481088a8c44c1cb8ff6f630d9969ee28606317a85e6746174"
+      "bytes": 18268,
+      "sha256": "dd52f5f5ada0eb87d18325f46ace13ec761f67e78d760f82dd7722ff66365058"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -142,18 +152,53 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "bytes": 1476,
-      "sha256": "8602e9fe76a1a1cec01ef78bb41319eda2a127d8c838e89fbdfe27e2677d2aad"
+      "bytes": 2436,
+      "sha256": "7a5e8c6b9147ea9b0bbb352790634640a9c5006cba6b43787d4bb86b034c2e5d"
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 2538,
-      "sha256": "919d7d77a06216c8b91e22c1f7329deec71294974c9862e3ba367f2c6b575d56"
+      "bytes": 10272,
+      "sha256": "7729dff47420dc85e0faa359e3777d5faac71796b617120f47d1b32857b0ede7"
+    },
+    {
+      "path": "docs/UI-RELEASE-PLAN.md",
+      "bytes": 10902,
+      "sha256": "8bf0e09a0910fc22bf67ca109b72c5603b2fbcfb9251cf0fe67e55015ccdff7f"
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 9392,
-      "sha256": "ddfee0685f7a5d1fc62690fd8e0c9e2a491121eca8ce9ee424e6550fc337d050"
+      "bytes": 14044,
+      "sha256": "7b5231f306b62660b4ab50161e7566159d23c136e1499323e6565c20a7b27cc4"
+    },
+    {
+      "path": "docs/WORKING-APP-PLAN.md",
+      "bytes": 7798,
+      "sha256": "2fb3d2242d3a31305e713e61eee57a3cb2b85b2c82200114ce81c47c5e4681b0"
+    },
+    {
+      "path": "docs/compatibility-known-failures.json",
+      "bytes": 4721,
+      "sha256": "94c7d24a436c3ad4d149be310c9ed36fbadeca6e48457ed0b0e68f139a27815e"
+    },
+    {
+      "path": "docs/design/README.md",
+      "bytes": 1579,
+      "sha256": "e97e0a643c568add74c2ca0746caea9248cb0a3fad5bc397bea8169548bb11eb"
+    },
+    {
+      "path": "docs/design/planora-brand.html",
+      "bytes": 39201,
+      "sha256": "81011516368e766d3e70c800294aa82adb0ef74c553c5121af74e013772372b9"
+    },
+    {
+      "path": "docs/design/planora-next.html",
+      "bytes": 19115,
+      "sha256": "afa214515acfd6ec13abc92fe8338f39db361708ccc8d3e1a8794761eb4c5e25"
+    },
+    {
+      "path": "docs/design/planora-next.png",
+      "bytes": 76969,
+      "sha256": "1f9d9fad9d61021fa7d30bc339e2276d5cddc9044556ded37be6df3e90156128"
     },
     {
       "path": "examples/README.md",
@@ -307,8 +352,8 @@
     },
     {
       "path": "project-app/ProjectDesk/AppBrand.cs",
-      "bytes": 3066,
-      "sha256": "cef4ff8ff7206a476651ac0023451bcd85dbd09406e12a71837896c01de85921"
+      "bytes": 2800,
+      "sha256": "2e3e44ace3cde10fd1fa001758730ef5516c3f07bd618d89932d79b81f557d3c"
     },
     {
       "path": "project-app/ProjectDesk/AutoSchedulingValidation.cs",
@@ -342,8 +387,8 @@
     },
     {
       "path": "project-app/ProjectDesk/ColumnPickerWindow.cs",
-      "bytes": 4147,
-      "sha256": "630ba4eac8faa06f7f5f9fb4da4296c843a3395b3e7693420e0d9f629e9727ef"
+      "bytes": 4712,
+      "sha256": "3f2b66a0d59c8a9f910a643bfefd11638ffa4acfbe6bac864a72d986293cf7a9"
     },
     {
       "path": "project-app/ProjectDesk/ColumnTitleWindow.cs",
@@ -367,8 +412,8 @@
     },
     {
       "path": "project-app/ProjectDesk/DesignTokens.cs",
-      "bytes": 5869,
-      "sha256": "92193a062db612989e339afc7d638484416a3b06211a87dc6b083b4ed9b73cac"
+      "bytes": 9270,
+      "sha256": "44470a4e77e520bfece28426a2be541282a68c0484c73766a15f01bb24ca2e07"
     },
     {
       "path": "project-app/ProjectDesk/DurableCommands.cs",
@@ -387,8 +432,8 @@
     },
     {
       "path": "project-app/ProjectDesk/EditableSheetModule.cs",
-      "bytes": 1508,
-      "sha256": "e46d42fd1545033290f9edbdb256a0c291e37c9d9295e77cde0879a8e3c0e9f2"
+      "bytes": 1586,
+      "sha256": "b0298bfb5dea28a359c5e6fd5ecff36e553c4364eef2f102e8e3aa55ddcb8554"
     },
     {
       "path": "project-app/ProjectDesk/EditorForms.cs",
@@ -413,7 +458,7 @@
     {
       "path": "project-app/ProjectDesk/GlassNavigationSurface.cs",
       "bytes": 2013,
-      "sha256": "a69a28a96324ebddc8b670e8377c7f9640f97e18674061d6c11bd408c279bfac"
+      "sha256": "4a128e55c5c3d1468423037e735c5f012bacafc08139b29117ebc19fad09c34f"
     },
     {
       "path": "project-app/ProjectDesk/GuiCommandForms.cs",
@@ -422,8 +467,8 @@
     },
     {
       "path": "project-app/ProjectDesk/IconValidation.cs",
-      "bytes": 5597,
-      "sha256": "22063a33ee3282e463763ea9ec21ae6db5a434e58e83a5045683e23920c41386"
+      "bytes": 5779,
+      "sha256": "19ca5365ee661364f5428d79882ba8dbf484fb0806f5aa74391096e971e4fce4"
     },
     {
       "path": "project-app/ProjectDesk/McpBrowserLogin.cs",
@@ -477,8 +522,8 @@
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
-      "bytes": 2614,
-      "sha256": "5712cabab774227f3c925e6ac6f392cf288c296b405e318530b49793d7b20373"
+      "bytes": 2651,
+      "sha256": "714fef911b6839c8edeec8e914d39f1e2980295d498b6286583e9f0ec4b973b1"
     },
     {
       "path": "project-app/ProjectDesk/NetworkDiagramModule.cs",
@@ -512,8 +557,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.Closing.cs",
-      "bytes": 1401,
-      "sha256": "8180fa9d3349d4163c59f3d72c2efeadf4731be0d10885310a2a653a59ef7db5"
+      "bytes": 1454,
+      "sha256": "41a2aefd4be91d840f6fe23c48a4fb2f4eddc31ed9a7988201c4298039833882"
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.Connectors.cs",
@@ -546,9 +591,24 @@
       "sha256": "47d45f5c9a13cfca054e3cf1ba8ee789022e2e25f33dc153292d8a54c5399d9e"
     },
     {
+      "path": "project-app/ProjectDesk/PlannerWindow.Ribbon.cs",
+      "bytes": 1839,
+      "sha256": "092a665a508510b9d168879f2c2381980d6bacd8e95695e60d7cc08e4cc795a2"
+    },
+    {
+      "path": "project-app/ProjectDesk/PlannerWindow.Workspace.cs",
+      "bytes": 5567,
+      "sha256": "e7d9096b5a8071b07ddcad9ab4c3203e0d40b8eb1667b52893028d010a32c8d6"
+    },
+    {
       "path": "project-app/ProjectDesk/PlannerWindow.cs",
-      "bytes": 59296,
-      "sha256": "9e64318dc4b88a26554d298d7115267a7ca9f602559e8c028ed115af43d50308"
+      "bytes": 61717,
+      "sha256": "d4680e22e19509ffdea966fc7d42a4bcfa42f400d9a2534d3605411bcbd410d1"
+    },
+    {
+      "path": "project-app/ProjectDesk/PlanningLibraryValidation.cs",
+      "bytes": 5477,
+      "sha256": "176e7f602724b7db4a16908a8d079d8cdb7fdae8c7c835d2f6bdc15a039f0a86"
     },
     {
       "path": "project-app/ProjectDesk/PlanoraPackage.cs",
@@ -557,8 +617,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 33454,
-      "sha256": "1957ba3ed885f79dd5c4187cb9a657f698bcbab95974f43722969a6e0b27aac6"
+      "bytes": 34685,
+      "sha256": "ae84cdb36e798c50662406f9d26d71e66c0209d04e1fbb0bd98617f3fc861463"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
@@ -572,8 +632,8 @@
     },
     {
       "path": "project-app/ProjectDesk/ProjectDesk.csproj",
-      "bytes": 1361,
-      "sha256": "b1ed0b5e9ad570f5dd773961ffe0b89a8cf082989c1e0f541df30bbc5d4eeb86"
+      "bytes": 1362,
+      "sha256": "a36427419c46a00613eff81272f6af6de2d39079d78b13007d71aefc601f35fe"
     },
     {
       "path": "project-app/ProjectDesk/ProjectPresentation.cs",
@@ -602,8 +662,8 @@
     },
     {
       "path": "project-app/ProjectDesk/RecoveryUiValidation.cs",
-      "bytes": 6420,
-      "sha256": "5f90cf724cdc848229dfd50c3d2e51c5fb26e870a9f113b735f074a41f623609"
+      "bytes": 6476,
+      "sha256": "9d4bd757f0c679e177dc4c5632009c9967f2437b4bbeebef55261055645e993d"
     },
     {
       "path": "project-app/ProjectDesk/ResourceGraphModule.cs",
@@ -611,14 +671,19 @@
       "sha256": "80196ce3e602517feea2f1341b923ca6e6926dcf6aba3515fef7a6b6269ea44a"
     },
     {
+      "path": "project-app/ProjectDesk/ResourceSheetValidation.cs",
+      "bytes": 4085,
+      "sha256": "c8c717277ec6299e7c5f657f6dc5559f97f9b87001ab3c80cab54dce7230f808"
+    },
+    {
       "path": "project-app/ProjectDesk/Resources/Planora.ico",
-      "bytes": 17804,
-      "sha256": "d2e83580c44fa923482265e39a62478fd0742e1ac68c2730f85997c7b46c0ff0"
+      "bytes": 18542,
+      "sha256": "aeb323f00a46e6ee88b173ba645cbf87ac4dd7341374374363f01a5c42f40912"
     },
     {
       "path": "project-app/ProjectDesk/Resources/Planora.png",
-      "bytes": 8777,
-      "sha256": "bfe38d7ee403451f213c5d05c7847cdef084f8c1d215ecc8cbe65482a183a6ec"
+      "bytes": 9200,
+      "sha256": "2678db4455f9cfa3552ee5aab1f049a38dd4d9e86bd370c7bc6442c41b99bd6a"
     },
     {
       "path": "project-app/ProjectDesk/Resources/ProjectCommands.json",
@@ -627,8 +692,8 @@
     },
     {
       "path": "project-app/ProjectDesk/RibbonModule.cs",
-      "bytes": 5591,
-      "sha256": "b5ccff8c324e250a8ad368dc68d20c81e7144ffa77728b05c1c2749d0b2eebc7"
+      "bytes": 7483,
+      "sha256": "6b61d0da05d323685dbcd51940f53117a213da416eaaaf5182d028b72c4d2d9d"
     },
     {
       "path": "project-app/ProjectDesk/RichNotesWindow.cs",
@@ -641,9 +706,19 @@
       "sha256": "aa7f05a7b661039cb0d14538ed59fd2b8bff80f16e4cf243c9d7e5b6692228a3"
     },
     {
+      "path": "project-app/ProjectDesk/SavedWorkspaceView.cs",
+      "bytes": 4599,
+      "sha256": "c239f1e5100d6d98e64a09a21773042709cf2b9803faf37ad012a4dc134c2e74"
+    },
+    {
+      "path": "project-app/ProjectDesk/StarterTemplates.cs",
+      "bytes": 3928,
+      "sha256": "a81e5d347e207a2b773c9269c9f7e09ed63870a72d4949e65ef2e92bb80804af"
+    },
+    {
       "path": "project-app/ProjectDesk/TaskColumns.cs",
-      "bytes": 9087,
-      "sha256": "72246425c6208ca6ca3af19d62d2977c10a8bf4e9a7d2b7bd4046e21a07cb0be"
+      "bytes": 9649,
+      "sha256": "2fbed189a4450f3e9cf5b80b278621744d7e2c06d48d224c2a589fb2ded93501"
     },
     {
       "path": "project-app/ProjectDesk/TaskDetailsModule.cs",
@@ -657,8 +732,13 @@
     },
     {
       "path": "project-app/ProjectDesk/TaskGanttModule.cs",
-      "bytes": 12850,
-      "sha256": "8e57fe7a88dcbca17ca5783d53dec902ce0ecfe40dad04a60c0287c783fd281d"
+      "bytes": 13333,
+      "sha256": "e9e25bc5391b4683fad108a17e2e192ba48129d25e1154347b8cd26398d4a0d2"
+    },
+    {
+      "path": "project-app/ProjectDesk/TaskInspectorModule.cs",
+      "bytes": 6623,
+      "sha256": "ca87b922ad57d6c2ce65544d577c8ec5131f4c76b4c53715e09a2eeb7068684e"
     },
     {
       "path": "project-app/ProjectDesk/TaskPaste.cs",
@@ -667,13 +747,18 @@
     },
     {
       "path": "project-app/ProjectDesk/TaskSheetModule.cs",
-      "bytes": 20419,
-      "sha256": "7fec96019c42aaa15eb7a82b8e4c61d6ac7924b9a2afe127f49cdfdeb65b470e"
+      "bytes": 21083,
+      "sha256": "573b0098e804e00aa00d56d74e0e4aeb2954b441514686ea2bee046037ae2ccd"
     },
     {
       "path": "project-app/ProjectDesk/TaskUsageModule.cs",
       "bytes": 4436,
       "sha256": "b2b88ccdc6313b56a7a53f8cea67c7d7ad8c886b61d52802830adc5ab448d729"
+    },
+    {
+      "path": "project-app/ProjectDesk/TemplateLibraryWindow.cs",
+      "bytes": 4134,
+      "sha256": "b21ad39f6af4061bc928329e945ecef586bb67226a8a252f5b915dfe880b8730"
     },
     {
       "path": "project-app/ProjectDesk/TextFormatting.cs",
@@ -687,8 +772,8 @@
     },
     {
       "path": "project-app/ProjectDesk/TimelineModule.cs",
-      "bytes": 23975,
-      "sha256": "eb69fc0c7fff3254b0fe041e06a24c4bf14cd03e6b5d9edff63c5f8bbe8701b2"
+      "bytes": 25074,
+      "sha256": "2d0d6ed6ccd6a1725486d2a165675c3f443e0980817e56774bd8d937a4e3be91"
     },
     {
       "path": "project-app/ProjectDesk/TimelineStyleWindow.cs",
@@ -702,13 +787,18 @@
     },
     {
       "path": "project-app/ProjectDesk/UiIcons.cs",
-      "bytes": 14803,
-      "sha256": "28c851cc71cb598086f5b526cf00893de7fb8a16356f8998cda808d910db38fd"
+      "bytes": 15993,
+      "sha256": "79ed9daa16ad9f3b12fc7bba470b98b7afcc0b0719a8f3a24ace65c5382f6bd2"
     },
     {
       "path": "project-app/ProjectDesk/VisualReviewValidation.cs",
       "bytes": 2876,
       "sha256": "7108c184bc134af61701b7017e74f16f30e93d3b93068c1676971ad94698cb0f"
+    },
+    {
+      "path": "project-app/ProjectDesk/WorkspaceValidation.cs",
+      "bytes": 10713,
+      "sha256": "fc06f3f6ebaa05fbe3bd13bcd0315ba0919018e977746e81815bbc2b91bb54ff"
     },
     {
       "path": "project-app/vendor/OfficeIMO/.editorconfig",
@@ -7706,14 +7796,129 @@
       "sha256": "f2e2117793bb6285fed88d961d89dec31f236bf8233e04d926070b91f3c2a8d1"
     },
     {
+      "path": "releases/0.3.0/release.json",
+      "bytes": 170,
+      "sha256": "5bda0ce182262cdd2ad1f39985ed850d66a63366c1d3896ce2043211bdd78871"
+    },
+    {
+      "path": "releases/0.3.0/release.md",
+      "bytes": 1546,
+      "sha256": "876de6acf7d940c8cc099c8ece459b0c8fbb4ac1a64afa35958476a5448d3d91"
+    },
+    {
+      "path": "releases/0.3.1/release.json",
+      "bytes": 190,
+      "sha256": "d1c200319a3b485b48d061877be68df0c2234d72018d502f0a58f947beaa66b4"
+    },
+    {
+      "path": "releases/0.3.1/release.md",
+      "bytes": 2113,
+      "sha256": "3e5e74d1bdc73cdf331b4bb9cf7314deb20779561b258f95b9699b6e73e55e79"
+    },
+    {
+      "path": "releases/0.3.10/release.json",
+      "bytes": 291,
+      "sha256": "9606e323c9b99f27680de2b7b6395e2491f7bd6740b18da29b38f4b7b31454ee"
+    },
+    {
+      "path": "releases/0.3.10/release.md",
+      "bytes": 1265,
+      "sha256": "7aeb7bc4594639420b67baccc3986044b99c216b38f9f8c8b483bdfb9160cd31"
+    },
+    {
+      "path": "releases/0.3.3/release.json",
+      "bytes": 356,
+      "sha256": "fdf6dcabf4be485bcacd6eb4ec3c1d9899e718a4a8a090f97c7cedc5be00de23"
+    },
+    {
+      "path": "releases/0.3.3/release.md",
+      "bytes": 2315,
+      "sha256": "b315c6a65c1e570c2824527252bea9680611c8fc203bfe527c8ef70396b4e59d"
+    },
+    {
+      "path": "releases/0.3.4/release.json",
+      "bytes": 347,
+      "sha256": "badb8f12af34d408f4df861096ac11976e9978f1e1e4e765b5b8baf6f57bb994"
+    },
+    {
+      "path": "releases/0.3.4/release.md",
+      "bytes": 1731,
+      "sha256": "064153c2f17f99c5a9644eabe754c00d5788874eb151d4855d6391644bf3549a"
+    },
+    {
+      "path": "releases/0.3.5/release.json",
+      "bytes": 291,
+      "sha256": "2001936a2aa5fca1ead1299c0370ca1b64f0a34566037bf7ff4f03829869b679"
+    },
+    {
+      "path": "releases/0.3.5/release.md",
+      "bytes": 1565,
+      "sha256": "0a678558beffce25fcde5381dd11bf23243e386e81677d8520cd93da8278a42f"
+    },
+    {
+      "path": "releases/0.3.6/release.json",
+      "bytes": 293,
+      "sha256": "687ff3216f8bc4cbcac7eae1cbafb2d506f776ecbeea0ed30ec73ef39f923a28"
+    },
+    {
+      "path": "releases/0.3.6/release.md",
+      "bytes": 1835,
+      "sha256": "7734c941a9b97b830f52b7073243fbfc32e0d9560aaf3bcbef98048dea009834"
+    },
+    {
+      "path": "releases/0.3.7/release.json",
+      "bytes": 307,
+      "sha256": "b8c46fe4641b902359cc62363707483e8e054b78f755cac0a54f2d4575c03c1b"
+    },
+    {
+      "path": "releases/0.3.7/release.md",
+      "bytes": 1556,
+      "sha256": "2b5655dc310fb933a8fd577fe4a25ff346f2d57445ec29adc76a60866e265a50"
+    },
+    {
+      "path": "releases/0.3.8/release.json",
+      "bytes": 327,
+      "sha256": "0ae5b2f6111bcd5174d6309dfd2a7660d4f7a623dba2c690f92f3153e4c13374"
+    },
+    {
+      "path": "releases/0.3.8/release.md",
+      "bytes": 1697,
+      "sha256": "45044bd66be5ba223735a4ff55cf4942eed1785c3974d415648dac5b92c9dabf"
+    },
+    {
+      "path": "releases/0.3.9/release.json",
+      "bytes": 326,
+      "sha256": "4220ee40d665b5d9e7e30fb3f43aabb1e592932a60050a284a38055f62eef6e0"
+    },
+    {
+      "path": "releases/0.3.9/release.md",
+      "bytes": 1364,
+      "sha256": "2ae0bc9a3dbbc7a7a660b4e67e4720356c91aba51198c824fd32217188362688"
+    },
+    {
+      "path": "releases/release.md",
+      "bytes": 2512,
+      "sha256": "6794e24de13f38820359bc93ce825d4b104250b665b6fb5aca99cd032550fe27"
+    },
+    {
       "path": "scripts/build.ps1",
       "bytes": 1322,
       "sha256": "8ff64536cebf8ede83e1c68f91835e9873aded8f78638184f9b39167c35185d9"
     },
     {
+      "path": "scripts/release.ps1",
+      "bytes": 5538,
+      "sha256": "1862acfc07a31e0ac92a59cfaa975432bce006ec0c7379a9fec524f0c832f6d3"
+    },
+    {
       "path": "scripts/validate.ps1",
-      "bytes": 1095,
-      "sha256": "a9c66112ca642326a1052df1432fbdb28f67e1ab363f0393a88fa7e01670e55e"
+      "bytes": 1163,
+      "sha256": "68e3d43fb7bc666c618f11de1c5422c35bbd5bb69807aae109635fcd0593a14c"
+    },
+    {
+      "path": "scripts/verify-mpp-regressions.ps1",
+      "bytes": 1579,
+      "sha256": "9d75c8d813ed5dbcf0764a6289705adfffddd5641f314aaccb6a0783e04f7431"
     },
     {
       "path": "scripts/verify-public-examples.ps1",

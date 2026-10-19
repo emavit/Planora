@@ -1,0 +1,13 @@
+{
+  "version": "0.3.5",
+  "previousVersion": "0.3.4",
+  "features": [
+    "Persistent inspector dates and Apply/Cancel controls",
+    "Adjacent field validation for typed inspector values"
+  ],
+  "checks": [
+    "workspace-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}

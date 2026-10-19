@@ -133,8 +133,15 @@ public sealed class GanttCanvas : Control {
                     ctx.DrawRectangle(Palette("Summary",DesignTokens.Text),null,new Rect(x,y-4,Math.Max(4,right-x),5));
                     ChartDrawing.Diamond(ctx,new Point(x,y),3,Palette("Summary",DesignTokens.Text));ChartDrawing.Diamond(ctx,new Point(right,y),3,Palette("Summary",DesignTokens.Text));
                 } else {
-                    ctx.DrawRectangle(brush,ShowCritical&&t.IsCritical==true?new Pen(Palette("Critical",ChartDrawing.Critical),1.5):null,new Rect(x,y-6,Math.Max(4,right-x),12),2,2);
-                    if(t.PercentComplete>0)ctx.DrawRectangle(ColorByProgress?Darker(brush):Palette("Progress",ChartDrawing.Progress),null,new Rect(x,y-6,Math.Max(4,right-x)*Math.Clamp(t.PercentComplete.Value/100d,0,1),12),2,2);
+                    // Rounded bars retain exact date endpoints and a straight progress boundary.
+                    double barHeight=Math.Min(16,Math.Max(10,node.Height-12));
+                    var barRect=new Rect(x,y-barHeight/2,Math.Max(4,right-x),barHeight);
+                    var roundedBar=new RoundedRect(barRect,barHeight/2,barHeight/2);
+                    using(ctx.PushClip(roundedBar)) {
+                        ctx.DrawRectangle(brush,null,barRect);
+                        if(t.PercentComplete>0)ctx.DrawRectangle(ColorByProgress?Darker(brush):Palette("Progress",ChartDrawing.Progress),null,new Rect(x,barRect.Y,barRect.Width*Math.Clamp(t.PercentComplete.Value/100d,0,1),barHeight));
+                    }
+                    if(ShowCritical&&t.IsCritical==true)ctx.DrawRectangle(null,new Pen(Palette("Critical",ChartDrawing.Critical),1.5),barRect,barHeight/2,barHeight/2);
                 }
                 if(ShowProgressLabels&&!t.IsSummary&&t.IsMilestone!=true&&t.Duration?.Value!=0&&t.Start!=t.Finish){
                     ChartDrawing.Text(ctx,$"{Math.Clamp(t.PercentComplete??0,0,100):0}%",right+8,y-8,48,DesignTokens.Text,11,true);DrawnProgressLabelCount++;

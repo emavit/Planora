@@ -1,0 +1,6 @@
+{
+  "version": "0.3.0",
+  "previousVersion": "0.2.1",
+  "features": ["Compact modular workspace navigation", "Editable task inspector"],
+  "checks": ["workspace-test"]
+}

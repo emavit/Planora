@@ -1,0 +1,115 @@
+{
+  "baselineVersion": "0.2.1",
+  "description": "Observed pre-existing failures, not accepted full compatibility. Reduce this list when fixed; do not auto-update from a candidate.",
+  "totalStages": 88,
+  "files": [
+    {
+      "file": "assignment-assignments-project2019-mpp14.mpp",
+      "sha256": "D5BBDA5704838AFCC171493425197167671EE57D3BB051CDFDF55613D240C953"
+    },
+    {
+      "file": "mpp12subproject.mpp",
+      "sha256": "84FE8F47FE5AC504A1843EBEFDFEAD03D4BCE3484DC33E3D2FC0881C230AED7F"
+    },
+    {
+      "file": "mpp12task.mpp",
+      "sha256": "56DC0F6DD1B15707C3880603EB5E89865672642580F0A4536913A7ECFC8C34F3"
+    },
+    {
+      "file": "mpp14assignmentfields.mpp",
+      "sha256": "8C7A98076FB15CF988F4593B970E888915094908C9672D8BD3A7843FF134C28C"
+    },
+    {
+      "file": "mpp14baselines.mpp",
+      "sha256": "D71244D2C8F15B1D007D11523045DF61F14E79D5F522A52437481F36D850AC5F"
+    },
+    {
+      "file": "mpp14calendar.mpp",
+      "sha256": "98C8A0FB569BE058C0A76EC61D2918F4D81A2A6AF9CDCC3FFD1E5640B888E8EC"
+    },
+    {
+      "file": "mpp14relations.mpp",
+      "sha256": "8F33CDB774AA090B664D90145879ACC8A289057CA45A6575884EB0DA9FD91F30"
+    },
+    {
+      "file": "mpp14resource.mpp",
+      "sha256": "3FC8D51A7E1270C897C0C933ABAAD05D1DF1683B6C1B476B54880708268F6E79"
+    },
+    {
+      "file": "mpp14task.mpp",
+      "sha256": "AAEF495DC99BE1735DE02940A6FB506573035E99DE4ACF0FA2FFE96344C8BE4A"
+    },
+    {
+      "file": "mpp9task.mpp",
+      "sha256": "D27D6A9D3D6D6538B1E33194F31EECAF83FFF00CDFA214FE16DD74FD26AD3860"
+    },
+    {
+      "file": "sample1.mpp",
+      "sha256": "7BDBFDC31DD398BCBFCB1D1A8ACE8C6781E0D4F2600C87A9E30DB2C78AF9B676"
+    },
+    {
+      "file": "task-baselines-project2019-mpp14.mpp",
+      "sha256": "19A4A7A6D3FE510E9F2A71EE827E25D1C9E705C6E24B831F4943FD73FF80C9A7"
+    },
+    {
+      "file": "task-durations-project2019-mpp14.mpp",
+      "sha256": "801206E2B5976FAF411E7B5DE3BB829D105FDDF79579417A793176B0055513A3"
+    },
+    {
+      "file": "task-links-project2019-mpp14.mpp",
+      "sha256": "B2592BE8D205ACAF3D02C240C8A68D33DF00C62BAD27477B6F93A3C950D0DB5A"
+    }
+  ],
+  "failures": [
+    {
+      "file": "assignment-assignments-project2019-mpp14.mpp",
+      "stage": "independent-producer-xml",
+      "error": "System.Exception: MPP data differs from repository's matching producer XML"
+    },
+    {
+      "file": "mpp12task.mpp",
+      "stage": "baseline-10-capture-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[1]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
+    },
+    {
+      "file": "mpp14assignmentfields.mpp",
+      "stage": "rename-undo-redo-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
+    },
+    {
+      "file": "mpp14assignmentfields.mpp",
+      "stage": "new-task-link-resource-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
+    },
+    {
+      "file": "mpp14assignmentfields.mpp",
+      "stage": "baseline-10-capture-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
+    },
+    {
+      "file": "mpp14baselines.mpp",
+      "stage": "rename-undo-redo-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
+    },
+    {
+      "file": "mpp14baselines.mpp",
+      "stage": "new-task-link-resource-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
+    },
+    {
+      "file": "mpp14baselines.mpp",
+      "stage": "baseline-10-capture-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
+    },
+    {
+      "file": "mpp14task.mpp",
+      "stage": "baseline-10-capture-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[1]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
+    },
+    {
+      "file": "mpp9task.mpp",
+      "stage": "baseline-0-capture-native-save",
+      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[0]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
+    }
+  ]
+}

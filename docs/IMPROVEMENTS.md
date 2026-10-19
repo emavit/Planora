@@ -98,7 +98,7 @@ Priority: **P0** data integrity/release blockers, **P1** core daily usability, *
 | GUI-10 | P1 | Dialog consistency | Consistent buttons, padding, validation, default action, Escape/X behavior and minimum sizing |
 | GUI-11 | P2 | Inspector/context menus | Fast contextual actions without forcing multi-step modal editing for ordinary tasks |
 | GUI-12 | P2 | Onboarding | A small generated example and discoverable keyboard tips; no confidential sample files |
-| GUI-13 | P2 | Theme polish | Office-for-Mac/Apple-inspired restraint while preserving the familiar Project layout; no unlicensed asset copies |
+| GUI-13 | P2 | Theme polish | Original, restrained desktop design per UI-RELEASE-PLAN.md; preserve fast planning workflows and MPP compatibility; no unlicensed asset copies |
 | GUI-14 | P2 | Responsive layouts | Explicit overflow and compact ribbon behavior for smaller displays; no hidden essential controls |
 | GUI-15 | P2 | Multi-window consistency | Independent project/recovery state, visible project identity and no cross-window settings loss |
 | GUI-16 | P2 | Usability qualification | Walk through create → link → assign → baseline → export → reopen with representative users |
@@ -141,6 +141,6 @@ Priority: **P0** data integrity/release blockers, **P1** core daily usability, *
 
 ## Recommended execution order
 
-Start with REL-01, REC-01, DATA-01/02/03 and GUI-03/04. Then qualify large-project behavior and finish AI-01/02. Expand custom fields/views and scheduling only after shared model semantics are explicit. Resource/portfolio/rule/sync work follows the durable foundation; macOS qualification follows the Windows release gate. Android and iOS development follows completion and validation of macOS; see [mobile plan](MOBILE-PLAN.md).
+UI work now follows [the UI release plan](UI-RELEASE-PLAN.md), starting with combined 0.3.2: workspace clarity, density/focus mode, spreadsheet editing feedback and a resizable grouped inspector. Keep Gantt and timelines central. Preserve REL-01, REC-01 and DATA-01/02/03 gates and GUI-03/04 behavior. Then qualify large-project behavior and finish AI-01/02. Expand custom fields/views and scheduling only after shared model semantics are explicit. Resource/portfolio/rule/sync work follows the durable foundation; macOS qualification follows the Windows release gate. Android and iOS development follows completion and validation of macOS; see [mobile plan](MOBILE-PLAN.md).
 
 Do not mark a row done merely because a button exists. Record behavior, persistence, Undo, error/cancel handling, affected platform and relevant tests. The complete source method inventory and real-project compatibility matrix remain separate engineering audits.

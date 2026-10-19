@@ -8,6 +8,7 @@ namespace ProjectDesk;
 // Opt-in diagnostic: a disposable in-memory project in its own native Windows window.
 internal static class NativeStabilityCheck {
  public static void Start(PlannerWindow window,ProjectSession session,IClassicDesktopStyleApplicationLifetime desktop){
+  window.SetCompactWorkspace(false);
   int initial=session.Tasks.Count,step=0;var timer=new DispatcherTimer{Interval=TimeSpan.FromMilliseconds(130)};
   window.Title="Planora — stability check";
   timer.Tick+=(_,_)=>{

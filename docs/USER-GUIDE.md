@@ -1,12 +1,12 @@
 # How to use Planora
 
-This guide describes the 0.2.1 Windows preview source. Some Microsoft Project functions remain unavailable or only partially supported. macOS is planned and unqualified. Android and iOS apps are planned after the macOS app is completed and validated; mobile versions are not available yet. [Mobile roadmap](MOBILE-PLAN.md).
+This guide describes the 0.3.1 Windows preview source. Some Microsoft Project functions remain unavailable or only partially supported. macOS is planned and unqualified. Android and iOS apps are planned after the macOS app is completed and validated; mobile versions are not available yet. [Mobile roadmap](MOBILE-PLAN.md).
 
 ## 1. Start the app
 
 If you have a self-contained Windows build, keep its whole folder together and run `Planora.exe`. This GitHub source folder intentionally contains no compiled app. To build from source, install .NET 10 and follow the README. Run commands from the repository root.
 
-The first screen uses a ribbon/menu, a task table beside the Gantt chart, and an optional timeline area above them. Use the ribbon tabs for Task, Resource, Project, View and formatting commands. Help → All Project Commands exposes the observed command catalogue and explains unsupported routes.
+The first screen uses compact view navigation, menus, a task table beside the Gantt chart, and optional timelines above them. Choose Show ribbon for expanded Task, Resource, Project, View and formatting commands. Help → All Project Commands exposes the observed command catalogue and explains unsupported routes.
 
 ## 2. Create or open a project
 
@@ -111,3 +111,43 @@ See [all improvement areas](IMPROVEMENTS.md) and [open implementation tasks](TAS
 ## Public practice files
 
 Open the MPP files under [examples/public-mpp](../examples/public-mpp/) for public compatibility practice. Read [provenance, license and Microsoft gallery coverage](../examples/README.md) first. The XML files are producer references, not additional UI-open templates. Do not overwrite checked-in files; save a new copy. Private examples are excluded.
+
+## New workspace tools (0.3.0–0.3.1)
+
+- **Inspector** opens the editable task panel. Select a task, edit name, duration, scheduling mode, predecessors or completion, then Apply. The changes are one Undo step; invalid input stays in the panel. Cancel edits discards the draft. Changing row selection keeps an unapplied draft attached to its original task. Commands validate pending edits before continuing.
+- **Saved views…** stores columns, filters, active view, pane visibility and Gantt dates/zoom on this computer. Save current with a unique name; select a saved view and Apply. Delete removes only the saved layout.
+- **File → New from Template…** offers ten original schedule starters with preview, project name and start date. Create project runs the existing save prompt if needed. These are linked task schedules; they do not add sprints, custom workflows or service-desk behavior.
+- Each built release folder includes **release.md**, validation evidence and file hashes. Keep the full folder together when copying the app. [Version differences](../releases/release.md).
+
+## Workspace controls in 0.3.3
+
+Use Row density to choose Compact or Comfortable. Text wrapping and larger custom fonts still take precedence. Press F11 or Focus to hide optional ribbon/sidebar/inspector while retaining timeline visibility; Exit focus restores panel preferences. Resize the inspector with its left divider or the Inspector width presets. Width persists on this computer. Schedule mode uses an automatic/manual selector; Apply commits the task fields together and Undo restores the previous values. Invalid drafts remain attached to their original task.
+
+## Inspector layout in 0.3.5
+
+The date summary and Apply/Cancel controls stay visible while the grouped fields scroll. Invalid duration, task name or completion values show an error below the field; changing the rejected value clears that message. Apply validates the batch before modifying the project. Dependency/cross-field errors are shown in the pinned status area. Cancel discards the draft and follows the current task selection.
+
+## Planning ribbon in 0.3.6
+
+Click Show ribbon if it is hidden. Planning gathers Create, Gantt, Dates & selection, Timeline, Schedule and Presentation commands. Gantt zoom/fit and Gantt dates affect the chart; Timeline dates affect the active timeline. Use Previous/Next command arrows to reach overflowing groups and All ribbon tabs for tabs outside the visible strip. Hide controls leaves the tabs visible; selecting a tab opens its commands again. Existing Task, Resource, Project, View and formatting tabs remain available.
+
+## Timeline workspace in 0.3.7
+
+Use Options beside the timeline selector to rename or remove the active lane. The last lane cannot be removed; hide the timeline module instead. Fit panel adjusts the panel height to its lanes without changing dates or zoom. It is useful after deleting a lane or making the timeline panel large. Each lane retains direct Tasks, Dates, Format and zoom actions.
+
+
+## Version 0.3.8 appearance
+
+The indigo/aqua icon identifies the new Planora build. The familiar ribbon commands now show group names below their controls; the active tab has an underline. Show ribbon restores the command area if your saved workspace is compact. Gantt bars have rounded ends; progress and custom colors still use your existing formatting. This release does not change .mpp or .planora file identities.
+
+## Microsoft Project Entry column preset
+
+In Gantt, choose **Choose columns** (or a column header menu → Insert Column). Select **Preset: Microsoft Project — Entry**, then **Apply columns**. The preset restores Indicators, Task Mode, Task Name, Duration, Start, Finish, Predecessors and Resource Names in that order, with standard field widths. You can adjust the selection before applying; Cancel leaves the current view unchanged. Column order and widths are saved in workspace preferences. The preset follows the current light/dark theme.
+
+## Colored command icons — 0.3.9
+
+Planning commands use teal, resource commands purple, milestones and notes amber, PDF/delete/unlink red, and general tools blue. Dark mode uses lighter variants. Color supplements the existing labels and shapes; command behavior is unchanged. Dropdown and context-menu rows use the same rounded style and selection surfaces as the workspace.
+
+## Quickly hide timelines
+
+Click **Hide timelines** in the workspace toolbar above the Gantt or task table. The same button becomes **Show timelines**. This hides all lanes together, remembers your choice, and keeps timeline tasks, formatting and date ranges intact.

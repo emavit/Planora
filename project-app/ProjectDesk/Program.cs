@@ -16,6 +16,19 @@ static class Program {
         try{return Run(args);}catch(Exception error){Console.Error.WriteLine(error.ToString());return 1;}
     }
     private static int Run(string[] args) {
+        if(args.FirstOrDefault()=="--icons-ui-test"){
+            Directory.CreateDirectory(args[1]);var fixture=Path.Combine(args[1],"icons-fixture.mpp");
+            using(var session=new ProjectSession()){session.NewProject("Icon validation",new DateTime(2026,10,19,8,0,0));session.AddTask("Design");session.AddTask("Delivery");session.SaveCopy(fixture,true);}
+            return IconValidation.Run(fixture,args[1]);
+        }
+        if(args.FirstOrDefault()=="--timeline-ui-test"){
+            Directory.CreateDirectory(args[1]);var fixture=Path.Combine(args[1],"timeline-fixture-"+Guid.NewGuid()+".mpp");
+            using(var session=new ProjectSession()){session.NewProject("Timeline UI fixture",new DateTime(2026,10,19,8,0,0));session.AddTask("Discovery");session.AddTask("Delivery");session.AddTask("Launch",true);session.SaveCopy(fixture,true);}
+            return TimelineValidation.Run(fixture,args[1]);
+        }
+        if(args.FirstOrDefault()=="--resource-sheet-test")return ResourceSheetValidation.Run(args[1]);
+        if(args.FirstOrDefault()=="--planning-library-test")return PlanningLibraryValidation.Run(args[1]);
+        if(args.FirstOrDefault()=="--workspace-test")return WorkspaceValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--durable-test")return DurableValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--recovery-ui-test")return RecoveryUiValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--mcp-stall-fixture"){File.WriteAllText(args[1],Environment.ProcessId.ToString());Thread.Sleep(30000);return 0;}

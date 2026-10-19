@@ -1,0 +1,14 @@
+{
+  "version": "0.3.10",
+  "previousVersion": "0.3.9",
+  "features": [
+    "One-click Hide timelines / Show timelines in the workspace toolbar"
+  ],
+  "checks": [
+    "workspace-test",
+    "icons-ui-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}

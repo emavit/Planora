@@ -16,10 +16,10 @@ public sealed class GlassNavigationSurface : UserControl {
  }
  public void SetAppearance(bool dark,bool reduce){
   IsReduced=reduce;_acrylic.IsVisible=!reduce;
-  var tint=Color.Parse(dark?"#242B34":"#F8FBFF");
+  var tint=Color.Parse(dark?"#242426":"#F7F7F9");
   _acrylic.Material=new ExperimentalAcrylicMaterial{BackgroundSource=AcrylicBackgroundSource.Digger,TintColor=tint,TintOpacity=.88,MaterialOpacity=.72,FallbackColor=tint};
-  _frame.Background=reduce?new SolidColorBrush(tint):new LinearGradientBrush{StartPoint=new RelativePoint(0,0,RelativeUnit.Relative),EndPoint=new RelativePoint(0,1,RelativeUnit.Relative),GradientStops={new GradientStop(Color.Parse(dark?"#A82E3846":"#D9FFFFFF"),0),new GradientStop(Color.Parse(dark?"#CA20262F":"#DDEAF0F8"),1)}};
-  _frame.BorderBrush=new SolidColorBrush(Color.Parse(dark?"#596573":"#FFFFFF"));
+  _frame.Background=reduce?new SolidColorBrush(tint):new LinearGradientBrush{StartPoint=new RelativePoint(0,0,RelativeUnit.Relative),EndPoint=new RelativePoint(0,1,RelativeUnit.Relative),GradientStops={new GradientStop(Color.Parse(dark?"#E629292C":"#EBFFFFFF"),0),new GradientStop(Color.Parse(dark?"#EB222224":"#EBF5F5F7"),1)}};
+  _frame.BorderBrush=new SolidColorBrush(Color.Parse(dark?"#454549":"#E2E2E7"));
   _frame.BoxShadow=reduce?default:BoxShadows.Parse(dark?"0 3 12 0 #50000000":"0 3 12 0 #160D2545");
  }
  public static bool SystemRequestsSolid(Window window){

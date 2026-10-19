@@ -20,6 +20,14 @@ public sealed class ColumnPickerWindow : Window {
         var heading=new StackPanel{Spacing=8,Margin=new Thickness(0,0,0,16)};
         heading.Children.Add(new TextBlock{Text="Choose columns",FontSize=22});
         heading.Children.Add(new TextBlock{Text=$"{catalogue.Count} available fields · Insert before the selected column, or append at the end.",TextWrapping=Avalonia.Media.TextWrapping.Wrap});
+        var preset=Action("Preset: Microsoft Project — Entry",()=>{
+            ResetWidths=true;_selected.Clear();
+            foreach(var key in TaskColumns.ProjectEntryPreset)if(_catalogue.FirstOrDefault(c=>c.Key==key)is TaskColumn column)_selected.Add(column);
+            _search.Text="";Update();
+        });
+        preset.HorizontalAlignment=HorizontalAlignment.Left;
+        ToolTip.SetTip(preset,"Indicators, Task Mode, Task Name, Duration, Start, Finish, Predecessors, Resource Names. Apply columns to confirm.");
+        heading.Children.Add(preset);
         heading.Children.Add(_search); DockPanel.SetDock(heading,Dock.Top);root.Children.Add(heading);
         var footer=new StackPanel{Orientation=Orientation.Horizontal,Spacing=10,HorizontalAlignment=HorizontalAlignment.Right,Margin=new Thickness(0,16,0,0)};
         footer.Children.Add(Action("Cancel",()=>Close(null)));

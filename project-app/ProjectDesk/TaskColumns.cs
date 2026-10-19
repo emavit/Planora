@@ -11,6 +11,7 @@ public sealed record TaskColumn(string Key, string Title, double Width, Func<Pro
 }
 
 public static class TaskColumns {
+    public static readonly string[] ProjectEntryPreset = ["Indicators", "TaskMode", "Name", "Duration", "Start", "Finish", "Predecessors", "ResourceNames"];
     public static readonly string[] Defaults = ["DisplayId", "TaskMode", "Name", "Duration", "Start", "Finish", "Predecessors", "ResourceNames"];
     public static IReadOnlyList<TaskColumn> Catalogue(ProjectDocument? document) {
         var columns = new List<TaskColumn> {
@@ -81,6 +82,10 @@ public sealed class TaskTableRow : System.ComponentModel.INotifyPropertyChanged 
     public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
     private TaskTableRow(IReadOnlyList<TaskColumn> columns,int uid){Uid=uid;Cells=columns.ToDictionary(c=>c.Key,_=>(string?)"");}
     public static TaskTableRow EntryRow(IReadOnlyList<TaskColumn> columns,int uid=-1)=>new(columns,uid);
+    public void UpdateCell(string key,string? value){
+        if(Cells.GetValueOrDefault(key)==value)return;
+        Cells=new(Cells){[key]=value};PropertyChanged?.Invoke(this,new(nameof(Cells)));
+    }
     public void Refresh(ProjectTask task,ProjectDocument document,IReadOnlyList<TaskColumn> columns){Cells=columns.ToDictionary(c=>c.Key,c=>c.Read(task,document));PropertyChanged?.Invoke(this,new(nameof(Cells)));}
     public TaskTableRow(ProjectTask task, ProjectDocument document, IReadOnlyList<TaskColumn> columns) {
         Uid=task.Uid; RawName=task.Name; IsSummary=task.IsSummary;
@@ -90,6 +95,10 @@ public sealed class TaskTableRow : System.ComponentModel.INotifyPropertyChanged 
 
 public sealed record ColumnSetting(string Key, double Width);
 public sealed class ViewPreferences {
+    public List<SavedWorkspaceView> SavedViews {get;set;}=[];
+    public bool CompactWorkspace {get;set;}=true;
+    public bool ShowInspector {get;set;}
+    public double InspectorWidth {get;set;}=300;
     public string ThemeMode {get;set;}="Automatic";
     public bool GanttColorByProgress {get;set;}
     public bool GanttProgressLabels {get;set;}

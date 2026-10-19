@@ -1,0 +1,14 @@
+{
+  "version": "0.3.8",
+  "previousVersion": "0.3.7",
+  "features": [
+    "Modern Planora visual identity and shared application icons",
+    "Apple/Office hybrid ribbon and rounded Gantt presentation"
+  ],
+  "checks": [
+    "workspace-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}

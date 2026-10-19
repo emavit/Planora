@@ -1,0 +1,15 @@
+{
+  "version": "0.3.9",
+  "previousVersion": "0.3.8",
+  "features": [
+    "Microsoft Project Entry column preset",
+    "Colored command icons and coordinated dropdown appearance"
+  ],
+  "checks": [
+    "workspace-test",
+    "icons-ui-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}

@@ -132,7 +132,14 @@ public sealed class TaskSheetModule : UserControl {
         ProjectDurationUnit.Week=>duration.IsElapsed?10080m:document.Settings.MinutesPerWeek??2400,
         ProjectDurationUnit.Month=>duration.IsElapsed?43200m:(document.Settings.MinutesPerDay??480)*(document.Settings.DaysPerMonth??20),_=>1m});
     public void ExpandAll(){_collapsed.Clear();_outlineLevel=int.MaxValue;if(_session!=null)Refresh(_session);}
-    public void RefreshValues(){if(_session?.Document==null)return;foreach(var row in ((IEnumerable<TaskTableRow>?)Grid.ItemsSource??[])){var task=_session.Tasks.FirstOrDefault(t=>t.Uid==row.Uid);if(task!=null)row.Refresh(task,_session.Document,_catalogue);}}
+    public void RefreshResourceNames(int resourceUid){
+        if(_session?.Document is not {} document)return;
+        var affected=document.Assignments.Where(a=>a.Resource?.Uid==resourceUid&&a.Task!=null).Select(a=>a.Task!.Uid).ToHashSet();
+        var names=document.Assignments.Where(a=>a.Task!=null&&affected.Contains(a.Task.Uid)&&a.Resource?.Uid>0)
+            .GroupBy(a=>a.Task!.Uid).ToDictionary(g=>g.Key,g=>string.Join(", ",g.Select(a=>a.Resource!.Name)));
+        foreach(var row in Grid.ItemsSource?.OfType<TaskTableRow>()??[])if(affected.Contains(row.Uid))row.UpdateCell("ResourceNames",names.GetValueOrDefault(row.Uid)??"");
+    }
+    public void RefreshValues(){if(_session?.Document==null)return;var tasks=_session.Tasks.ToDictionary(t=>t.Uid);foreach(var row in ((IEnumerable<TaskTableRow>?)Grid.ItemsSource??[])){if(tasks.TryGetValue(row.Uid,out var task))row.Refresh(task,_session.Document,_catalogue);}}
     public void ApplyColumns(IEnumerable<string> keys) {
         _updating=true;
         try {

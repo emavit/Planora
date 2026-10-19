@@ -15,6 +15,7 @@ public sealed partial class PlannerWindow {
  private async Task HandleWindowClosing(Avalonia.Controls.WindowClosingEventArgs e){
   if(_closeApproved)return;
   if(_busy){e.Cancel=true;return;}
+  if(!_inspector.TryCommit()){e.Cancel=true;return;}
   if(!Sheet.Grid.CommitEdit()||!_resources.CommitEdit()||!_assignments.CommitEdit()){e.Cancel=true;_status.Text="Correct or cancel the current cell before closing.";return;}
   Sheet.Persist();if(!HasUnsavedChanges)return;e.Cancel=true;_busy=true;
   try{if(await ResolveUnsavedChanges()){_closeApproved=true;Close();}}finally{_busy=false;}

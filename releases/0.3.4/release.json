@@ -1,0 +1,15 @@
+{
+  "version": "0.3.4",
+  "previousVersion": "0.3.3",
+  "kind": "bugfix",
+  "features": [],
+  "fixes": [
+    "Avoid rebuilding every task field when a Resource Sheet name changes",
+    "Index task lookups once during general task value refresh"
+  ],
+  "checks": [
+    "resource-sheet-test",
+    "workspace-test",
+    "planning-library-test"
+  ]
+}

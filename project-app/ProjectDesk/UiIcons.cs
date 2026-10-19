@@ -20,16 +20,38 @@ public sealed class UiIcon : Control {
         Width=Height=size;IsHitTestVisible=false;Focusable=false;
         AutomationProperties.SetName(this, "");
     }
+    internal IBrush IconBrush => !IsEffectivelyEnabled || this.GetVisualAncestors().OfType<Button>().Any(b=>b.Classes.Contains("primary"))
+        ? TextElement.GetForeground(this)??DesignTokens.Text
+        : UiIcons.ColorFor(IconKey,ActualThemeVariant==ThemeVariant.Dark);
     static UiIcon() => AffectsRender<UiIcon>(TextElement.ForegroundProperty);
     public override void Render(DrawingContext context) {
         base.Render(context);
         using var transform=context.PushTransform(Matrix.CreateScale(Bounds.Width/24,Bounds.Height/24));
-        context.DrawGeometry(null,new Pen(TextElement.GetForeground(this)??DesignTokens.Text,1.65,
+        context.DrawGeometry(null,new Pen(IconBrush,1.65,
             lineCap:PenLineCap.Round,lineJoin:PenLineJoin.Round),_geometry);
     }
 }
 
 public static class UiIcons {
+    private static readonly Dictionary<string,(IBrush Light,IBrush Dark)> Colors=new(){
+        ["blue"]=(Brush("#2563B8"),Brush("#89BBFF")),
+        ["teal"]=(Brush("#087E81"),Brush("#6AD8CB")),
+        ["purple"]=(Brush("#7750B7"),Brush("#C5A5F5")),
+        ["amber"]=(Brush("#A2640A"),Brush("#F2C16A")),
+        ["red"]=(Brush("#BE4248"),Brush("#FF9DA4"))
+    };
+    private static IBrush Brush(string value)=>new SolidColorBrush(Color.Parse(value));
+    internal static IBrush ColorFor(string key,bool dark){
+        string family=key switch{
+            "gantt" or "timeline" or "task" or "check" or "progress" or "today"=>"teal",
+            "person" or "people" or "assign" or "network" or "board"=>"purple",
+            "open" or "milestone" or "baseline" or "notes" or "highlight"=>"amber",
+            "delete" or "pdf" or "unlink"=>"red",
+            _=>"blue"
+        };
+        var pair=Colors[family];return dark?pair.Dark:pair.Light;
+    }
+
     public static IReadOnlyDictionary<string,string> Paths { get; }=new Dictionary<string,string> {
         ["command"]="M5 4H19V20H5Z M8 8H16 M8 12H16 M8 16H13",
         ["file"]="M6 3H14L19 8V21H6Z M14 3V8H19",

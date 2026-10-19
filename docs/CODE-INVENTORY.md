@@ -86,3 +86,15 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | TimelineValidation.cs | TimelineValidation |
 | UiIcons.cs | UiIcon, UiIcons |
 | VisualReviewValidation.cs | VisualReviewValidation |
+
+## Workspace and template additions (0.3.x)
+
+| File | Responsibility |
+|---|---|
+| PlannerWindow.Workspace.cs | Compact navigation and optional inspector composition |
+| TaskInspectorModule.cs | Validated draft editing bound to task identity |
+| SavedWorkspaceView.cs | Saved workspace preferences and dialogs |
+| StarterTemplates.cs | Original schedule recipes and atomic creation state |
+| TemplateLibraryWindow.cs | Search, preview and new-project choice |
+| WorkspaceValidation.cs | Navigation, inspector, editing and MPP regressions |
+| PlanningLibraryValidation.cs | Template and saved-view regressions |

@@ -8,7 +8,7 @@ try {
  $assembly=Join-Path $repo 'project-app/ProjectDesk/bin/Release/net10.0/Planora.dll'
  $results=Join-Path $repo ('artifacts/validation/'+(Get-Date -Format 'yyyyMMdd-HHmmss')+'-'+[Guid]::NewGuid().ToString('N').Substring(0,8))
  $checks=@('durable-test','core-test','auto-model-test')
- if($IncludeUi){$checks+=@('recovery-ui-test','close-test')}
+ if($IncludeUi){$checks+=@('recovery-ui-test','close-test','workspace-test','planning-library-test','resource-sheet-test','timeline-ui-test')}
  foreach($check in $checks){$output=Join-Path $results $check;New-Item -ItemType Directory -Path $output -Force | Out-Null;dotnet $assembly ('--'+$check) $output 2>&1 | Tee-Object -FilePath (Join-Path $output 'result.log');if($LASTEXITCODE -ne 0){throw "Check failed: $check"}}
  Write-Output "Validation evidence: $results"
 } finally {Pop-Location}

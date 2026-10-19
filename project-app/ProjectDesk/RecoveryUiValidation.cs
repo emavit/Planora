@@ -39,7 +39,7 @@ internal static class RecoveryUiValidation {
   dialog.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Cancel")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Pump();Check(session.Tasks.Count==2,"Cancel recovery preserves live project");
   using(var frame=restored.CaptureRenderedFrame()!)frame.Save(Path.Combine(folder,"recovered-window.png"));
   session.Rename(a,"Automatically checkpointed");window.RefreshForValidation();window.StartRecoveryForValidation();
-  Until(()=>{try{using var probe=new ProjectSession();store.Recover(store.Sessions().Single(),probe);return probe.Tasks.Single(t=>t.Uid==a).Name=="Automatically checkpointed";}catch(IOException){return false;}});
+  Until(()=>{try{var slots=store.Sessions();if(slots.Count==0)return false;using var probe=new ProjectSession();store.Recover(slots.Single(),probe);return probe.Tasks.FirstOrDefault(t=>t.Uid==a)?.Name=="Automatically checkpointed";}catch(IOException){return false;}});
   Check(true,"Automatic timer persists later edits");
   window.Close();Pump();window.ActiveSavePrompt!.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Don't Save")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Until(()=>!window.IsVisible);
   Check(store.Sessions().Count==0,"Don't Save removes this session's retained checkpoint");restored.CloseForValidation();File.Delete(path);File.Delete(portable);

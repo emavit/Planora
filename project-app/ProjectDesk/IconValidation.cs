@@ -20,7 +20,7 @@ public static class IconValidation {
         AppBuilder.Configure<DesktopApp>().UseSkia().UseHeadless(new AvaloniaHeadlessPlatformOptions{UseHeadlessDrawing=false}).SetupWithoutStarting();
         int checks=0;void Check(bool condition,string message){if(!condition)throw new InvalidOperationException(message);checks++;}
         using var session=new ProjectSession();session.Open(file);
-        var window=new PlannerWindow(session,Path.Combine(output,"icon-views.json"));window.Show();Dispatcher.UIThread.RunJobs();window.RefreshCommandIcons();
+        var window=new PlannerWindow(session,Path.Combine(output,"icon-views.json"));window.Show();window.SetCompactWorkspace(false);Dispatcher.UIThread.RunJobs();window.RefreshCommandIcons();
         foreach(string key in UiIcons.Paths.Keys){var icon=new UiIcon(key);Check(icon.Width==18&&icon.Height==18,"Invalid icon geometry: "+key);}
         var app=Application.Current!;
         foreach(var theme in new[]{ThemeVariant.Light,ThemeVariant.Dark}) {
@@ -58,8 +58,9 @@ public static class IconValidation {
             foreach(string key in UiIcons.Paths.Keys)wrap.Children.Add(new StackPanel{Orientation=Orientation.Horizontal,Spacing=8,
                 Children={new UiIcon(key,24){VerticalAlignment=VerticalAlignment.Center},new TextBlock{Text=key,VerticalAlignment=VerticalAlignment.Center}}});
             var gallery=new Window{Title="Original ProjectDesk vector icons",Width=950,Height=780,Content=wrap};gallery.Show();Dispatcher.UIThread.RunJobs();
-            var brush=TextElement.GetForeground(gallery.GetVisualDescendants().OfType<UiIcon>().First());
-            Check(brush is ISolidColorBrush solid&&solid.Color==DesignTokens.Text.Color,"Icon foreground does not follow theme.");
+            var icons=gallery.GetVisualDescendants().OfType<UiIcon>().ToArray();
+            Check(icons.Select(i=>((ISolidColorBrush)i.IconBrush).Color).Distinct().Count()>=5,"Semantic icon colors missing.");
+            foreach(var icon in icons)Check(Equals(icon.IconBrush,UiIcons.ColorFor(icon.IconKey,theme==ThemeVariant.Dark)),"Icon color does not follow theme: "+icon.IconKey);
             using(var frame=gallery.CaptureRenderedFrame()??throw new Exception("Icon gallery did not render"))frame.Save(Path.Combine(output,"icon-catalogue-"+theme.Key+".png"));gallery.Close();
             File.WriteAllLines(Path.Combine(output,"commands-"+theme.Key+".txt"),labels.Order());
         }

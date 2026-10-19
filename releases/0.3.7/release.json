@@ -1,0 +1,14 @@
+{
+  "version": "0.3.7",
+  "previousVersion": "0.3.6",
+  "features": [
+    "Modern timeline toolbar and quieter navigation surfaces",
+    "Fit timeline panel to reclaim Gantt space"
+  ],
+  "checks": [
+    "workspace-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test"
+  ]
+}
