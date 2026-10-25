@@ -60,56 +60,5 @@
       "sha256": "B2592BE8D205ACAF3D02C240C8A68D33DF00C62BAD27477B6F93A3C950D0DB5A"
     }
   ],
-  "failures": [
-    {
-      "file": "assignment-assignments-project2019-mpp14.mpp",
-      "stage": "independent-producer-xml",
-      "error": "System.Exception: MPP data differs from repository's matching producer XML"
-    },
-    {
-      "file": "mpp12task.mpp",
-      "stage": "baseline-10-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[1]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
-    },
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "rename-undo-redo-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    },
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "new-task-link-resource-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    },
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "baseline-10-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    },
-    {
-      "file": "mpp14baselines.mpp",
-      "stage": "rename-undo-redo-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
-    },
-    {
-      "file": "mpp14baselines.mpp",
-      "stage": "new-task-link-resource-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
-    },
-    {
-      "file": "mpp14baselines.mpp",
-      "stage": "baseline-10-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_DATE_RANGE at /Task[UID=1]/Baseline: Start is later than finish."
-    },
-    {
-      "file": "mpp14task.mpp",
-      "stage": "baseline-10-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[1]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
-    },
-    {
-      "file": "mpp9task.mpp",
-      "stage": "baseline-0-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_NATIVE_EDIT_UNSUPPORTED at /Task[UID=1]/Baseline[0]/FixedCost: This modeled value has no qualified native writer. It cannot be represented by this operation."
-    }
-  ]
+  "failures": []
 }

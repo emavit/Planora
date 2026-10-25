@@ -4,6 +4,7 @@ The usual cadence is two user-facing features per release. The user requested a 
 
 | Version | Previous | Feature 1 | Feature 2 | Changes |
 |---|---|---|---|---|
+| 0.3.11 | 0.3.10 | Planora.app for macOS (menu bar, Finder, Keychain, system font) | All documented public MPP failures fixed | [release.md](0.3.11/release.md) |
 | 0.3.10 | 0.3.9 | One-click timeline visibility | User-requested focused release | [release.md](0.3.10/release.md) |
 | 0.3.9 | 0.3.8 | Project Entry column preset | Colored icons and dropdown styling | [release.md](0.3.9/release.md) |
 | 0.3.8 | 0.3.7 | Modern Planora identity | Apple/Office ribbon and rounded Gantt | [release.md](0.3.8/release.md) |
@@ -18,6 +19,8 @@ The usual cadence is two user-facing features per release. The user requested a 
 Source release notes live here. Built Windows releases live under project-app/releases/VERSION-win-x64 and each includes release.md, Planora.exe, dependencies, licenses, validation output and SHA256SUMS.json.
 
 Build with ./scripts/release.ps1 -Version VERSION -IncludeNative on Windows. The script validates the version and two declared features (four for 0.3.3), or an explicit bugfix definition with fixes and no new features, builds in staging, tests the packaged binaries and creates the release directory only after successful checks. Omitting IncludeNative produces an explicitly unqualified native preview. No automatic GitHub publication is performed.
+
+On a Mac, ./scripts/release.ps1 -Version VERSION -Runtime osx-arm64 -IncludeNative runs the same checks, packages project-app/releases/VERSION-osx-arm64 with an ad-hoc signed Planora.app, and writes Planora-VERSION-osx-arm64.zip (made with ditto so the bundle keeps its symlinks and executable bits) and its .sha256 file next to it. The app is not Developer ID signed or notarized.
 
 The broader roadmap remains open. A template category is not equivalent to complete workflow support.
 

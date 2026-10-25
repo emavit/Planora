@@ -3,7 +3,8 @@ using System.Security.Cryptography;
 using System.Text.Json;
 namespace ProjectDesk;
 
-// Versioned portable model package. Presentation metadata is not yet part of this format.
+// Versioned portable project package: original bytes, durable history and the ProjectPresentation carried in
+// DurableProjectState (formatting, rich notes, timeline lanes, chart axes). Column and app preferences stay local.
 public static class PlanoraPackage {
  private const int BaseLimit=64*1024*1024,HistoryLimit=16*1024*1024;
  private sealed record Manifest(int SchemaVersion,string BaseSha256,string StateSha256);

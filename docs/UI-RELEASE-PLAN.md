@@ -87,7 +87,7 @@ The accompanying [interactive concept](design/planora-next.html) demonstrates la
 1. All features in the release meet their acceptance criteria (four for 0.3.3, two for subsequent releases); no placeholder buttons counted as completion.
 2. Review real screenshots in both themes, with empty, populated, long-name and error states. Use synthetic/public projects.
 3. Exercise keyboard-only workflows and representative Windows scaling; record contrast measurements before claiming an accessibility pass.
-4. Run relevant functional suites, the exact packaged native Windows stress test and the public MPP regression gate. The current baseline is 78 passing stages and 10 documented existing failures; it is not full compatibility.
+4. Run relevant functional suites, the exact packaged native Windows stress test and the public MPP regression gate. The current baseline is 88 passing stages and 0 documented existing failures (since 2026-10-25); it is not full compatibility.
 5. Preserve each version folder. Include executable, dependencies, notices, hashes, validation evidence and release.md explaining changes from the preceding version.
 6. Update delivered/planned status accurately. GitHub publication is a separate action.
 

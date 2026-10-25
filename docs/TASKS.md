@@ -19,7 +19,7 @@ The broader [functional and GUI improvement inventory](IMPROVEMENTS.md) expands 
 | VIEW-01 | Define typed statuses/custom fields shared by table, board and calendar | TaskColumns.cs, ProgressBoardModule.cs, CalendarViewModule.cs | Model specification |
 | ARCH-01 | Characterize platform seams and produce approved per-file migration map | docs/ARCHITECTURE.md, app modules | Owner approval before migration |
 | MPP-01 | Expand synthetic/publicly redistributable operation matrix; retain failures | PublicMppValidation.cs, vendor model | Dataset/provenance checks |
-| MAC-01 | Actual M1 smoke/recovery/PDF/credential qualification | Platform adapters, packaging | REL-01 and Windows gate |
+| MAC-01 | Actual M1 smoke/recovery/PDF/credential qualification. In progress on Apple Silicon (M4 Pro): evidence and open items in [MAC-QUALIFICATION.md](MAC-QUALIFICATION.md) | Platform adapters, packaging | REL-01 and Windows gate |
 | MOB-01 | After macOS completion: evaluate Android/iOS frameworks, shared-core feasibility and phone/tablet feature matrix; record reviewed decisions | docs/MOBILE-PLAN.md, architecture ADRs | MAC-01 and macOS completion gate |
 | MOB-02 | Develop Android app against agreed scope; qualify lifecycle, offline data, touch/accessibility, secure storage and distribution on real devices | Future mobile client and adapters | MOB-01 |
 | MOB-03 | Develop iOS app against agreed scope; qualify lifecycle, offline data, touch/accessibility, secure storage and distribution on real devices | Future mobile client and adapters | MOB-01 |
@@ -79,6 +79,21 @@ Project Entry preset, coordinated dropdown styling and semantic colored icons pa
 ## Timeline visibility shortcut — 2026-10-19
 Direct workspace Hide timelines / Show timelines toggle implemented. Build and 57 workspace checks pass, including persistence and unchanged lane/date state. Source-only change after 0.3.9.
 
+## Packaged 0.3.11 — 2026-10-25
+
+First macOS preview packaged on Apple Silicon with `release.ps1 -Version 0.3.11 -Runtime osx-arm64 -IncludeNative`: durable, core (including 24 MPP fidelity checks), auto-model, recovery, close, workspace 64, icons 4,900, timelines 42, resource sheet, templates 73, AI 56 and MCP 60 checks passed, public MPP 88 / 0 known failures, and 20 native macOS cycles. Ad-hoc signed Planora.app, ZIP and SHA-256 checksum prepared locally. GitHub publication follows the merge into main; no Windows package was built for 0.3.11.
+
 ## Packaged 0.3.10 — 2026-10-19
 
 User requested immediate release and GitHub update. One-click timeline visibility packaged; 57 workspace, 4,878 icon checks and standard release gates passed, including 20 native Windows cycles. Public MPP remains 78 pass / 10 known failures. Windows ZIP and SHA-256 checksum prepared; standard release copy verified.
+
+## Public MPP failure clusters resolved — 2026-10-25
+
+All ten documented public-corpus failures are fixed in the shared engine (identical on Windows and macOS); the gate is 88 passed / 0 documented failures, which is not a full-compatibility claim. Evidence and changes per cluster:
+
+- Baseline fixed cost (mpp9task, mpp12task, mpp14task): Project stores task baseline fixed cost in 0x0b4001e0 (baseline 0) and the seventh slot of each numbered baseline block (MPXJ FieldMap9/12/14 BASELINE_FIXED_COST, BASELINE<N>_FIXED_COST); the corpus field maps carry the baseline 0 id for MPP9 and the ids for baselines 0–10 for MPP12/MPP14. Reader and native writer now carry the amount (currency ×100). MPP8 has no such field and still reports a nonzero captured amount as unsupported.
+- Manual task dates (assignment-assignments-project2019): MPP14 keeps a manual task's displayed Start/Finish in 0x0b400503/0x0b400504 and the scheduled dates in 0x0b400023/0x0b400024 (MPXJ FieldMap14). The reader prefers the display pair for manual tasks; the MPP14 writer mirrors Start/Finish into it. Manual Duration (0x0b400508) is not yet modeled separately; the corpus does not expose a difference.
+- Inverted baseline dates (mpp14baselines): raw baseline start/finish bytes decode consistently and one year apart (typed test values); Project 2010 writes them as entered. Validation downgrades an unchanged source baseline range to a warning (same number, start and finish in the native load snapshot); authored values stay errors.
+- Base-less resource calendar (mpp14assignmentfields, calendar UID 4 of budget work resource R2): kind flag 0x0d400000 clear, resource id 2, no name or pattern, base id bytes 03 00 FF FF and an unresolvable base GUID. Validation downgrades the finding to a warning only for an unchanged native calendar record without a positive source base id; calculation still refuses the calendar and no inherited calendar is assumed.
+
+Owner confirmation in Microsoft Project (Windows): open examples/public-mpp/mpp14assignmentfields.mpp, check the Base Calendar shown for "Budget Work Resource" and whether Project repairs or rejects calendar 4 (save as XML and inspect Calendar UID 4), then open an .mpp saved by Planora with a captured baseline on a fixed-cost task and a manually scheduled task to confirm the Baseline Fixed Cost column and the manual Start/Finish display. The core-test MPP fidelity checks (`MppFidelityValidation.cs`) cover each cluster. On this Mac, timeline-ui-test fails at the base commit ("Gantt Ctrl+wheel did not zoom independently") independently of these changes.

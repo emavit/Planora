@@ -128,7 +128,7 @@ public sealed partial class ProjectDocument {
     private static void CheckPercent(int? value, string location, Finding add) {
         if (value < 0 || value > 100) add("PROJECT_PERCENT", "A completion percentage must be between 0 and 100.", location);
     }
-    private static void CheckRich(ProjectCollection<ProjectBaseline> baselines, ProjectCollection<ProjectCustomFieldValue> fields,
+    private void CheckRich(ProjectCollection<ProjectBaseline> baselines, ProjectCollection<ProjectCustomFieldValue> fields,
         ProjectCollection<ProjectTimephasedValue> timephased, int ownerUid, string location, Finding add, CancellationToken token) {
         var numbers = new HashSet<int>();
         foreach (var baseline in baselines) {
@@ -139,7 +139,9 @@ public sealed partial class ProjectDocument {
                 add("PROJECT_BASELINE_CONTEXT", "Only task baselines support duration and fixed cost.", location + "/Baseline");
             if (!baseline.Number.HasValue || baseline.Number < 0 || baseline.Number > 10 || !numbers.Add(baseline.Number.Value))
                 add("PROJECT_BASELINE_NUMBER", "Baselines need a unique number from 0 through 10.", location);
-            CheckDateRange(baseline.Start, baseline.Finish, location + "/Baseline", add);
+            if (baseline.Start > baseline.Finish && IsPreservedNativeBaselineRange(baseline, location))
+                add("PROJECT_DATE_RANGE", "The native source stores this baseline with a start later than its finish; the producer values are retained unchanged.", location + "/Baseline", ProjectDiagnosticSeverity.Warning);
+            else CheckDateRange(baseline.Start, baseline.Finish, location + "/Baseline", add);
             if (baseline.Duration?.Value < 0) add("PROJECT_NEGATIVE_DURATION", "A baseline duration cannot be negative.", location);
             CheckTimephased(baseline.TimephasedData, ownerUid, location + "/Baseline", add, token);
         }
@@ -150,6 +152,37 @@ public sealed partial class ProjectDocument {
                 add("PROJECT_CUSTOM_FIELD_ID", "Custom values require unique nonempty field IDs within their owner.", location);
         }
         CheckTimephased(timephased, ownerUid, location, add, token);
+    }
+    // Microsoft Project lets users type baseline dates independently and writes the result as-is (public corpus
+    // mpp14baselines.mpp, producer 14.0.4751). Unchanged source baselines are retained by native output; only
+    // authored values are rejected.
+    private bool IsPreservedNativeBaselineRange(ProjectBaseline baseline, string ownerPath) {
+        var original = NativeSource?.Snapshot;
+        if (original == null || !baseline.Number.HasValue || !(original.TryGetValue(ownerPath + "/Baseline/Count", out var count) && count is int total)) return false;
+        for (int index = 0; index < total; index++) {
+            string path = ownerPath + "/Baseline[" + index + "]";
+            if (original.TryGetValue(path + "/Number", out var number) && Equals(number, baseline.Number.Value)
+                && original.TryGetValue(path + "/Start", out var start) && Equals(start, baseline.Start)
+                && original.TryGetValue(path + "/Finish", out var finish) && Equals(finish, baseline.Finish)) return true;
+        }
+        return false;
+    }
+    // True when every inventoried value under the entity path equals the native source snapshot, so native
+    // output leaves the producer record untouched.
+    private bool IsUnchangedNativeRecord(string entityPath, ref Dictionary<string, object?>? current, CancellationToken token) {
+        var original = NativeSource?.Snapshot;
+        if (original == null) return false;
+        current ??= ProjectModelSnapshot.Capture(this, token);
+        bool Belongs(string key) => key.StartsWith(entityPath + "/", StringComparison.Ordinal) || key.StartsWith(entityPath + "[", StringComparison.Ordinal);
+        foreach (var pair in original) {
+            token.ThrowIfCancellationRequested();
+            if (Belongs(pair.Key) && !(current.TryGetValue(pair.Key, out var value) && Equals(value, pair.Value))) return false;
+        }
+        foreach (var pair in current) {
+            token.ThrowIfCancellationRequested();
+            if (Belongs(pair.Key) && !original.ContainsKey(pair.Key)) return false;
+        }
+        return true;
     }
     private static void CheckTimephased(ProjectCollection<ProjectTimephasedValue> intervals, int ownerUid, string location, Finding add, CancellationToken token) {
         foreach (var interval in intervals) {

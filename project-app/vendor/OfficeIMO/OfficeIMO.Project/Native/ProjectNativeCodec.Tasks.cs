@@ -10,6 +10,9 @@ internal static partial class ProjectNativeCodec {
             if (record.Uid == 0 && IsSyntheticProjectSummary(document, record)) continue;
             CheckEntityBudget(document, options);
             if (ordered.Count >= options.MaxTasks) throw new InvalidDataException("Native task budget exceeded.");
+            // MPP14 keeps the displayed Start/Finish of a manually scheduled task in 0x0b400503/0x0b400504;
+            // 0x0b400023/0x0b400024 hold the scheduled dates, which Project only displays for automatic tasks.
+            bool manual = document.NativeInfo!.Profile == ProjectNativeProfile.Mpp14 && record.Boolean(0x0b400500) == true;
             var task = new ProjectTask(document, record.Uid) {
                 DisplayId = record.Integer(0x0b400017), Name = record.Text(0x0b40000e),
                 Wbs = record.Text(0x0b400010), Contact = record.Text(0x0b400070), IsNull = false,
@@ -18,13 +21,14 @@ internal static partial class ProjectNativeCodec {
                 Duration = Duration(record, 0x0b40001d, 0x0b4000b5, document),
                 ActualDuration = Duration(record, 0x0b40001c, 0x0b4000b5, document),
                 RemainingDuration = Duration(record, 0x0b40001f, 0x0b4000b5, document),
-                Start = record.Date(0x0b400023), Finish = record.Date(0x0b400024),
+                Start = manual ? record.Date(0x0b400503) ?? record.Date(0x0b400023) : record.Date(0x0b400023),
+                Finish = manual ? record.Date(0x0b400504) ?? record.Date(0x0b400024) : record.Date(0x0b400024),
                 EarlyStart = record.Date(0x0b400025), EarlyFinish = record.Date(0x0b400026), LateStart = record.Date(0x0b400027), LateFinish = record.Date(0x0b400028),
                 FreeSlackMinutes = record.Integer(0x0b400015) / 10m, TotalSlackMinutes = record.Integer(0x0b400016) / 10m,
                 ActualStart = record.Date(0x0b400029), ActualFinish = record.Date(0x0b40002a),
                 Deadline = record.Date(0x0b4001b5), ConstraintDate = record.Date(0x0b400012),
                 ConstraintType = (ProjectConstraintType?)record.Integer(0x0b400011), Type = (ProjectTaskType?)record.Integer(0x0b400080),
-                IsManual = document.NativeInfo!.Profile != ProjectNativeProfile.Mpp14 ? false : record.Boolean(0x0b400500),
+                IsManual = document.NativeInfo.Profile != ProjectNativeProfile.Mpp14 ? false : record.Boolean(0x0b400500),
                 IsActive = document.NativeInfo.Profile != ProjectNativeProfile.Mpp14 ? true : record.Boolean(0x0b4004ff), IsMilestone = record.Boolean(0x0b400018),
                 IsCritical = record.Boolean(0x0b400013), EffortDriven = record.Boolean(0x0b400084),
                 Work = Work(record, 0x0b400000), ActualWork = Work(record, 0x0b400002), RemainingWork = Work(record, 0x0b400004),
@@ -77,6 +81,8 @@ internal static partial class ProjectNativeCodec {
         if (start != null || finish != null || work != null || cost != null || duration != null) {
             var baseline = task.Baselines.Add(); baseline.Number = 0; baseline.Start = start; baseline.Finish = finish;
             baseline.Work = work; baseline.Cost = cost; baseline.Duration = duration;
+            // Baseline fixed cost is a separate producer field (MPXJ BASELINE_FIXED_COST); a lone amount does not create a baseline.
+            baseline.FixedCost = record.Number(0x0b4001e0) / 100m;
         }
         var firstFields = new uint[] { 0x1e2, 0x1ed, 0x1f8, 0x203, 0x20e, 0x220, 0x22b, 0x236, 0x241, 0x24c };
         for (int index = 0; index < firstFields.Length; index++) {
@@ -88,7 +94,7 @@ internal static partial class ProjectNativeCodec {
             if (extraStart == null && extraFinish == null && extraWork == null && extraCost == null && extraDuration == null) continue;
             var item = task.Baselines.Add(); item.Number = index + 1;
             item.Start = extraStart; item.Finish = extraFinish; item.Work = extraWork; item.Cost = extraCost;
-            item.Duration = extraDuration;
+            item.Duration = extraDuration; item.FixedCost = record.Number(id + 7) / 100m;
         }
     }
 

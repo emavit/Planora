@@ -18,7 +18,7 @@ public static class ThemeValidation {
         byte[] original=SHA256.HashData(File.ReadAllBytes(file));
         AppBuilder.Configure<DesktopApp>().UseSkia().UseHeadless(new AvaloniaHeadlessPlatformOptions{UseHeadlessDrawing=false}).SetupWithoutStarting();
         using var session=new ProjectSession();session.Open(file);string model=session.Document!.ToXml(new(){LossPolicy=OfficeConversionLossPolicy.Allow});
-        var window=new PlannerWindow(session,settings);window.Show();Pump();int checks=0;
+        var window=new PlannerWindow(session,settings);window.Show();window.SetCompactWorkspace(false);Pump();int checks=0;
         void Assert(bool value,string message){if(!value)throw new InvalidOperationException(message);checks++;}
         MenuItem ThemeItem(string mode)=>window.GetVisualDescendants().OfType<Menu>().Single().Items.OfType<MenuItem>().Single(m=>Equals(m.Header,"Appearance")).Items.OfType<MenuItem>().Single(m=>Equals(m.Header,"Theme")).Items.OfType<MenuItem>().Single(m=>Equals(m.Header,mode));
         window.GetVisualDescendants().OfType<RibbonModule>().Single().SelectTab("Appearance");Pump();var picker=window.GetVisualDescendants().OfType<ComboBox>().Single(c=>c.Name=="ThemeMode");

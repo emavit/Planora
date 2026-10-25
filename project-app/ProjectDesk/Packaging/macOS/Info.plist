@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template for scripts/build.ps1 -Runtime osx-*; @VERSION@ is replaced from ProjectDesk.csproj. -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key><string>Planora</string>
+  <key>CFBundleDisplayName</key><string>Planora</string>
+  <key>CFBundleIdentifier</key><string>io.github.emavit.planora</string>
+  <key>CFBundleExecutable</key><string>Planora</string>
+  <key>CFBundleIconFile</key><string>Planora.icns</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+  <key>CFBundleShortVersionString</key><string>@VERSION@</string>
+  <key>CFBundleVersion</key><string>@VERSION@</string>
+  <key>LSMinimumSystemVersion</key><string>12.0</string>
+  <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSPrincipalClass</key><string>NSApplication</string>
+  <key>NSHumanReadableCopyright</key><string>Planora is MIT licensed. Third-party notices are in Contents/Resources.</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key><string>Planora Project Package</string>
+      <key>CFBundleTypeRole</key><string>Editor</string>
+      <key>LSHandlerRank</key><string>Owner</string>
+      <key>CFBundleTypeIconFile</key><string>Planora.icns</string>
+      <key>LSItemContentTypes</key><array><string>io.github.emavit.planora.package</string></array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeName</key><string>Microsoft Project Document</string>
+      <key>CFBundleTypeRole</key><string>Editor</string>
+      <key>LSHandlerRank</key><string>Alternate</string>
+      <key>CFBundleTypeExtensions</key><array><string>mpp</string></array>
+      <key>LSItemContentTypes</key><array><string>com.microsoft.mpp</string></array>
+    </dict>
+  </array>
+  <key>UTExportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key><string>io.github.emavit.planora.package</string>
+      <key>UTTypeDescription</key><string>Planora Project Package</string>
+      <key>UTTypeConformsTo</key><array><string>public.data</string></array>
+      <key>UTTypeIconFile</key><string>Planora.icns</string>
+      <key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>planora</string></array></dict>
+    </dict>
+  </array>
+  <key>UTImportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key><string>com.microsoft.mpp</string>
+      <key>UTTypeDescription</key><string>Microsoft Project Document</string>
+      <key>UTTypeConformsTo</key><array><string>public.data</string></array>
+      <key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>mpp</string></array></dict>
+    </dict>
+  </array>
+</dict>
+</plist>

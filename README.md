@@ -6,9 +6,11 @@
 
 An offline desktop project planner with spreadsheet-style task editing, linked Gantt charts, resources, baselines, multiple timelines, PDF export, local recovery and optional AI/MCP connections.
 
-**Status:** Windows preview, version 0.3.10. The shared C#/.NET/Avalonia source is intended for macOS, but a Mac release has not been qualified. Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. Versions 0.3.0, 0.3.1 and 0.3.3 passed automated and native Windows stress checks on this machine. The public MPP regression corpus retains 10 pre-existing failures; full compatibility is not qualified.
+**Status:** version 0.3.11: Windows preview (latest Windows package 0.3.10) and the first macOS preview for Apple Silicon. macOS is not yet qualified; see [macOS qualification](docs/MAC-QUALIFICATION.md). Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. Versions 0.3.0, 0.3.1 and 0.3.3 passed automated and native Windows stress checks on this machine. The public MPP regression corpus passes all 88 stages since 0.3.11; full compatibility is not qualified.
 
 ## Latest additions
+
+0.3.11 is the first macOS preview: Planora.app with the macOS menu bar, Finder document opening, Keychain-stored secrets and the system font, plus fixes for all ten documented public MPP corpus failures (also on Windows). [Download the macOS preview](https://github.com/emavit/Planora/releases/tag/v0.3.11) · [Release notes](releases/0.3.11/release.md).
 
 0.3.10 adds one-click Hide timelines / Show timelines above the Gantt and table. [Download the Windows preview](https://github.com/emavit/Planora/releases/tag/v0.3.10) · [Release notes](releases/0.3.10/release.md).
 
@@ -41,7 +43,7 @@ Windows self-contained build (PowerShell):
 ./scripts/build.ps1 -Runtime win-x64
 ```
 
-An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; this is not evidence of macOS runtime qualification. Python is not required.
+On a Mac, `pwsh ./scripts/build.ps1 -Runtime osx-arm64` produces a self-contained `Planora.app` (icon, `.planora`/`.mpp` document types, notices in `Contents/Resources`). It is unsigned; build it on macOS so the executable bit is kept. See [macOS qualification](docs/MAC-QUALIFICATION.md) for what has been verified. Python is not required.
 
 ## Validate
 
@@ -49,7 +51,17 @@ An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; t
 ./scripts/validate.ps1
 ```
 
-The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. On Windows, `./scripts/validate.ps1 -IncludeUi` also runs headless recovery and close-flow checks. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the AI and MCP connector checks (local fixtures, no live provider calls) and the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. `-IncludePerformance` pastes 500/2,000/5,000-task plans and reports paste, window, edit, reschedule, undo, save and reopen timings in `perf-test/results.json`; it has no timing budgets yet. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+
+Check the public MPP corpus against the documented baseline:
+
+```powershell
+./scripts/verify-mpp-regressions.ps1 -Assembly project-app/ProjectDesk/bin/Release/net10.0/Planora.dll -Output artifacts/validation/public-mpp
+```
+
+GitHub CI runs the model checks and the MPP gate on Windows, macOS and Linux, and the UI and extended checks on Windows and macOS.
+
+On macOS, install the .NET 10 SDK and PowerShell 7, then run the same scripts with `pwsh`, for example `pwsh ./scripts/validate.ps1 -IncludeUi -IncludeExtended`.
 
 ## Quick start: your first project
 

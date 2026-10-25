@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 
 namespace ProjectDesk;
 
@@ -27,6 +28,7 @@ static class Program {
             return TimelineValidation.Run(fixture,args[1]);
         }
         if(args.FirstOrDefault()=="--resource-sheet-test")return ResourceSheetValidation.Run(args[1]);
+        if(args.FirstOrDefault()=="--perf-test")return PerformanceValidation.Run(args[1],args.Length>2?args[2].Split(',').Select(int.Parse).ToArray():[500,2000,5000]);
         if(args.FirstOrDefault()=="--planning-library-test")return PlanningLibraryValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--workspace-test")return WorkspaceValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--durable-test")return DurableValidation.Run(args[1]);
@@ -72,7 +74,7 @@ static class Program {
                 session.Undo();
                 var preferencesPath = System.IO.Path.Combine("project-app/previews", "views-" + Guid.NewGuid() + ".json");
                 var window = new PlannerWindow(session, preferencesPath);
-                window.Show(); Dispatcher.UIThread.RunJobs();
+                window.Show(); window.SetCompactWorkspace(false); Dispatcher.UIThread.RunJobs();
                 if (window.TaskCount != session.Tasks.Count) throw new Exception("Task view count mismatch");
                 if (window.ResourceCount != session.Resources.Count) throw new Exception("Resource view count mismatch");
                 if (window.AssignmentCount != session.Document!.Assignments.Count(a => a.Task?.Uid != 0 && a.Resource?.Uid > 0)) throw new Exception("Assignment view count mismatch");
@@ -123,15 +125,17 @@ static class Program {
                 if(!window.ResourceGrid.IsVisible)throw new Exception("View menu did not open Resource Sheet");
                 viewMenu.Items.OfType<MenuItem>().Single(m=>Equals(m.Header,"Gantt Chart")).RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));Dispatcher.UIThread.RunJobs();
                 window.Sheet.Grid.SelectedItem=window.Sheet.Grid.ItemsSource!.OfType<TaskTableRow>().Single(r=>r.Uid==editableUid);
+                window.GetVisualDescendants().OfType<RibbonModule>().Single().SelectTab("Task");Dispatcher.UIThread.RunJobs();
                 window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Manually Schedule")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(session.Document.Tasks.GetByUid(editableUid).IsManual!=true)throw new Exception("Ribbon task mode did not apply");session.Undo();window.RefreshForValidation();Dispatcher.UIThread.RunJobs();
                 var findDropdown=window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Find ▾"));findDropdown.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(findDropdown.ContextMenu?.IsOpen!=true)throw new Exception("Ribbon dropdown did not open");findDropdown.ContextMenu.Close();
+                static bool IsDark(Avalonia.Media.Color c)=>0.2126*c.R+0.7152*c.G+0.0722*c.B<0.4*255;
                 Application.Current!.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Dark;Dispatcher.UIThread.RunJobs();
-                if(RibbonModule.Chrome.Color!=Avalonia.Media.Color.Parse("#20242A"))throw new Exception("Dark Office theme did not follow application theme");
+                if(RibbonModule.Chrome.Color!=DesignTokens.Background.Color||!IsDark(RibbonModule.Chrome.Color))throw new Exception("Dark Office theme did not follow application theme");
                 AvaloniaHeadlessPlatform.ForceRenderTimerTick(3);Dispatcher.UIThread.RunJobs();using(var darkFrame=window.CaptureRenderedFrame()??throw new Exception("Dark theme did not render"))darkFrame.Save("project-app/previews/office-dark.png");
                 Application.Current.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Light;Dispatcher.UIThread.RunJobs();
-                if(RibbonModule.Chrome.Color!=Avalonia.Media.Color.Parse("#F3F5F7"))throw new Exception("Light Office theme did not follow application theme");
+                if(RibbonModule.Chrome.Color!=DesignTokens.Background.Color||IsDark(RibbonModule.Chrome.Color))throw new Exception("Light Office theme did not follow application theme");
                 window.Sheet.Grid.SelectedItem=window.Sheet.Grid.ItemsSource!.OfType<TaskTableRow>().Single(r=>r.Uid==editableUid);
                 int oldCount=session.Tasks.Count;var oldLinks=session.Document.Dependencies.Count;
                 window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"＋ Task")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
@@ -184,7 +188,8 @@ static class Program {
                 window.Sheet.SetFilter("","Milestones");window.KeyPressQwerty(Avalonia.Input.PhysicalKey.F3,Avalonia.Input.RawInputModifiers.None);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.F3,Avalonia.Input.RawInputModifiers.None);Dispatcher.UIThread.RunJobs();if(window.TaskCount!=oldCount)throw new Exception("F3 did not reset task filtering");
                 window.Sheet.FocusName(-1,true);Dispatcher.UIThread.RunJobs();
                 window.Clipboard!.SetTextAsync("Keyboard paste A\nKeyboard paste B").GetAwaiter().GetResult();
-                window.KeyPressQwerty(Avalonia.Input.PhysicalKey.V,Avalonia.Input.RawInputModifiers.Control);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.V,Avalonia.Input.RawInputModifiers.Control);Dispatcher.UIThread.RunJobs();
+                var pasteModifier=OperatingSystem.IsMacOS()?Avalonia.Input.RawInputModifiers.Meta:Avalonia.Input.RawInputModifiers.Control;
+                window.KeyPressQwerty(Avalonia.Input.PhysicalKey.V,pasteModifier);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.V,pasteModifier);Dispatcher.UIThread.RunJobs();
                 if(session.Tasks.Count!=oldCount+2||!session.Tasks.Any(t=>t.Name=="Keyboard paste B"))throw new Exception("Ctrl+V in the name editor did not create task rows");session.Undo();window.RefreshForValidation();Dispatcher.UIThread.RunJobs();
                 var originalColumns=window.Sheet.VisibleKeys.ToArray();
                 window.Sheet.ApplyColumns(["DisplayId","TaskMode","Name","ResourceNames","Baseline0.Start","PercentComplete","Cost"]);
@@ -223,7 +228,7 @@ static class Program {
                 Console.WriteLine($"PASS: {System.IO.Path.GetFileName(file)}; {session.Tasks.Count} tasks, {session.Resources.Count} resources, {window.Sheet.Catalogue.Count} selectable columns; {ProjectCommandCatalogue.Observed.Count} observed commands / {ProjectCommandCatalogue.Observed.Count(c=>window.CommandActions.ContainsKey(c.Id))} local routes; 13 views; Office menus, dropdown, task mode, light/dark, blank insertion/focus/keyboard/cancel/single undo/render stress/header menu/append paste PASS");
             }
             using(var empty=new ProjectSession()){
-                empty.NewProject("Empty insertion check",new DateTime(2026,10,19));var blankWindow=new PlannerWindow(empty,"project-app/previews/empty-check-views.json");blankWindow.Show();Dispatcher.UIThread.RunJobs();
+                empty.NewProject("Empty insertion check",new DateTime(2026,10,19));var blankWindow=new PlannerWindow(empty,"project-app/previews/empty-check-views.json");blankWindow.Show();blankWindow.SetCompactWorkspace(false);Dispatcher.UIThread.RunJobs();
                 blankWindow.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"＋ Task")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(empty.Tasks.Count!=0||blankWindow.Sheet.Grid.SelectedItem is not TaskTableRow{Uid:<-1})throw new Exception("Empty project did not insert a blank row");
                 blankWindow.Sheet.Grid.GetVisualDescendants().OfType<TextBox>().Single(t=>t.Name=="CellTextBox"&&t.IsVisible).Text="First task";if(!blankWindow.Sheet.Grid.CommitEdit())throw new Exception("Empty project task did not commit");Dispatcher.UIThread.RunJobs();
@@ -231,14 +236,16 @@ static class Program {
             }
             return 0;
         }
-        AppBuilder.Configure<DesktopApp>().UsePlatformDetect().StartWithClassicDesktopLifetime(args);
-        return 0;
+        return AppBuilder.Configure<DesktopApp>().UsePlatformDetect().StartWithClassicDesktopLifetime(args);
     }
+    // Command line that starts this app again, whether it runs from its apphost or as "dotnet Planora.dll".
+    internal static (string FileName,string[] Arguments) SelfCommand(params string[] args){string executable=Environment.ProcessPath??throw new InvalidOperationException("Cannot locate Planora executable.");return Path.GetFileNameWithoutExtension(executable).Equals("dotnet",StringComparison.OrdinalIgnoreCase)?(executable,[typeof(Program).Assembly.Location,..args]):(executable,args);}
     private static void CommitInline(DataGrid grid,int uid,string header,string value){grid.SelectedItem=grid.ItemsSource!.OfType<SheetRecord>().Single(r=>r.Uid==uid);grid.CurrentColumn=grid.Columns.Single(c=>Equals(c.Header,header));grid.ScrollIntoView(grid.SelectedItem,grid.CurrentColumn);grid.Focus();Dispatcher.UIThread.RunJobs();if(!grid.BeginEdit())throw new Exception(header+" cannot begin edit");Dispatcher.UIThread.RunJobs();grid.GetVisualDescendants().OfType<TextBox>().Single(t=>t.Name=="CellTextBox"&&t.IsVisible).Text=value;if(!grid.CommitEdit())throw new Exception(header+" edit could not commit");}
 }
 
 public sealed class DesktopApp : Application {
     public override void Initialize() {
+        Name = AppBrand.Name;
         Styles.Add(new FluentTheme());
         Styles.Add(new StyleInclude(new Uri("avares://Planora/")) { Source = new Uri("avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml") });
         RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Default;
@@ -254,6 +261,8 @@ public sealed class DesktopApp : Application {
             desktop.MainWindow = new PlannerWindow(session,stability?Path.Combine("project-app/previews","native-check-views.json"):null);
             if(planora&&path!=null)((PlannerWindow)desktop.MainWindow).OpenPlanoraCopy(path);
             if(stability)NativeStabilityCheck.Start((PlannerWindow)desktop.MainWindow,session,desktop);
+            // macOS delivers Finder Open/Open With as activation events rather than command-line arguments.
+            if(TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activation)activation.Activated+=(_,e)=>{if(e is FileActivatedEventArgs opened&&desktop.MainWindow is PlannerWindow window){var files=opened.Files.Select(f=>f.TryGetLocalPath()).OfType<string>().ToList();if(files.Count>0)Dispatcher.UIThread.Post(()=>_=window.OpenFromSystem(files[0],files.Count-1));}};
             desktop.Exit += (_, _) => session.Dispose();
         }
         base.OnFrameworkInitializationCompleted();

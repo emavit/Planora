@@ -65,6 +65,12 @@ public static class IconValidation {
             File.WriteAllLines(Path.Combine(output,"commands-"+theme.Key+".txt"),labels.Order());
         }
         Check(!session.HasEdits,"Icon UI changed the project.");window.Close();
+        // The macOS bundle icon: a PNG-based .icns whose entries decode at their declared sizes.
+        string icns=Path.Combine(output,"Planora-"+Guid.NewGuid()+".icns");AppBrand.WriteIcns(icns);var icnsBytes=File.ReadAllBytes(icns);
+        Check(icnsBytes.AsSpan(0,4).SequenceEqual("icns"u8)&&System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(icnsBytes.AsSpan(4))==icnsBytes.Length,"icns header or length is invalid.");
+        var icnsSizes=new Dictionary<string,int>{["icp4"]=16,["icp5"]=32,["ic11"]=32,["ic12"]=64,["ic07"]=128,["ic13"]=256,["ic08"]=256,["ic14"]=512,["ic09"]=512,["ic10"]=1024};var seen=new List<string>();
+        for(int at=8;at<icnsBytes.Length;){string type=System.Text.Encoding.ASCII.GetString(icnsBytes,at,4);int length=(int)System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(icnsBytes.AsSpan(at+4));Check(length>8&&at+length<=icnsBytes.Length&&icnsSizes.ContainsKey(type),"icns entry "+type+" is invalid.");using var png=SkiaSharp.SKBitmap.Decode(icnsBytes.AsSpan(at+8,length-8));Check(png!=null&&png.Width==icnsSizes[type]&&png.Height==icnsSizes[type],"icns entry "+type+" is not a "+icnsSizes[type]+" px PNG.");seen.Add(type);at+=length;}
+        Check(seen.Order().SequenceEqual(icnsSizes.Keys.Order()),"icns does not contain every macOS icon size.");
         Console.WriteLine($"PASS: {checks} icon checks; {UiIcons.Paths.Count} original vector symbols, menus, all ribbon tabs and dynamic dialogs in light/dark. Project unchanged.");return 0;
     }
 }

@@ -95,6 +95,17 @@ internal static class WorkspaceValidation {
         window.SetCompactWorkspace(true);
         Check(ViewPreferences.Load(settings).InspectorWidth==380,"Inspector width persists");
         string mpp=Path.Combine(output,"workspace-"+Guid.NewGuid()+".mpp");session.SaveCopy(mpp,true);using(var readback=new ProjectSession()){readback.Open(mpp);Check(readback.Tasks.Any(t=>t.Name=="Architecture")&&readback.Tasks.Any(t=>t.Name=="Blank row entry"),"Inspector and grid edits survive MPP readback");}
+        // Finder Open/Open With hands documents to the running app; they must open like File > Open.
+        using(var target=new ProjectSession()){target.NewProject("Receiving window",new DateTime(2026,10,19));var receiver=new PlannerWindow(target,Path.Combine(output,"receiver-"+Guid.NewGuid()+".json"));receiver.Show();Pump();var opening=receiver.OpenFromSystem(mpp,1);bool Wait(Func<bool> done){var clock=System.Diagnostics.Stopwatch.StartNew();while(!done()&&clock.Elapsed<TimeSpan.FromSeconds(10)){Pump();Thread.Sleep(10);}return done();}
+         Check(Wait(()=>receiver.OwnedWindows.OfType<SaveChangesWindow>().Any()),"Opening a handed-over document asks about unsaved changes first");receiver.OwnedWindows.OfType<SaveChangesWindow>().Single().GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Don't Save")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Wait(()=>opening.IsCompleted);
+         Check(opening.IsCompletedSuccessfully&&target.SourcePath==Path.GetFullPath(mpp)&&target.Tasks.Any(t=>t.Name=="Architecture")&&receiver.Sheet.Grid.ItemsSource!.OfType<TaskTableRow>().Count(r=>r.Uid>0)==target.Tasks.Count,"Documents handed over by the system open like File > Open");Check(receiver.GetVisualDescendants().OfType<TextBlock>().Any(b=>b.Text?.Contains("1 other document was not opened")==true),"Extra handed-over documents are reported, not silently dropped");receiver.CloseForValidation();}
+        // The macOS menu bar mirrors the in-window menu; native items must run the same commands and track checks.
+        var menuBar=window.GetVisualDescendants().OfType<Menu>().Single();var native=PlannerWindow.MirrorMenu(menuBar);
+        Check(native.Items.OfType<NativeMenuItem>().Select(i=>i.Header).SequenceEqual(menuBar.Items.OfType<MenuItem>().Select(i=>i.Header as string)),"Native menu mirrors every menu bar title");
+        var themeItems=native.Items.OfType<NativeMenuItem>().Single(i=>i.Header=="Appearance").Menu!.Items.OfType<NativeMenuItem>().Single(i=>i.Header=="Theme").Menu!.Items.OfType<NativeMenuItem>().ToDictionary(i=>i.Header!);
+        themeItems["Dark"].Command!.Execute(null);Pump();Check(window.ThemeMode=="Dark"&&themeItems["Dark"].IsChecked&&!themeItems["Automatic"].IsChecked,"Native menu item runs its command and mirrors radio checks");
+        themeItems["Automatic"].Command!.Execute(null);Pump();Check(window.ThemeMode=="Automatic"&&themeItems["Automatic"].IsChecked&&!themeItems["Dark"].IsChecked,"Native menu restores the automatic theme");
+        Check(menuBar.IsVisible,"In-window menu stays visible where no native menu is exported");
         window.CloseForValidation();var reopened=new PlannerWindow(session,settings);reopened.Show();Pump();Check(reopened.CompactWorkspace&&reopened.InspectorVisible,"Workspace preferences restore");reopened.CloseForValidation();
         File.WriteAllText(Path.Combine(output,"checks.json"),JsonSerializer.Serialize(checks,new JsonSerializerOptions{WriteIndented=true}));Console.WriteLine($"PASS: {checks.Count} workspace/inspector checks");return 0;
     }

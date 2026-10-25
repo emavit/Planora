@@ -52,6 +52,7 @@ public static class CoreValidation {
         session.SaveCopy(Path.Combine(folder,"calendar-holiday.mpp"));
         File.WriteAllText(Path.Combine(folder,"core-expected.json"),JsonSerializer.Serialize(expected,new JsonSerializerOptions{WriteIndented=true}));
         ValidateProgressMatrix(folder);
+        MppFidelityValidation.Run(folder);
         Console.WriteLine("PASS: core authoring, FS weekend scheduling, resource work/cost, baseline 0/10, progress, native save/reopen, structural undo/redo, outline, cycle rejection.");
         return 0;
     }

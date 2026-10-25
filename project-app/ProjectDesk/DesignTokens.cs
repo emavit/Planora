@@ -34,7 +34,8 @@ public static class DesignTokens {
         Separator.Color=Color.Parse(dark?"#3A3A3E":"#DEDEE3");
         Selected.Color=Color.Parse(dark?"#283D58":"#E7F0FC");
     }
-    public static FontFamily Font => new(OperatingSystem.IsMacOS() ? "Helvetica Neue" : "Segoe UI");
+    // macOS: the system UI font (San Francisco) like native apps, falling back to Helvetica Neue. PDF export embeds its own font.
+    public static FontFamily Font => new(OperatingSystem.IsMacOS() ? ".AppleSystemUIFont, Helvetica Neue" : "Segoe UI");
     private static SolidColorBrush Brush(string value) => new(Color.Parse(value));
     public static void Apply(Application app) {
         app.Resources["SystemAccentColor"] = Accent.Color;

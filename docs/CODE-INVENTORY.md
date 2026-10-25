@@ -92,9 +92,13 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | File | Responsibility |
 |---|---|
 | PlannerWindow.Workspace.cs | Compact navigation and optional inspector composition |
+| PlannerWindow.NativeMenu.cs | macOS menu bar mirror of the in-window menu |
+| MacKeychain.cs | macOS Keychain adapter behind McpCredentialStore |
 | TaskInspectorModule.cs | Validated draft editing bound to task identity |
 | SavedWorkspaceView.cs | Saved workspace preferences and dialogs |
 | StarterTemplates.cs | Original schedule recipes and atomic creation state |
 | TemplateLibraryWindow.cs | Search, preview and new-project choice |
 | WorkspaceValidation.cs | Navigation, inspector, editing and MPP regressions |
 | PlanningLibraryValidation.cs | Template and saved-view regressions |
+| PerformanceValidation.cs | Large-plan timing measurement (paste, edit, reschedule, Undo, save, reopen) |
+| MppFidelityValidation.cs | Native MPP fidelity regressions from the public corpus (run by core-test) |
