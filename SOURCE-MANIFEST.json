@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 16018,
-      "sha256": "b197081a2fa669650ee5e8291a795383a1bd850302121bf1478f10ebe52fe810"
+      "bytes": 16090,
+      "sha256": "a1cc3d207ffe217ccb0a47308f205eecb02aaa9fa83ed33ba5d50a0674223bad"
     },
     {
       "path": "CLAUDE.md",
@@ -162,8 +162,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 12916,
-      "sha256": "72d48e3d650d1009b9f1541bab507eba1c7474494b6e37e18ca58ddc6a1af266"
+      "bytes": 12987,
+      "sha256": "b8ed4d2c6da7c1882936147c19ecb1a1186b169be3fcf7b8b1287a9a7384eb22"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
