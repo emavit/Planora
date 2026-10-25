@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7900,
-      "sha256": "4ee33c791de6ee0aae69b36959e70df789a9ba9b50f8e73e9c22e8d879468e22"
+      "bytes": 8556,
+      "sha256": "87576dedbaf91711ec6de602baa07fa78d3eda9d8408ec86aec583e7946d6dce"
     },
     {
       "path": "CLAUDE.md",
@@ -522,8 +522,8 @@
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
-      "bytes": 2651,
-      "sha256": "714fef911b6839c8edeec8e914d39f1e2980295d498b6286583e9f0ec4b973b1"
+      "bytes": 3199,
+      "sha256": "58c42af3f7ef07343dc2b2812c152bcb8ab1b0ea1d14a6cd4d36215330461d04"
     },
     {
       "path": "project-app/ProjectDesk/NetworkDiagramModule.cs",
@@ -617,8 +617,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 35129,
-      "sha256": "352799c617cf2f593c13ea2d3f8b3fb31b119dd173a5d71b998bf3511ac4a9cb"
+      "bytes": 35118,
+      "sha256": "344f9b34a6b8d621a938a4e4a7419f190d95e173165dbe0ae327f703b79158a4"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
