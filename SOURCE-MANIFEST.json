@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 16090,
-      "sha256": "a1cc3d207ffe217ccb0a47308f205eecb02aaa9fa83ed33ba5d50a0674223bad"
+      "bytes": 16566,
+      "sha256": "930e4b2fa80fb97c9e62faf24c0635a47451097fde8e82bef86ab1a37d1aee94"
     },
     {
       "path": "CLAUDE.md",
@@ -7932,18 +7932,23 @@
     },
     {
       "path": "releases/release.md",
-      "bytes": 2512,
-      "sha256": "6794e24de13f38820359bc93ce825d4b104250b665b6fb5aca99cd032550fe27"
+      "bytes": 2895,
+      "sha256": "e8071a0846358bab6cdf0793c62a0e6fec136dc07591a2e4462cf0fe5486c3e6"
     },
     {
       "path": "scripts/build.ps1",
-      "bytes": 2548,
-      "sha256": "28c0cf436bb30637b342676293ec80cf3adb5e496529e089596a4bf7fed24db7"
+      "bytes": 1842,
+      "sha256": "b3ea20d652d70cd3224b34d31b051c89d30439b46f3153a382c617a1f836648f"
+    },
+    {
+      "path": "scripts/macos-bundle.ps1",
+      "bytes": 2281,
+      "sha256": "bde569986b0ef08c253b880d93d52123d06fe0bf1013125ded46978a0a65a979"
     },
     {
       "path": "scripts/release.ps1",
-      "bytes": 5538,
-      "sha256": "1862acfc07a31e0ac92a59cfaa975432bce006ec0c7379a9fec524f0c832f6d3"
+      "bytes": 6749,
+      "sha256": "e2d4bf9b62a34179aa02e19a13d55b6b3236d70b0112142759cdeadb8223f80f"
     },
     {
       "path": "scripts/validate.ps1",

@@ -19,6 +19,8 @@ Source release notes live here. Built Windows releases live under project-app/re
 
 Build with ./scripts/release.ps1 -Version VERSION -IncludeNative on Windows. The script validates the version and two declared features (four for 0.3.3), or an explicit bugfix definition with fixes and no new features, builds in staging, tests the packaged binaries and creates the release directory only after successful checks. Omitting IncludeNative produces an explicitly unqualified native preview. No automatic GitHub publication is performed.
 
+On a Mac, ./scripts/release.ps1 -Version VERSION -Runtime osx-arm64 -IncludeNative runs the same checks, packages project-app/releases/VERSION-osx-arm64 with an ad-hoc signed Planora.app, and writes Planora-VERSION-osx-arm64.zip (made with ditto so the bundle keeps its symlinks and executable bits) and its .sha256 file next to it. The app is not Developer ID signed or notarized.
+
 The broader roadmap remains open. A template category is not equivalent to complete workflow support.
 
 Delivered scope and remaining work: [UI-first sequence](../docs/UI-RELEASE-PLAN.md). Future versions are not included in the delivered table above.
