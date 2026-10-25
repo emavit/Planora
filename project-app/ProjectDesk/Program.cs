@@ -72,7 +72,7 @@ static class Program {
                 session.Undo();
                 var preferencesPath = System.IO.Path.Combine("project-app/previews", "views-" + Guid.NewGuid() + ".json");
                 var window = new PlannerWindow(session, preferencesPath);
-                window.Show(); Dispatcher.UIThread.RunJobs();
+                window.Show(); window.SetCompactWorkspace(false); Dispatcher.UIThread.RunJobs();
                 if (window.TaskCount != session.Tasks.Count) throw new Exception("Task view count mismatch");
                 if (window.ResourceCount != session.Resources.Count) throw new Exception("Resource view count mismatch");
                 if (window.AssignmentCount != session.Document!.Assignments.Count(a => a.Task?.Uid != 0 && a.Resource?.Uid > 0)) throw new Exception("Assignment view count mismatch");
@@ -123,15 +123,17 @@ static class Program {
                 if(!window.ResourceGrid.IsVisible)throw new Exception("View menu did not open Resource Sheet");
                 viewMenu.Items.OfType<MenuItem>().Single(m=>Equals(m.Header,"Gantt Chart")).RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));Dispatcher.UIThread.RunJobs();
                 window.Sheet.Grid.SelectedItem=window.Sheet.Grid.ItemsSource!.OfType<TaskTableRow>().Single(r=>r.Uid==editableUid);
+                window.GetVisualDescendants().OfType<RibbonModule>().Single().SelectTab("Task");Dispatcher.UIThread.RunJobs();
                 window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Manually Schedule")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(session.Document.Tasks.GetByUid(editableUid).IsManual!=true)throw new Exception("Ribbon task mode did not apply");session.Undo();window.RefreshForValidation();Dispatcher.UIThread.RunJobs();
                 var findDropdown=window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"Find ▾"));findDropdown.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(findDropdown.ContextMenu?.IsOpen!=true)throw new Exception("Ribbon dropdown did not open");findDropdown.ContextMenu.Close();
+                static bool IsDark(Avalonia.Media.Color c)=>0.2126*c.R+0.7152*c.G+0.0722*c.B<0.4*255;
                 Application.Current!.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Dark;Dispatcher.UIThread.RunJobs();
-                if(RibbonModule.Chrome.Color!=Avalonia.Media.Color.Parse("#20242A"))throw new Exception("Dark Office theme did not follow application theme");
+                if(RibbonModule.Chrome.Color!=DesignTokens.Background.Color||!IsDark(RibbonModule.Chrome.Color))throw new Exception("Dark Office theme did not follow application theme");
                 AvaloniaHeadlessPlatform.ForceRenderTimerTick(3);Dispatcher.UIThread.RunJobs();using(var darkFrame=window.CaptureRenderedFrame()??throw new Exception("Dark theme did not render"))darkFrame.Save("project-app/previews/office-dark.png");
                 Application.Current.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Light;Dispatcher.UIThread.RunJobs();
-                if(RibbonModule.Chrome.Color!=Avalonia.Media.Color.Parse("#F3F5F7"))throw new Exception("Light Office theme did not follow application theme");
+                if(RibbonModule.Chrome.Color!=DesignTokens.Background.Color||IsDark(RibbonModule.Chrome.Color))throw new Exception("Light Office theme did not follow application theme");
                 window.Sheet.Grid.SelectedItem=window.Sheet.Grid.ItemsSource!.OfType<TaskTableRow>().Single(r=>r.Uid==editableUid);
                 int oldCount=session.Tasks.Count;var oldLinks=session.Document.Dependencies.Count;
                 window.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"＋ Task")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
@@ -224,7 +226,7 @@ static class Program {
                 Console.WriteLine($"PASS: {System.IO.Path.GetFileName(file)}; {session.Tasks.Count} tasks, {session.Resources.Count} resources, {window.Sheet.Catalogue.Count} selectable columns; {ProjectCommandCatalogue.Observed.Count} observed commands / {ProjectCommandCatalogue.Observed.Count(c=>window.CommandActions.ContainsKey(c.Id))} local routes; 13 views; Office menus, dropdown, task mode, light/dark, blank insertion/focus/keyboard/cancel/single undo/render stress/header menu/append paste PASS");
             }
             using(var empty=new ProjectSession()){
-                empty.NewProject("Empty insertion check",new DateTime(2026,10,19));var blankWindow=new PlannerWindow(empty,"project-app/previews/empty-check-views.json");blankWindow.Show();Dispatcher.UIThread.RunJobs();
+                empty.NewProject("Empty insertion check",new DateTime(2026,10,19));var blankWindow=new PlannerWindow(empty,"project-app/previews/empty-check-views.json");blankWindow.Show();blankWindow.SetCompactWorkspace(false);Dispatcher.UIThread.RunJobs();
                 blankWindow.GetVisualDescendants().OfType<Button>().Single(b=>Equals(b.Content,"＋ Task")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));Dispatcher.UIThread.RunJobs();
                 if(empty.Tasks.Count!=0||blankWindow.Sheet.Grid.SelectedItem is not TaskTableRow{Uid:<-1})throw new Exception("Empty project did not insert a blank row");
                 blankWindow.Sheet.Grid.GetVisualDescendants().OfType<TextBox>().Single(t=>t.Name=="CellTextBox"&&t.IsVisible).Text="First task";if(!blankWindow.Sheet.Grid.CommitEdit())throw new Exception("Empty project task did not commit");Dispatcher.UIThread.RunJobs();

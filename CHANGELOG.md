@@ -4,6 +4,7 @@
 
 - Validation checks send ⌘ instead of Ctrl for wheel zoom and keyboard paste on macOS, matching the app's platform shortcuts. Timeline UI and multi-timeline checks pass on macOS (31 each).
 - Fixed the Windows CI failure present since the public example corpus was added: `LICENSE-MPXJ.txt` was converted to CRLF on Windows checkouts, so its pinned SHA-256 never matched and the Windows build/model/UI steps were skipped. The file now keeps its exact bytes like the other hashed fixtures.
+- Restored the theme, formatting and spreadsheet smoke checks on every platform. They predated the compact workspace default (ribbon hidden) and the Planning default tab, and expected dark-palette colours from before 0.3.10. They now show the ribbon, select the Task tab where needed and assert that dark/light surfaces and ribbon chrome follow the theme instead of fixed colour literals. Theme 37, formatting 58 and smoke checks pass.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 
