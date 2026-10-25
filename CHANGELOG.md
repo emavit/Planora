@@ -20,6 +20,7 @@
 - `build.ps1 -Runtime osx-arm64|osx-x64` assembles `Planora.app`: binaries in `Contents/MacOS`, notices and a new `Planora.icns` in `Contents/Resources`, and an Info.plist generated from `Packaging/macOS/Info.plist` with the project version, a macOS 12.0 minimum matching the bundled binaries, and document types (`.planora` as owner, `.mpp` as alternate). The icon is drawn on the macOS grid (824 of 1024 units with a soft shadow) and written as a PNG-based `.icns` without platform tools; the icon check verifies all ten sizes (4,900 checks). The bundle is unsigned; its identifier `io.github.emavit.planora` awaits the owner's confirmation.
 - Documents opened from Finder (double-click, Open With, drop on the Dock icon) open in Planora on macOS. macOS delivers them as activation events rather than command-line arguments; the app now handles them through the same path as File > Open, including the Save/Don't Save/Cancel prompt. Workspace check: 63.
 - On macOS the interface uses the system font (San Francisco, via `.AppleSystemUIFont`, falling back to Helvetica Neue) like native Mac apps; Windows keeps Segoe UI. PDF export still embeds Helvetica Neue, since the system font is meant for on-screen interface text.
+- The task table's ID column header is readable. Its 42 px default and 60 px minimum left no room for "ID" beside the header's column chevron (blank with Helvetica Neue, ".." with San Francisco); both are now 72 px.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 

@@ -147,7 +147,7 @@ public sealed class TaskSheetModule : UserControl {
             foreach(var key in keys.Distinct()) {
                 var spec=_catalogue.FirstOrDefault(c=>c.Key==key);if(spec==null)continue;
                 var stored=_preferences.Columns.FirstOrDefault(c=>c.Key==key)?.Width??0;
-                var column=new FormattedTaskColumn(key,this){Header=spec.Title,Binding=new Binding($"Cells[{key}]"),IsReadOnly=!ProjectSession.CanEditText(key),Width=new DataGridLength(stored>=40?stored:spec.Width),MinWidth=key switch{"DisplayId"=>60,"TaskMode"=>95,"Duration"=>105,_=>60}};
+                var column=new FormattedTaskColumn(key,this){Header=spec.Title,Binding=new Binding($"Cells[{key}]"),IsReadOnly=!ProjectSession.CanEditText(key),Width=new DataGridLength(stored>=40?stored:spec.Width),MinWidth=key switch{"DisplayId"=>72,"TaskMode"=>95,"Duration"=>105,_=>60}};
                 column.HeaderTemplate=new FuncDataTemplate<object>((_,_)=>ColumnHeader(column,spec));
                 Grid.Columns.Add(column);_keys[column]=key;
             }

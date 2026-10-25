@@ -35,7 +35,7 @@ public static class TaskColumns {
                 "PhysicalPercentComplete" => "Physical % Complete", "TotalSlackMinutes" => "Total Slack (min)", "FreeSlackMinutes" => "Free Slack (min)",
                 _ => Regex.Replace(property.Name, "(?<=[a-z])([A-Z])", " $1")
             };
-            columns.Add(new(property.Name, title, property.Name switch{"DisplayId"=>42,"Name"=>240,"Duration"=>85,_=>type==typeof(DateTime)?110:120},
+            columns.Add(new(property.Name, title, property.Name switch{"DisplayId"=>72,"Name"=>240,"Duration"=>85,_=>type==typeof(DateTime)?110:120},
                 (task, project) => property.Name == "Name" ? new string(' ', Math.Min(20, Depth(task)*2)) + task.Name : Format(property.GetValue(task))));
         }
         for (int n = 0; n <= 10; n++) {

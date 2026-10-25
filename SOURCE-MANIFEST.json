@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 13542,
-      "sha256": "44610fe05b2e87c759df0993ab150c07dffb0a154583e0d4e1538799c5803e36"
+      "bytes": 13758,
+      "sha256": "3f9e5d4f1ef6fdd1256e2e7523cbcbbb1c4c24fe80406900a4d5b6d2ebadb412"
     },
     {
       "path": "CLAUDE.md",
@@ -748,7 +748,7 @@
     {
       "path": "project-app/ProjectDesk/TaskColumns.cs",
       "bytes": 9649,
-      "sha256": "2fbed189a4450f3e9cf5b80b278621744d7e2c06d48d224c2a589fb2ded93501"
+      "sha256": "d7531a3f9ca7602ad0a02b100d2460668b3860adc28cfe5e55ff48919060276a"
     },
     {
       "path": "project-app/ProjectDesk/TaskDetailsModule.cs",
@@ -778,7 +778,7 @@
     {
       "path": "project-app/ProjectDesk/TaskSheetModule.cs",
       "bytes": 21083,
-      "sha256": "573b0098e804e00aa00d56d74e0e4aeb2954b441514686ea2bee046037ae2ccd"
+      "sha256": "56c0952c4f83f5eb44df25e20a7563184601ee72888a336aef55c3e2d383b2de"
     },
     {
       "path": "project-app/ProjectDesk/TaskUsageModule.cs",
