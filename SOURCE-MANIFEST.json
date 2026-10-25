@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 14286,
-      "sha256": "812edde05a7597d1e3964f94cccd2365687ca5c730f30504be7078060ac565fd"
+      "bytes": 14593,
+      "sha256": "8f6aece823393730b366dbffbce01c7548018418ca0194c36b12ed1021688274"
     },
     {
       "path": "CLAUDE.md",
@@ -182,8 +182,8 @@
     },
     {
       "path": "docs/compatibility-known-failures.json",
-      "bytes": 3586,
-      "sha256": "f0e28e79ed41bf15a6b4f21c70115a844a16394d7e2a9178ba6b34b349158061"
+      "bytes": 2923,
+      "sha256": "1b2e1609817ef4d16fdf2411d77fb5341d4c80aef10fad3c047a5b851dbb62e9"
     },
     {
       "path": "docs/design/README.md",
@@ -532,8 +532,8 @@
     },
     {
       "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
-      "bytes": 4724,
-      "sha256": "1cc490d8bbe1b02f1a0d176ba07c97ce6437db7fb50e0412852b82f6b44049fb"
+      "bytes": 6416,
+      "sha256": "40413c50b31b48f29af5d7e8fc4bb990928ca9f013ff678917da360d4749c677"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
@@ -7247,8 +7247,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/ProjectDocument.Validation.cs",
-      "bytes": 14338,
-      "sha256": "0974f3a58a4219e21eeaf4cb44d89c7e44bf9de312d91f4cb7abe5d85c0ae9fa"
+      "bytes": 15732,
+      "sha256": "7c2e3574fd59382ff031f8ed4e96b4ec94c15207048eb6b25920f49fde82f33d"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/ProjectDocument.Views.cs",

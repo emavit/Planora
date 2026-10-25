@@ -42,7 +42,19 @@ internal static class MppFidelityValidation {
             string dest=Path.Combine(folder,"manual-authored.mpp");s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);
             Check(reopened.Tasks.GetByUid(t).IsManual==true&&reopened.Tasks.GetByUid(t).Start==start&&reopened.Tasks.GetByUid(t).Finish==start.AddDays(11).AddHours(9),"Authored manual dates survive a new MPP14 file");
         }
-        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost, manual dates).");return checks;
+        // Preserved producer values: Project 2010 wrote baselines whose start is later than their finish; unchanged records must not block unrelated edits.
+        using(var s=new ProjectSession()){
+            s.Open(Path.Combine(corpus,"mpp14baselines.mpp"));var baseline=s.Document!.Tasks.GetByUid(1).Baselines.Single(b=>b.Number==1);
+            Check(baseline.Start==new DateTime(2001,1,1,9,0,0)&&baseline.Finish==new DateTime(2000,1,1,17,30,0),"Producer baseline keeps its inverted dates");
+            s.Rename(1,"Renamed task");string dest=Path.Combine(folder,"inverted-baseline-rename.mpp");var report=s.AssessSave(dest);
+            Check(!report.HasErrors&&report.Diagnostics.Any(d=>d.Code=="PROJECT_DATE_RANGE"&&d.Severity==ProjectDiagnosticSeverity.Warning&&d.Location=="/Task[UID=1]/Baseline"),"Unchanged inverted producer baseline is reported, not blocking");
+            s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);var reloaded=reopened.Tasks.GetByUid(1).Baselines.Single(b=>b.Number==1);
+            Check(reloaded.Start==baseline.Start&&reloaded.Finish==baseline.Finish&&reopened.Tasks.GetByUid(1).Name=="Renamed task","Inverted producer baseline survives the edited save unchanged");
+            s.Execute("Author an inverted baseline",d=>{var b=d.Tasks.GetByUid(1).Baselines.Single(x=>x.Number==1);b.Start=b.Start!.Value.AddDays(1);});
+            var authored=s.AssessSave(Path.Combine(folder,"inverted-baseline-authored.mpp"));
+            Check(authored.Diagnostics.Any(d=>d.Code=="PROJECT_DATE_RANGE"&&d.Severity==ProjectDiagnosticSeverity.Error),"Authored inverted baseline dates still block saving");
+        }
+        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost, manual dates, preserved producer baselines).");return checks;
     }
     private static string FindCorpus() {
         for(var directory=new DirectoryInfo(AppContext.BaseDirectory);directory!=null;directory=directory.Parent){

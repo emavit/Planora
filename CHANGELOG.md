@@ -60,6 +60,7 @@
 - No 0.3.2 package was published; the user requested 0.3.3. Broader range selection, Resources/Notes inspector sections and per-field validation remain pending; this release does not claim the entire earlier combined design scope.
 - Native task baseline fixed cost now reads from and writes to the dedicated MPP9/12/14 field (baseline 0 and numbered baselines), so capturing a baseline on tasks with a fixed cost saves natively; three public-corpus stages leave the known-failure list.
 - Manually scheduled MPP14 tasks now read Start/Finish from the fields Project displays (0x0b400503/0x0b400504) and authored manual dates are written there too, matching Project's own MSPDI export of the public corpus; the producer-XML stage leaves the known-failure list.
+- Baselines that Project wrote with a start later than their finish no longer block unrelated native edits: an unchanged source baseline range is reported as a warning and retained byte for byte, while authored inverted dates still fail validation; three mpp14baselines stages leave the known-failure list.
 
 ## Unreleased documentation
 
