@@ -6,6 +6,8 @@ Avalonia supplies the shared UI. Credential vaults, browser opening, subprocess 
 
 macOS acceptance must cover M1 execution, editing/navigation, date behavior, recovery, PDF fonts, keychain/connector behavior and independent offline MPP operations. Merely publishing `osx-arm64` does not meet these criteria. Use runtime platform checks in adapter construction, not spread through scheduling logic. Current macOS evidence and open items: [macOS qualification](MAC-QUALIFICATION.md).
 
+Credential vaults: `McpCredentialStore` (the composition point for `IMcpSecrets`, shared by MCP connectors and AI API keys) uses Windows Credential Manager on Windows and the user's default Keychain on macOS (`MacKeychain`, generic-password items with service "Planora" through the Security framework; values never pass through a command line). Other platforms keep secrets for the running process only. The MCP check verifies roundtrip, persistence beyond one store instance, overwrite and removal against the real platform vault. An unsigned macOS app is identified by its binary, so after an update macOS may ask once to allow Keychain access; signing gives it a stable identity.
+
 ## Android and iOS — future phase
 
 Begin after the macOS completion gate, not in parallel with unfinished desktop qualification. Reuse qualified scheduling/project contracts through testable interfaces where feasible; evaluate the mobile UI framework separately. Phone/tablet layouts, touch interaction, app lifecycle, sandboxed file access, secure credential storage, offline persistence, optional sync and distribution each need mobile-specific design and tests. Do not assume desktop MPP, PDF, CLI or connector support transfers automatically. See [mobile plan](MOBILE-PLAN.md).

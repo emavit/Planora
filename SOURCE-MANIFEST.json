@@ -27,8 +27,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1227,
-      "sha256": "d9e52d3257f0440b62b9ed25c839995f3912373f458920ce0f6c55831fb17caf"
+      "bytes": 1354,
+      "sha256": "6a9b780506515a695bf00059bf82a7ad507bdf3a3499f6a289ab755a7892449e"
     },
     {
       "path": ".gitignore",
@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 11800,
-      "sha256": "4025c9f110bf5e554a1ce585d5c561997a1ba1d11032d51b838ec6d849d67aaa"
+      "bytes": 12319,
+      "sha256": "fa42e957b47e0ff280b544c016e2d44fad3dffaf7a4439255383011266a9fe14"
     },
     {
       "path": "CLAUDE.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "docs/CODE-INVENTORY.md",
-      "bytes": 6606,
-      "sha256": "5e3b94f103d3fd6fc325aa13d1f31651ba6d7d1e396b8c7c84542066732e48e2"
+      "bytes": 6676,
+      "sha256": "feb43c5c5b78c061c1369ca3ab2654a2da4594111bb58828035e9ac006896cc9"
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 6950,
-      "sha256": "84a8c4ffdc4806f8e6c635c642327c4e77221b5bacc8fdeeea976ba27c1d224e"
+      "bytes": 7160,
+      "sha256": "9901b2f08a15ff4f7328d4a15b80f090087ecc021c82cf6d3c1498ed7fe6dd73"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -142,8 +142,8 @@
     },
     {
       "path": "docs/PLATFORM_GUIDE.md",
-      "bytes": 1545,
-      "sha256": "246d15b2ff3f22b25cb8bb8191aa31636a0e8052ee7ec078b1d9bb13882b4987"
+      "bytes": 2229,
+      "sha256": "6dbe7c01aa8856b490bf81fec04041eab1d607f3b2e36feaa287e8d255e22cc8"
     },
     {
       "path": "docs/RECOVERY.md",
@@ -162,8 +162,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 10408,
-      "sha256": "9ba7d5c763b8d797e764ca9c8a259b7accc1fd943b2f1e3327bc0cb069422613"
+      "bytes": 10384,
+      "sha256": "b4395fbad23a1a234016e82abe8a3dd95f672e842721728bf4b18371b92336e6"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
@@ -476,6 +476,11 @@
       "sha256": "19ca5365ee661364f5428d79882ba8dbf484fb0806f5aa74391096e971e4fce4"
     },
     {
+      "path": "project-app/ProjectDesk/MacKeychain.cs",
+      "bytes": 5879,
+      "sha256": "cc2ab1167be2adb05a113d3fd5f3feed70143c3a9b756a7aabb1a531593688e0"
+    },
+    {
       "path": "project-app/ProjectDesk/McpBrowserLogin.cs",
       "bytes": 2963,
       "sha256": "252e6219bb8c0fb1803ba2a80437efb755532cdf04db48b24040121512a297a6"
@@ -492,8 +497,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorSettings.cs",
-      "bytes": 6016,
-      "sha256": "d13ebc4e8942ab4e2c1583f45ff04e252ff22d6fc7f7a2567df186dddea20200"
+      "bytes": 6408,
+      "sha256": "afcca0170de29d9a292b4cc730a89f2b7295c13de60dba61e0ce8c217abcfe08"
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorsWindow.cs",
@@ -522,8 +527,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpValidation.cs",
-      "bytes": 12777,
-      "sha256": "3c1b72b5d87e9ebeb0da22d435ee4d5ede61332b15a03a420cc21dd7445fa7e0"
+      "bytes": 13194,
+      "sha256": "430b6cc1ceed050423101cb6c6fc7d72e951dcabbda1410363b5173ec83c035e"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",

@@ -16,6 +16,7 @@
 - Corrected the `PlanoraPackage` header comment, which said presentation metadata was not part of the format. `.planora` packages do carry formatting, rich notes, timeline lanes and chart axes (covered by the recovery UI check).
 - On macOS the application menus appear in the system menu bar. The in-window menu remains the single definition: a native mirror raises the same items (including the Theme submenu and checkbox/radio items, whose state stays in sync), and the in-window menu is hidden only when macOS exports the native menu, so Windows and headless runs are unchanged. The app reports its name as Planora to the platform. Workspace check: 61 (4 new menu-mirror assertions). Menu shortcut labels are not shown yet.
 - Bold/Italic/Underline tooltips name ⌘B/⌘I/⌘U on macOS instead of Ctrl, matching the shortcuts the window already handles there. Formatting check: 59.
+- Connector tokens and AI API keys persist on macOS. `McpCredentialStore` kept secrets in memory on every non-Windows platform, so they were lost on restart; macOS now stores them as Keychain generic-password items (service "Planora") through the Security framework (`MacKeychain`). The MCP check verifies roundtrip, persistence beyond one store instance, overwrite and removal against the real platform vault (58 checks). CI jobs now time out after 30 minutes instead of 6 hours if a platform service waits for input.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 
