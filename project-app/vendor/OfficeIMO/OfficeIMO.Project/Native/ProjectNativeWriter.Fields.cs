@@ -12,8 +12,11 @@ internal sealed partial class ProjectNativeWriter {
         Field(editor, uid, path, "Type", 0x0b400000u | 0x80, Kind.Integer, 1);
         Field(editor, uid, path, "Calendar", 0x0b400000u | 0x191, Kind.Integer, 1);
         Field(editor, uid, path, "Name", 0x0b400000u | 0x0e, Kind.Text, 1);
-        Field(editor, uid, path, "Start", 0x0b400000u | 0x23, Kind.Date, 1);
-        Field(editor, uid, path, "Finish", 0x0b400000u | 0x24, Kind.Date, 1);
+        // A manual/automatic switch changes which MPP14 date pair is displayed (see WriteManualDate), so the scheduled pair
+        // is rewritten with the model dates even when the dates themselves did not change.
+        bool modeChanged = _profile == ProjectNativeProfile.Mpp14 && Changed(path + "/IsManual");
+        Field(editor, uid, path, "Start", 0x0b400000u | 0x23, Kind.Date, 1, force: modeChanged);
+        Field(editor, uid, path, "Finish", 0x0b400000u | 0x24, Kind.Date, 1, force: modeChanged);
         Field(editor, uid, path, "EarlyStart", 0x0b400000u | 0x25, Kind.Date, 1);
         Field(editor, uid, path, "EarlyFinish", 0x0b400000u | 0x26, Kind.Date, 1);
         if (_profile == ProjectNativeProfile.Mpp8 && Changed(path + "/Start") &&

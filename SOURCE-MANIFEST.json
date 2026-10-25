@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 15426,
-      "sha256": "57c61e436a319fe82384064dc74ce353d02ff81858180c231b2e5ae17c4707c3"
+      "bytes": 15680,
+      "sha256": "9407a3a710cf75213bd1f2a3e49111a274b27aa1185330f018fffcf09a1de9cf"
     },
     {
       "path": "CLAUDE.md",
@@ -133,7 +133,7 @@
     {
       "path": "docs/MAC-QUALIFICATION.md",
       "bytes": 8105,
-      "sha256": "fa05fde88fbd6d9465028ebc8a4a2521c0a6a1df4ce2d4d73aba934d03b28ea7"
+      "sha256": "ac4de5bc600045ccb080bc205df02bb047ff29e012877fa382359ab6fa5e5b7d"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -532,8 +532,8 @@
     },
     {
       "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
-      "bytes": 7787,
-      "sha256": "8007843a55f0bf999133b258be080d911ad5a5eb0ce3dcfa3880bf41fbdfbccf"
+      "bytes": 8566,
+      "sha256": "9eaa1e8d9dc1dfff1c1fb946662eccc2b5841438cbc4cf2b1b8bacd59256fbd0"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
@@ -6982,8 +6982,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.Fields.cs",
-      "bytes": 9409,
-      "sha256": "b4d61f0311a5cefe959f17eae3ce59041f4349a85991dff1d756acbfdd5d8850"
+      "bytes": 9764,
+      "sha256": "540aaf7350ecb3c45c4c1117730e62ba0e1e34d3225cac23a83834617ca3e7f8"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.FlatWork.cs",

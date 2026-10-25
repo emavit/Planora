@@ -36,6 +36,13 @@ internal static class MppFidelityValidation {
             Check(reopened.Tasks.GetByUid(1).Start==manualStart&&reopened.Tasks.GetByUid(1).Finish==manualFinish,"Edited manual dates survive a native round trip");
             Check(reopened.Tasks.GetByUid(2).Start==new DateTime(2016,1,4,8,0,0),"Untouched manual task keeps its producer dates");
         }
+        // Switching mode without moving the task changes which date pair is displayed, so both pairs must carry the model dates.
+        using(var s=new ProjectSession()){
+            s.Open(Path.Combine(corpus,"assignment-assignments-project2019-mpp14.mpp"));var before=s.Document!.Tasks.GetByUid(1);var start=before.Start;var finish=before.Finish;
+            s.Execute("Switch to automatic without moving",d=>d.Tasks.GetByUid(1).IsManual=false);
+            string dest=Path.Combine(folder,"manual-to-automatic.mpp");s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);var task=reopened.Tasks.GetByUid(1);
+            Check(task.IsManual==false&&task.Start==start&&task.Finish==finish,"Manual-to-automatic switch keeps the task's dates on reload");
+        }
         using(var s=new ProjectSession()){
             s.NewProject("Manual dates",new DateTime(2026,10,19,8,0,0));int t=s.AddTask("Manual",calculateDates:false);var start=new DateTime(2016,1,4,8,0,0);
             s.Execute("Author manual dates",d=>{var task=d.Tasks.GetByUid(t);task.IsManual=true;task.Start=start;task.Finish=start.AddDays(11).AddHours(9);});
