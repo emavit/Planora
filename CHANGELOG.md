@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Claude Code can work on the project open in Planora, using your Claude subscription through Claude Code. Connectors → Claude Code… (also offered in the Claude connection settings) runs `claude mcp add --scope user planora -- <Planora> --mcp-connect` or shows the command to paste into Terminal. Claude Code can read the project, tasks, resources and assignments, switch views and select tasks. It can propose adding, editing, deleting, indenting and outdenting tasks; adding, editing, deleting and assigning resources; project information, baselines, Calculate Project, Undo/Redo, new/open project and saving a new `.mpp` or `.planora` copy. Each proposal is checked against the revision Claude last read, shown in Planora for approval (old → new values) and applied as one Undo step. Existing files, including the opened original, are never overwritten. Planora answers on a private per-user socket (macOS/Linux: a 0700 folder with a 0600 socket; Windows: the per-user settings folder) and can be switched off in the same dialog. Claude Code starts its servers with every session, so `--mcp-connect` lists the tools itself and starts or reaches Planora only when a Planora tool is called; a call cut off because Planora closed is reported, not repeated. The new `mcp-host-test` (61 checks, part of `validate.ps1 -IncludeExtended`) drives a scripted client over the socket and through `--mcp-connect`, including approval, decline, stale revision, busy, Undo, save-copy safety and socket permissions. It never runs the installed Claude Code.
+- The Claude browser-handoff setting no longer ends with "Embedded Claude subscription login requires Anthropic approval" and no way forward: it offers Connect Claude Code. Anthropic does not allow third-party apps to offer claude.ai sign-in, so Planora uses Claude Code's own sign-in instead.
+- The AI and MCP settings name the credential store of the current platform (the macOS Keychain on a Mac) instead of always saying Windows Credential Manager.
+
 ## 0.3.11 — 2026-10-25 · macOS preview
 
 - Validation checks send ⌘ instead of Ctrl for wheel zoom and keyboard paste on macOS, matching the app's platform shortcuts. Timeline UI and multi-timeline checks pass on macOS (31 each).

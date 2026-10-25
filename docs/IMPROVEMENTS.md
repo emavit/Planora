@@ -120,7 +120,7 @@ Priority: **P0** data integrity/release blockers, **P1** core daily usability, *
 | AI-03 | P1 | AI request reliability — bounded | Timeout/cancel/size/error tests and accurate usage/model status without credential leaks | AiConnections, AiCodexClient |
 | AI-04 | P2 | AI project edits — task import only | Typed broader proposals, explicit diff review, stale-revision protection and one Undo | AI task draft, commands |
 | MCP-01 | P1 | Generic MCP client — existing subset | Broader authentication/server profiles, reconnect and capability-specific errors | McpConnections, settings/editor |
-| MCP-02 | P2 | Project MCP host — missing | Least-privilege read/edit tools with reviewed mutation and local permissions | New host module |
+| MCP-02 | P2 | Project MCP host — first version (Claude Code control) | Done: read/navigation tools, reviewed single-Undo changes with stale-revision checks, private socket, on/off switch, Claude Code registration. Remaining: read-only mode or per-tool permissions, calendar/working-time, timeline and formatting tools, PDF export, Windows/Linux live qualification | PlanoraMcpHost, PlanoraMcpTools, PlannerWindow.Mcp, ClaudeCodeSetup |
 | AUTO-01 | P2 | Local rules — missing | Deterministic triggers/actions, recursion guards, preview/history and Undo | New automation engine |
 | SYNC-01 | P2 | Personal sync — missing | Conflict detection/merge, offline versioning and no silent last-writer data loss | Persistence and sync interfaces |
 | MOB-01 | P3 after macOS | Android and iOS — planned | Start after macOS completion; evaluate framework/shared core and agree phone/tablet scope | Future mobile clients/adapters |

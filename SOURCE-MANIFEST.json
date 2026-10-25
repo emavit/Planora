@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 16573,
-      "sha256": "9114da1827e76b8b31c9e0350777a343a9bb5887ce75a4e92da06a6d5a9e5ac8"
+      "bytes": 18591,
+      "sha256": "2b28e005ec3699d6bcaf466f9d3cafb69f5d9b351bebc77b89b00068976dfc04"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9517,
-      "sha256": "2196abe39fa9d002bc9f463db0f8e6cbb551aaa58d41cdf0f194dd781c819217"
+      "bytes": 9756,
+      "sha256": "aa7da1a6f7cbe29a5ccfb99c845176e6a3ed754b1c9f403ea3580eff5636d682"
     },
     {
       "path": "SECURITY.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "docs/CODE-INVENTORY.md",
-      "bytes": 6781,
-      "sha256": "411009b154a0650f2e385b0ad47b0367c3ff188565d1a1ff5d0a7e681ba82028"
+      "bytes": 7257,
+      "sha256": "81c4f2bbc1aa878156dd474627d3e9e2c7d206742301f85394d70188c55a9651"
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
@@ -127,13 +127,13 @@
     },
     {
       "path": "docs/IMPROVEMENTS.md",
-      "bytes": 18268,
-      "sha256": "dd52f5f5ada0eb87d18325f46ace13ec761f67e78d760f82dd7722ff66365058"
+      "bytes": 18564,
+      "sha256": "a54165db300accc04c93fbfb626a874d038c233d1e381b74a3a53e265bcc71f9"
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 8652,
-      "sha256": "ee06723b948a98bcb1697c36f7c1d93d29cb32ef01567575d17091ed61352239"
+      "bytes": 9144,
+      "sha256": "8aa2230c0136dd0ca1dd7a30d58b3d2b096ce7f07a5752c8868b44aa6895b88f"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -142,8 +142,8 @@
     },
     {
       "path": "docs/PLATFORM_GUIDE.md",
-      "bytes": 2229,
-      "sha256": "6dbe7c01aa8856b490bf81fec04041eab1d607f3b2e36feaa287e8d255e22cc8"
+      "bytes": 2831,
+      "sha256": "843b9be3783fa32acf397b600e037df912353b27180df2bf5b0ff1ed1af9b7a5"
     },
     {
       "path": "docs/RECOVERY.md",
@@ -172,8 +172,8 @@
     },
     {
       "path": "docs/USER-GUIDE.md",
-      "bytes": 14044,
-      "sha256": "7b5231f306b62660b4ab50161e7566159d23c136e1499323e6565c20a7b27cc4"
+      "bytes": 15073,
+      "sha256": "a62b05a8c42829139dbe5503a239ca8046505004aa70fc71d9a97d11ee380412"
     },
     {
       "path": "docs/WORKING-APP-PLAN.md",
@@ -342,8 +342,8 @@
     },
     {
       "path": "project-app/ProjectDesk/AiConnectionEditor.cs",
-      "bytes": 7156,
-      "sha256": "7ff80e64e8acc4a93f1ff255391bd5d4c9c8304cddafd0ae3d70794267ae0194"
+      "bytes": 7891,
+      "sha256": "cd7286ae977323682c0eab326605afa26f423128539ddbcd621fb23addc22bcb"
     },
     {
       "path": "project-app/ProjectDesk/AiConnections.cs",
@@ -384,6 +384,11 @@
       "path": "project-app/ProjectDesk/ChartDrawing.cs",
       "bytes": 3904,
       "sha256": "3d6940ebc6a08c225a352cf9b3ddfa4a87cd270e1f9fa37813102482e704b121"
+    },
+    {
+      "path": "project-app/ProjectDesk/ClaudeCodeSetup.cs",
+      "bytes": 9383,
+      "sha256": "eceb21efd1b0b0c920248eabc75573e437ba546d1fe810d79924a9b4430a58fa"
     },
     {
       "path": "project-app/ProjectDesk/CloseFlowValidation.cs",
@@ -497,8 +502,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorSettings.cs",
-      "bytes": 7369,
-      "sha256": "6173dcab27d0578536120b8eb9cf47eec17b68d50e4c15d922facec1c0002a05"
+      "bytes": 7534,
+      "sha256": "b7f288805cef44bfc9dc45a1c24eb0a66368aa3e6fab0ee3bd0c5717efdcba96"
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorsWindow.cs",
@@ -517,8 +522,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpServerEditor.cs",
-      "bytes": 7584,
-      "sha256": "dd1abe54eb23260f7d8448bf19617e14c5221d6a8cdd24498d3e8d4faed5b819"
+      "bytes": 7590,
+      "sha256": "1daf4e6705d7cebd5bca1edf27e8713092b048eb9549676087e1e596c384971d"
     },
     {
       "path": "project-app/ProjectDesk/McpTaskImport.cs",
@@ -606,6 +611,11 @@
       "sha256": "1286a3ffd28ed29f613964d45aa9ac77e40ace17cb5b215b4245dee438e9071e"
     },
     {
+      "path": "project-app/ProjectDesk/PlannerWindow.Mcp.cs",
+      "bytes": 24899,
+      "sha256": "7f680551484771e20bd9285b17ace8e33af251219605143e585e82dc6d2c3114"
+    },
+    {
       "path": "project-app/ProjectDesk/PlannerWindow.NativeMenu.cs",
       "bytes": 2257,
       "sha256": "b7780c0d255206bb3304a688640640951d26acac345e1d013ea830faf32a3ba3"
@@ -632,13 +642,28 @@
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.cs",
-      "bytes": 62795,
-      "sha256": "30d47383f4edde3cecbcc51aa15fd1d72d17be1fdf725ec19bad0e1873423a88"
+      "bytes": 63109,
+      "sha256": "969bc74541ba263dc1240efc05453c9c06bf52ffe89152346a59b201ba5b025f"
     },
     {
       "path": "project-app/ProjectDesk/PlanningLibraryValidation.cs",
       "bytes": 5477,
       "sha256": "176e7f602724b7db4a16908a8d079d8cdb7fdae8c7c835d2f6bdc15a039f0a86"
+    },
+    {
+      "path": "project-app/ProjectDesk/PlanoraMcpHost.cs",
+      "bytes": 9910,
+      "sha256": "6e2b7456638eb18407071daa5ef6c629d1f93cf12bf2dc17160214eabe8a3b5d"
+    },
+    {
+      "path": "project-app/ProjectDesk/PlanoraMcpTools.cs",
+      "bytes": 8592,
+      "sha256": "04f21f7349016cd74df52669b034bc6d94dd8d17de342c87be5e3df937b81c1c"
+    },
+    {
+      "path": "project-app/ProjectDesk/PlanoraMcpValidation.cs",
+      "bytes": 20908,
+      "sha256": "84f94ae8aed0afe92aca11d51463169b11c03277bab8ac70cd4f022423ba1b99"
     },
     {
       "path": "project-app/ProjectDesk/PlanoraPackage.cs",
@@ -647,8 +672,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 36340,
-      "sha256": "8b3ed855310e4c7a7973297bda9efe7a7fc5cc77bc39cfaa1d509b26f0a3511c"
+      "bytes": 36733,
+      "sha256": "cd0b8611f2abc3ff3d4238a2b8799f52a7116116ffeb94f3b2fecec1aa279ba4"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
@@ -677,8 +702,8 @@
     },
     {
       "path": "project-app/ProjectDesk/ProjectSession.cs",
-      "bytes": 29600,
-      "sha256": "0e153d224f05b9cd080e64c20253db107d7186ebb1175a748f2e23434635bd32"
+      "bytes": 30512,
+      "sha256": "d71f8c4550d62bd70fe40f632aa66a24cebd223305829e1a67ef420bedb7cc5d"
     },
     {
       "path": "project-app/ProjectDesk/PublicMppValidation.cs",
@@ -752,8 +777,8 @@
     },
     {
       "path": "project-app/ProjectDesk/TaskColumns.cs",
-      "bytes": 9649,
-      "sha256": "d7531a3f9ca7602ad0a02b100d2460668b3860adc28cfe5e55ff48919060276a"
+      "bytes": 9700,
+      "sha256": "b84c8c80443d66c8f57a52496aca743466f4ba7953bc2afd413bd3d33938c4cb"
     },
     {
       "path": "project-app/ProjectDesk/TaskDetailsModule.cs",
@@ -7962,8 +7987,8 @@
     },
     {
       "path": "scripts/validate.ps1",
-      "bytes": 2734,
-      "sha256": "43d23b4b2ec273fcde58768ab593f6cf17ab6928256d6205ce3d3aa998740285"
+      "bytes": 2750,
+      "sha256": "07fc83c773d70c153de49147247b2eebe5f526e87c0d2717bb02ab92c6a67713"
     },
     {
       "path": "scripts/verify-mpp-regressions.ps1",

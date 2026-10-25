@@ -116,6 +116,7 @@ public sealed class ViewPreferences {
     public bool CriticalTasks {get;set;}=true;
     public int BaselineNumber {get;set;}
     public bool ShowSidebar { get; set; } = false;
+    public bool ClaudeCodeControl {get;set;}=true;
     public Dictionary<string,List<int>> TimelineTasks { get; set; } = [];
     public Dictionary<string,TimelineLayout> TimelineLayouts {get;set;}=[];
     public Dictionary<string,DateAxisView> GanttAxes {get;set;}=[];

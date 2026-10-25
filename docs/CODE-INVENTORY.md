@@ -94,6 +94,11 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | PlannerWindow.Workspace.cs | Compact navigation and optional inspector composition |
 | PlannerWindow.NativeMenu.cs | macOS menu bar mirror of the in-window menu |
 | MacKeychain.cs | macOS Keychain adapter behind McpCredentialStore |
+| PlanoraMcpHost.cs | Claude Code control: private socket MCP host and the `--mcp-connect` relay |
+| PlanoraMcpTools.cs | Claude Code control tool catalogue and instructions |
+| PlannerWindow.Mcp.cs | Claude Code tools on the open project: reads, navigation, reviewed single-Undo changes |
+| ClaudeCodeSetup.cs | Claude Code CLI discovery, `claude mcp add` registration and the Claude Code window |
+| PlanoraMcpValidation.cs | Claude Code control checks (`--mcp-host-test`) |
 | TaskInspectorModule.cs | Validated draft editing bound to task identity |
 | SavedWorkspaceView.cs | Saved workspace preferences and dialogs |
 | StarterTemplates.cs | Original schedule recipes and atomic creation state |

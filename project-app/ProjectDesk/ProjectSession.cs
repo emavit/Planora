@@ -44,11 +44,20 @@ public sealed partial class ProjectSession : IDisposable {
     public void DiscardRedo(){if(_position<_commands.Count)_commands.RemoveRange(_position,_commands.Count-_position);}
     public bool CanUndo=>_position>0;
     public bool CanRedo=>_position<_commands.Count;
+    public string? UndoLabel=>_position>0?_commands[_position-1].Name:null;
+    public string? RedoLabel=>_position<_commands.Count?_commands[_position].Name:null;
     public void EditCells(IEnumerable<TextCellChange> changes,string label="Paste cells"){
         var values=changes.ToArray();if(values.Length==0)return;
         using var staging=new ProjectSession{_baseBytes=_baseBytes,Document=Replay(_position),SourcePath=SourcePath,_position=_position,_deferAutoDates=true};staging._commands.AddRange(_commands.Take(_position));
         foreach(var change in values)staging.EditText(change.TaskUid,change.Key,change.Text);
         var affected=values.Where(c=>DateInputs.Contains(c.Key)).Select(c=>c.TaskUid).Distinct().ToArray();var explicitDates=values.Where(c=>c.Key is "Start" or "Finish"&&!string.IsNullOrWhiteSpace(c.Text)).Select(c=>(c.TaskUid,c.Key)).ToHashSet();if(affected.Length>0)staging.Execute("Update automatic dates",d=>ComputeAutoDates(d,affected,explicitDates), DurableCommand.Dates(affected,explicitDates));
+        var steps=staging._commands.Skip(_position).ToArray();if(steps.Length>0)Execute(label,d=>{foreach(var step in steps)step.Apply(d);}, DurableCommand.Batch(steps.Select(s=>s.Command)));
+    }
+    // Several reviewed operations become one Undo step. They run against a staging copy with automatic dates deferred,
+    // exactly as durable replay applies a batch; callers include an AutomaticDates step when schedules must follow.
+    public void Group(string label,Action<ProjectSession> operations){
+        using var staging=new ProjectSession{_baseBytes=_baseBytes,Document=Replay(_position),SourcePath=SourcePath,_position=_position,_deferAutoDates=true};staging._commands.AddRange(_commands.Take(_position));
+        operations(staging);
         var steps=staging._commands.Skip(_position).ToArray();if(steps.Length>0)Execute(label,d=>{foreach(var step in steps)step.Apply(d);}, DurableCommand.Batch(steps.Select(s=>s.Command)));
     }
     public void RenumberWbs()=>Execute("Renumber WBS",d=>{void Number(IEnumerable<ProjectTask> tasks,string prefix){int i=0;foreach(var t in tasks.Where(t=>t.Uid!=0)){string code=prefix+(++i);t.Wbs=code;Number(t.Children,code+".");}}Number(d.Tasks,"");}, DurableCommand.For("RenumberWbs"));

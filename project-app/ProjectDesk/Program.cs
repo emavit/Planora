@@ -40,6 +40,8 @@ static class Program {
         if(args.FirstOrDefault()=="--mcp-demo-server")return McpDemoServer.Run().GetAwaiter().GetResult();
         if(args.FirstOrDefault()=="--visual-review")return VisualReviewValidation.Run(args[1],args[2]);
         if(args.FirstOrDefault()=="--mcp-test")return McpValidation.Run(args[1]);
+        if(args.FirstOrDefault()=="--mcp-connect")return PlanoraMcpBridge.Run(!args.Contains("--no-launch")).GetAwaiter().GetResult();
+        if(args.FirstOrDefault()=="--mcp-host-test")return PlanoraMcpValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--public-mpp-test")return PublicMppValidation.Run(args[1],args[2]);
         if(args.FirstOrDefault()=="--theme-test")return ThemeValidation.Run(args[1],args[2]);
         if(args.FirstOrDefault()=="--icons-test")return IconValidation.Run(args[1],args[2]);
@@ -261,6 +263,7 @@ public sealed class DesktopApp : Application {
             desktop.MainWindow = new PlannerWindow(session,stability?Path.Combine("project-app/previews","native-check-views.json"):null);
             if(planora&&path!=null)((PlannerWindow)desktop.MainWindow).OpenPlanoraCopy(path);
             if(stability)NativeStabilityCheck.Start((PlannerWindow)desktop.MainWindow,session,desktop);
+            else{((PlannerWindow)desktop.MainWindow).StartClaudeCodeControl();desktop.Exit+=(_,_)=>((PlannerWindow)desktop.MainWindow).ReleaseClaudeCodeControl();}
             // macOS delivers Finder Open/Open With as activation events rather than command-line arguments.
             if(TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activation)activation.Activated+=(_,e)=>{if(e is FileActivatedEventArgs opened&&desktop.MainWindow is PlannerWindow window){var files=opened.Files.Select(f=>f.TryGetLocalPath()).OfType<string>().ToList();if(files.Count>0)Dispatcher.UIThread.Post(()=>_=window.OpenFromSystem(files[0],files.Count-1));}};
             desktop.Exit += (_, _) => session.Dispose();

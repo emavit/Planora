@@ -92,6 +92,8 @@ AI → ChatGPT / Claude opens the assistant panel. Connection Settings supports 
 
 Select task rows before opening AI if you want to include them. Review and Send shows the outgoing content. Task drafts require review before import; an answer alone does not change the project. Chart-image attachments and the full graphical onboarding flow remain unfinished.
 
+**Claude Code.** To work on the open project with Claude using your Claude subscription, choose Connectors → Claude Code… (or Connect Claude Code… in the Claude connection settings) and select Connect Claude Code. If Planora cannot find Claude Code, copy the shown command into Terminal. Then start a new Claude Code session and ask, for example, "List the tasks in my Planora project" or "Add a testing phase after design". Claude Code can read tasks, resources and assignments, switch views and select tasks without asking. Every change it proposes, including Undo, opening another project or saving a copy, appears in Planora with the old and new values; nothing changes until you choose Apply Change, and the result is one Undo step. If you edit the project meanwhile, Claude must read it again before proposing. Planora starts automatically when Claude Code needs it. Clear "Allow Claude Code to read this project and propose changes" to switch this off. On a Mac, move Planora.app to Applications before connecting.
+
 Connectors provides general MCP setup. Configure a trusted server's supported URL or local executable and inspect its tools. Review proposed task imports. Do not assume all server authentication modes or arbitrary tool schemas are supported. Never add secrets to GitHub or a project file.
 
 ## 12. Troubleshooting

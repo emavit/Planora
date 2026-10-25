@@ -51,7 +51,7 @@ On a Mac, `pwsh ./scripts/build.ps1 -Runtime osx-arm64` produces a self-containe
 ./scripts/validate.ps1
 ```
 
-The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the AI and MCP connector checks (local fixtures, no live provider calls) and the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. `-IncludePerformance` pastes 500/2,000/5,000-task plans and reports paste, window, edit, reschedule, undo, save and reopen timings in `perf-test/results.json`; it has no timing budgets yet. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the AI, MCP connector and Claude Code control checks (local fixtures, no live provider calls) and the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. `-IncludePerformance` pastes 500/2,000/5,000-task plans and reports paste, window, edit, reschedule, undo, save and reopen timings in `perf-test/results.json`; it has no timing budgets yet. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
 
 Check the public MPP corpus against the documented baseline:
 
@@ -80,7 +80,7 @@ Type a task name in the blank row; Enter/Tab commits and Esc cancels. Use predec
 
 Recovery checks every 15 seconds during normal use. File → Recovery opens retained checkpoints; the last few seconds before a crash may not have been saved. Keep saving project copies normally. [Recovery guide](docs/RECOVERY.md).
 
-AI/MCP are optional. Credentials belong in platform credential storage, never in the repository or project packages. Provider fixture tests do not qualify real sign-in/inference, and subscriptions do not automatically include API usage.
+AI/MCP are optional. To work with Claude on the open project using your Claude subscription, choose Connectors → Claude Code…: Claude Code reads the project and proposes changes, and Planora applies each one only after you approve it. Credentials belong in platform credential storage, never in the repository or project packages. Provider fixture tests do not qualify real sign-in/inference, and subscriptions do not automatically include API usage.
 
 ## Public examples
 
