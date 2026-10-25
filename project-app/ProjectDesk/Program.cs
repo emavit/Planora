@@ -244,6 +244,7 @@ static class Program {
 
 public sealed class DesktopApp : Application {
     public override void Initialize() {
+        Name = AppBrand.Name;
         Styles.Add(new FluentTheme());
         Styles.Add(new StyleInclude(new Uri("avares://Planora/")) { Source = new Uri("avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml") });
         RequestedThemeVariant = Avalonia.Styling.ThemeVariant.Default;

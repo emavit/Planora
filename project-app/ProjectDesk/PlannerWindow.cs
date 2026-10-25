@@ -150,7 +150,7 @@ public sealed partial class PlannerWindow : Window {
         ribbon.AddTab("AI",RibbonModule.Group("Planora AI",Action("ChatGPT / Claude",ShowAi,true)));
         ribbon.AddTab("Connectors",RibbonModule.Group("MCP connections",Action("Manage MCP Servers",ShowMcpConnectors,true)));
         ribbon.AddTab("Help",RibbonModule.Group("Commands",Action("All Project Commands…",AllCommands),Action("Go To…",GoToTask),Action("Replace…",ReplaceTaskNames)),RibbonModule.Group("Planora",Action("Help",ShowHelp)));
-        AddAppearanceControls(menus,ribbon);
+        AddAppearanceControls(menus,ribbon);InstallNativeMenu(menus);
         ribbon.SelectTab("Planning");DockPanel.SetDock(_glassNavigation,Dock.Top);root.Children.Add(_glassNavigation);Activated+=(_,_)=>UpdateGlassNavigation();
         var workspaceNavigation=BuildWorkspaceNavigation();DockPanel.SetDock(workspaceNavigation,Dock.Top);root.Children.Add(workspaceNavigation);
         _workspace.Margin=new Thickness(12,8,12,0);_workspace.Children.Add(_timeline);Grid.SetRow(_timelineDivider,1);_workspace.Children.Add(_timelineDivider);

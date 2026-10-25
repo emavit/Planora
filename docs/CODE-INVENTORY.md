@@ -92,6 +92,7 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | File | Responsibility |
 |---|---|
 | PlannerWindow.Workspace.cs | Compact navigation and optional inspector composition |
+| PlannerWindow.NativeMenu.cs | macOS menu bar mirror of the in-window menu |
 | TaskInspectorModule.cs | Validated draft editing bound to task identity |
 | SavedWorkspaceView.cs | Saved workspace preferences and dialogs |
 | StarterTemplates.cs | Original schedule recipes and atomic creation state |

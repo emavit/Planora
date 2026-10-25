@@ -95,6 +95,13 @@ internal static class WorkspaceValidation {
         window.SetCompactWorkspace(true);
         Check(ViewPreferences.Load(settings).InspectorWidth==380,"Inspector width persists");
         string mpp=Path.Combine(output,"workspace-"+Guid.NewGuid()+".mpp");session.SaveCopy(mpp,true);using(var readback=new ProjectSession()){readback.Open(mpp);Check(readback.Tasks.Any(t=>t.Name=="Architecture")&&readback.Tasks.Any(t=>t.Name=="Blank row entry"),"Inspector and grid edits survive MPP readback");}
+        // The macOS menu bar mirrors the in-window menu; native items must run the same commands and track checks.
+        var menuBar=window.GetVisualDescendants().OfType<Menu>().Single();var native=PlannerWindow.MirrorMenu(menuBar);
+        Check(native.Items.OfType<NativeMenuItem>().Select(i=>i.Header).SequenceEqual(menuBar.Items.OfType<MenuItem>().Select(i=>i.Header as string)),"Native menu mirrors every menu bar title");
+        var themeItems=native.Items.OfType<NativeMenuItem>().Single(i=>i.Header=="Appearance").Menu!.Items.OfType<NativeMenuItem>().Single(i=>i.Header=="Theme").Menu!.Items.OfType<NativeMenuItem>().ToDictionary(i=>i.Header!);
+        themeItems["Dark"].Command!.Execute(null);Pump();Check(window.ThemeMode=="Dark"&&themeItems["Dark"].IsChecked&&!themeItems["Automatic"].IsChecked,"Native menu item runs its command and mirrors radio checks");
+        themeItems["Automatic"].Command!.Execute(null);Pump();Check(window.ThemeMode=="Automatic"&&themeItems["Automatic"].IsChecked&&!themeItems["Dark"].IsChecked,"Native menu restores the automatic theme");
+        Check(menuBar.IsVisible,"In-window menu stays visible where no native menu is exported");
         window.CloseForValidation();var reopened=new PlannerWindow(session,settings);reopened.Show();Pump();Check(reopened.CompactWorkspace&&reopened.InspectorVisible,"Workspace preferences restore");reopened.CloseForValidation();
         File.WriteAllText(Path.Combine(output,"checks.json"),JsonSerializer.Serialize(checks,new JsonSerializerOptions{WriteIndented=true}));Console.WriteLine($"PASS: {checks.Count} workspace/inspector checks");return 0;
     }
