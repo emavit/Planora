@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 11642,
-      "sha256": "cc5768885af0afb7543371323fa2a6d7d674da0f6c4f215ca46665b479f3c1df"
+      "bytes": 11800,
+      "sha256": "4025c9f110bf5e554a1ce585d5c561997a1ba1d11032d51b838ec6d849d67aaa"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 6993,
-      "sha256": "6609409d9182678d04059592cc70afd08d7de022cacf1efbd63d992ae216caac"
+      "bytes": 6950,
+      "sha256": "84a8c4ffdc4806f8e6c635c642327c4e77221b5bacc8fdeeea976ba27c1d224e"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -447,8 +447,8 @@
     },
     {
       "path": "project-app/ProjectDesk/FormattingValidation.cs",
-      "bytes": 15980,
-      "sha256": "56662fdcdfce2b29d359976e719a5117a9234d0257a306afbff1ee36b4a72529"
+      "bytes": 16188,
+      "sha256": "29e58d3e509c03604101bc03204a63724e3c6ac7718435bf7e5688eb9a01a0ca"
     },
     {
       "path": "project-app/ProjectDesk/FormattingWindows.cs",
@@ -617,8 +617,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.cs",
-      "bytes": 61742,
-      "sha256": "01ee7c426e5ec24440f96c059da7e0d2de72038a2760692046d6e576a2ec0dee"
+      "bytes": 61974,
+      "sha256": "365541df85a9910ab08ed8bf17083dbc63e01224124859fc4df770c0e33faec8"
     },
     {
       "path": "project-app/ProjectDesk/PlanningLibraryValidation.cs",

@@ -15,6 +15,7 @@
 - The AI (56) and MCP (55) connector checks now run with `dotnet Planora.dll` as well as the apphost, so `validate.ps1 -IncludeExtended` and CI include them. Their child processes previously started `Environment.ProcessPath`, which is the `dotnet` host in that case; a shared `Program.SelfCommand` (already the logic behind the MCP demo server) now builds the command line.
 - Corrected the `PlanoraPackage` header comment, which said presentation metadata was not part of the format. `.planora` packages do carry formatting, rich notes, timeline lanes and chart axes (covered by the recovery UI check).
 - On macOS the application menus appear in the system menu bar. The in-window menu remains the single definition: a native mirror raises the same items (including the Theme submenu and checkbox/radio items, whose state stays in sync), and the in-window menu is hidden only when macOS exports the native menu, so Windows and headless runs are unchanged. The app reports its name as Planora to the platform. Workspace check: 61 (4 new menu-mirror assertions). Menu shortcut labels are not shown yet.
+- Bold/Italic/Underline tooltips name ⌘B/⌘I/⌘U on macOS instead of Ctrl, matching the shortcuts the window already handles there. Formatting check: 59.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 
