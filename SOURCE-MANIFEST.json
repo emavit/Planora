@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 13275,
-      "sha256": "adfd573b763f3546b110ad6aafc800b595621635e4079bc483dd8cab710340f6"
+      "bytes": 13542,
+      "sha256": "44610fe05b2e87c759df0993ab150c07dffb0a154583e0d4e1538799c5803e36"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 7547,
-      "sha256": "0090b2602f3de680f5606b8c1e6f0d14f99494e31d27c1de15e6c0144602a2ff"
+      "bytes": 7637,
+      "sha256": "03ebf2356f348b7936cd1f15c4dc0cc83ecbce65ef72d2463a99c73b0d39ed64"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -417,8 +417,8 @@
     },
     {
       "path": "project-app/ProjectDesk/DesignTokens.cs",
-      "bytes": 9270,
-      "sha256": "44470a4e77e520bfece28426a2be541282a68c0484c73766a15f01bb24ca2e07"
+      "bytes": 9421,
+      "sha256": "c91e68619f6574905dcca7abc14f2bf175cb16e6fe5924c753c9a5abc843c416"
     },
     {
       "path": "project-app/ProjectDesk/DurableCommands.cs",
