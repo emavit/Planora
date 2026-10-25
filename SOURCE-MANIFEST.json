@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 16566,
-      "sha256": "930e4b2fa80fb97c9e62faf24c0635a47451097fde8e82bef86ab1a37d1aee94"
+      "bytes": 16573,
+      "sha256": "9114da1827e76b8b31c9e0350777a343a9bb5887ce75a4e92da06a6d5a9e5ac8"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9100,
-      "sha256": "6846aff7774a75478f62a0cae8f3c340a046e46d87caeef93d5d487da2584a3c"
+      "bytes": 9517,
+      "sha256": "2196abe39fa9d002bc9f463db0f8e6cbb551aaa58d41cdf0f194dd781c819217"
     },
     {
       "path": "SECURITY.md",
@@ -133,7 +133,7 @@
     {
       "path": "docs/MAC-QUALIFICATION.md",
       "bytes": 8652,
-      "sha256": "6d30a4db3a791a18cb6ae18b8c1f43a5481e7b5e4081dd5997342a440ab8b91c"
+      "sha256": "ee06723b948a98bcb1697c36f7c1d93d29cb32ef01567575d17091ed61352239"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -162,8 +162,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 12987,
-      "sha256": "b8ed4d2c6da7c1882936147c19ecb1a1186b169be3fcf7b8b1287a9a7384eb22"
+      "bytes": 13542,
+      "sha256": "d03364428c931b6bea913f1bfa3d4480e9945e7b567b762e07cea6e219a00116"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
@@ -663,7 +663,7 @@
     {
       "path": "project-app/ProjectDesk/ProjectDesk.csproj",
       "bytes": 1362,
-      "sha256": "a36427419c46a00613eff81272f6af6de2d39079d78b13007d71aefc601f35fe"
+      "sha256": "e45c97fa422544360bf6d2c60c819e8b52edf06a4f076b43816205220b791dc8"
     },
     {
       "path": "project-app/ProjectDesk/ProjectPresentation.cs",
@@ -7861,6 +7861,16 @@
       "sha256": "7aeb7bc4594639420b67baccc3986044b99c216b38f9f8c8b483bdfb9160cd31"
     },
     {
+      "path": "releases/0.3.11/release.json",
+      "bytes": 470,
+      "sha256": "08592b9a4c12492774d2574c347365fee4ee02c54ad8f50de02fa66f7d145625"
+    },
+    {
+      "path": "releases/0.3.11/release.md",
+      "bytes": 1826,
+      "sha256": "3171c73541b9dbb07cd2fbb1a5b334ee9a60ae9961969c97e2b13bc2b5752e0e"
+    },
+    {
       "path": "releases/0.3.3/release.json",
       "bytes": 356,
       "sha256": "fdf6dcabf4be485bcacd6eb4ec3c1d9899e718a4a8a090f97c7cedc5be00de23"
@@ -7932,8 +7942,8 @@
     },
     {
       "path": "releases/release.md",
-      "bytes": 2895,
-      "sha256": "e8071a0846358bab6cdf0793c62a0e6fec136dc07591a2e4462cf0fe5486c3e6"
+      "bytes": 3058,
+      "sha256": "fcdfd452d460b71af8d577c44ad20e5ad7ee76ab1ecf15604fe6813e0f23e98c"
     },
     {
       "path": "scripts/build.ps1",

@@ -4,6 +4,7 @@ The usual cadence is two user-facing features per release. The user requested a 
 
 | Version | Previous | Feature 1 | Feature 2 | Changes |
 |---|---|---|---|---|
+| 0.3.11 | 0.3.10 | Planora.app for macOS (menu bar, Finder, Keychain, system font) | All documented public MPP failures fixed | [release.md](0.3.11/release.md) |
 | 0.3.10 | 0.3.9 | One-click timeline visibility | User-requested focused release | [release.md](0.3.10/release.md) |
 | 0.3.9 | 0.3.8 | Project Entry column preset | Colored icons and dropdown styling | [release.md](0.3.9/release.md) |
 | 0.3.8 | 0.3.7 | Modern Planora identity | Apple/Office ribbon and rounded Gantt | [release.md](0.3.8/release.md) |

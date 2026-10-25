@@ -1,0 +1,17 @@
+{
+  "version": "0.3.11",
+  "previousVersion": "0.3.10",
+  "features": [
+    "Planora.app for macOS with the macOS menu bar, Finder document opening, Keychain-stored secrets and the system font",
+    "All ten documented public MPP corpus failures fixed in the shared engine (88 of 88 stages)"
+  ],
+  "checks": [
+    "workspace-test",
+    "icons-ui-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test",
+    "ai-test",
+    "mcp-test"
+  ]
+}

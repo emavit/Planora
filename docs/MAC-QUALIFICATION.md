@@ -10,7 +10,7 @@ Status: **in progress — not qualified.** This report records macOS evidence ag
 | macOS | 26.6.2 (25G83) |
 | .NET | SDK 10.0.402, runtime 10.0.13, osx-arm64 |
 | PowerShell | 7.6.8 (repository scripts run unchanged with `pwsh`) |
-| Baseline | 0.3.10 source (`eb42efe`) plus the macOS validation branch |
+| Baseline | 0.3.11 (macOS validation work on top of 0.3.10, `eb42efe`) |
 
 ## Summary
 
