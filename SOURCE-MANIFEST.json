@@ -7,8 +7,8 @@
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 280,
-      "sha256": "6ce7d51a46613e5f78737b874b7d9bd4619518a74194c5d954267f18eeca3e7c"
+      "bytes": 294,
+      "sha256": "c77c8acb335da8370e4e2b96c72b9b32fc5ae889dcbe391062b66e9fc931d0a2"
     },
     {
       "path": ".github/ISSUE_TEMPLATE/bug_report.md",
@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 12319,
-      "sha256": "fa42e957b47e0ff280b544c016e2d44fad3dffaf7a4439255383011266a9fe14"
+      "bytes": 12963,
+      "sha256": "d8242b1475be12bab84d9aeea0a6618ad9274a9256440aef7ac8389f156bb8c1"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8915,
-      "sha256": "b6d51df67f2f1cea815d97be6f0ceab871bc1c39cb35fee0c744a58340ac3ba1"
+      "bytes": 9100,
+      "sha256": "6846aff7774a75478f62a0cae8f3c340a046e46d87caeef93d5d487da2584a3c"
     },
     {
       "path": "SECURITY.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 7160,
-      "sha256": "9901b2f08a15ff4f7328d4a15b80f090087ecc021c82cf6d3c1498ed7fe6dd73"
+      "bytes": 7495,
+      "sha256": "aedaca2901898923e30bcc74cfe882035790dc5fc33f5cd931a2bb761eeca95a"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -357,8 +357,8 @@
     },
     {
       "path": "project-app/ProjectDesk/AppBrand.cs",
-      "bytes": 2800,
-      "sha256": "2e3e44ace3cde10fd1fa001758730ef5516c3f07bd618d89932d79b81f557d3c"
+      "bytes": 4403,
+      "sha256": "109d9e79fcfea73995aa9bfaa01cc7ce25c21f46ef7ed56e0da615be9cf35bf8"
     },
     {
       "path": "project-app/ProjectDesk/AutoSchedulingValidation.cs",
@@ -472,8 +472,8 @@
     },
     {
       "path": "project-app/ProjectDesk/IconValidation.cs",
-      "bytes": 5779,
-      "sha256": "19ca5365ee661364f5428d79882ba8dbf484fb0806f5aa74391096e971e4fce4"
+      "bytes": 7082,
+      "sha256": "be89c6d722473150a8a89144c0f01f66c8291e19f1b3312f33f40bd32a6291a0"
     },
     {
       "path": "project-app/ProjectDesk/MacKeychain.cs",
@@ -539,6 +539,11 @@
       "path": "project-app/ProjectDesk/NetworkDiagramModule.cs",
       "bytes": 5477,
       "sha256": "6b9c6177f07676971a2f70c00c2a019cddbe7770c5824f5d95eb28d4ccfa5e11"
+    },
+    {
+      "path": "project-app/ProjectDesk/Packaging/macOS/Info.plist",
+      "bytes": 2942,
+      "sha256": "2b2a3cecd9f24d7281fda3df0ddc14bc021656e15e1143b09f04cf2c955ce736"
     },
     {
       "path": "project-app/ProjectDesk/PdfExport.cs",
@@ -694,6 +699,11 @@
       "path": "project-app/ProjectDesk/ResourceSheetValidation.cs",
       "bytes": 4085,
       "sha256": "c8c717277ec6299e7c5f657f6dc5559f97f9b87001ab3c80cab54dce7230f808"
+    },
+    {
+      "path": "project-app/ProjectDesk/Resources/Planora.icns",
+      "bytes": 145073,
+      "sha256": "6fbc514c255d5c4e8b33346d9effbacdde051407c6c49aa7dfe1fcf7e601a4df"
     },
     {
       "path": "project-app/ProjectDesk/Resources/Planora.ico",
@@ -7922,8 +7932,8 @@
     },
     {
       "path": "scripts/build.ps1",
-      "bytes": 1306,
-      "sha256": "c189fdb584f1e4ef4f234d146e520c2eb1348b724168a8dee7552b1a3aeeccec"
+      "bytes": 2548,
+      "sha256": "28c0cf436bb30637b342676293ec80cf3adb5e496529e089596a4bf7fed24db7"
     },
     {
       "path": "scripts/release.ps1",

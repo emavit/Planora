@@ -41,7 +41,7 @@ Windows self-contained build (PowerShell):
 ./scripts/build.ps1 -Runtime win-x64
 ```
 
-An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; this is not evidence of macOS runtime qualification. Python is not required.
+On a Mac, `pwsh ./scripts/build.ps1 -Runtime osx-arm64` produces a self-contained `Planora.app` (icon, `.planora`/`.mpp` document types, notices in `Contents/Resources`). It is unsigned; build it on macOS so the executable bit is kept. See [macOS qualification](docs/MAC-QUALIFICATION.md) for what has been verified. Python is not required.
 
 ## Validate
 

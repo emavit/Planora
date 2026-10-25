@@ -5,6 +5,7 @@
 *.ps1 text eol=lf
 *.png binary
 *.ico binary
+*.icns binary
 *.bin binary
 # Preserve exact fixture bytes for SHA-256 checks.
 examples/public-mpp/*.mpp binary
