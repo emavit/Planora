@@ -3,6 +3,7 @@
 ## Unreleased — macOS validation
 
 - Validation checks send ⌘ instead of Ctrl for wheel zoom and keyboard paste on macOS, matching the app's platform shortcuts. Timeline UI and multi-timeline checks pass on macOS (31 each).
+- Fixed the Windows CI failure present since the public example corpus was added: `LICENSE-MPXJ.txt` was converted to CRLF on Windows checkouts, so its pinned SHA-256 never matched and the Windows build/model/UI steps were skipped. The file now keeps its exact bytes like the other hashed fixtures.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 

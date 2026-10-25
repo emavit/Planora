@@ -9,3 +9,4 @@
 # Preserve exact fixture bytes for SHA-256 checks.
 examples/public-mpp/*.mpp binary
 examples/public-mpp/*.xml -text
+examples/public-mpp/LICENSE-MPXJ.txt -text

@@ -7,8 +7,8 @@
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 237,
-      "sha256": "1b1e4cbc001eb913c48a7b2fc3e1bf34de03ce13caa9cfc5c411d8d745786386"
+      "bytes": 280,
+      "sha256": "6ce7d51a46613e5f78737b874b7d9bd4619518a74194c5d954267f18eeca3e7c"
     },
     {
       "path": ".github/ISSUE_TEMPLATE/bug_report.md",
@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 6600,
-      "sha256": "a38beffd346f87a1127edc553852cce10bc3c2f8a5cd25d421f6133d3b43f6b2"
+      "bytes": 6899,
+      "sha256": "ff2d8352cb3246a1c9f985b2485ea1dcf1c271999262cc605dff511d18a09c11"
     },
     {
       "path": "CLAUDE.md",
