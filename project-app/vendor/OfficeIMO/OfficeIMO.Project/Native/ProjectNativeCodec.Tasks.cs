@@ -77,6 +77,8 @@ internal static partial class ProjectNativeCodec {
         if (start != null || finish != null || work != null || cost != null || duration != null) {
             var baseline = task.Baselines.Add(); baseline.Number = 0; baseline.Start = start; baseline.Finish = finish;
             baseline.Work = work; baseline.Cost = cost; baseline.Duration = duration;
+            // Baseline fixed cost is a separate producer field (MPXJ BASELINE_FIXED_COST); a lone amount does not create a baseline.
+            baseline.FixedCost = record.Number(0x0b4001e0) / 100m;
         }
         var firstFields = new uint[] { 0x1e2, 0x1ed, 0x1f8, 0x203, 0x20e, 0x220, 0x22b, 0x236, 0x241, 0x24c };
         for (int index = 0; index < firstFields.Length; index++) {
@@ -88,7 +90,7 @@ internal static partial class ProjectNativeCodec {
             if (extraStart == null && extraFinish == null && extraWork == null && extraCost == null && extraDuration == null) continue;
             var item = task.Baselines.Add(); item.Number = index + 1;
             item.Start = extraStart; item.Finish = extraFinish; item.Work = extraWork; item.Cost = extraCost;
-            item.Duration = extraDuration;
+            item.Duration = extraDuration; item.FixedCost = record.Number(id + 7) / 100m;
         }
     }
 

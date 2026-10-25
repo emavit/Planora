@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 13758,
-      "sha256": "3f9e5d4f1ef6fdd1256e2e7523cbcbbb1c4c24fe80406900a4d5b6d2ebadb412"
+      "bytes": 14013,
+      "sha256": "2b4968b8a9a00a7800ab75b4f8012ed65efe75ca90fd33b82044a5013ca1c34d"
     },
     {
       "path": "CLAUDE.md",
@@ -182,8 +182,8 @@
     },
     {
       "path": "docs/compatibility-known-failures.json",
-      "bytes": 4721,
-      "sha256": "94c7d24a436c3ad4d149be310c9ed36fbadeca6e48457ed0b0e68f139a27815e"
+      "bytes": 3796,
+      "sha256": "1f12e842fb5ea9c81d4fac29965d39511c96be963c8e9aa016acf15b4e15cfce"
     },
     {
       "path": "docs/design/README.md",
@@ -402,8 +402,8 @@
     },
     {
       "path": "project-app/ProjectDesk/CoreValidation.cs",
-      "bytes": 8575,
-      "sha256": "9c20f5eab3c2ed0dd3f3aac7556e54bde822fbaa800bccdd9bd3f997dc92571c"
+      "bytes": 8618,
+      "sha256": "f140ee54e151cc62042dd3c4fc157388b63716b9b65681c8fca9a2c270ab02fe"
     },
     {
       "path": "project-app/ProjectDesk/DateAxis.cs",
@@ -529,6 +529,11 @@
       "path": "project-app/ProjectDesk/McpValidation.cs",
       "bytes": 13194,
       "sha256": "430b6cc1ceed050423101cb6c6fc7d72e951dcabbda1410363b5173ec83c035e"
+    },
+    {
+      "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
+      "bytes": 2807,
+      "sha256": "32bc9272a1eb391833857b6a246a68eb4806f951fc38e3f19912e1f15cf8f16b"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
@@ -672,8 +677,8 @@
     },
     {
       "path": "project-app/ProjectDesk/ProjectSession.cs",
-      "bytes": 29615,
-      "sha256": "374a9d703bc95e3a8e164e5be6fabdc10257a65930749e791de63680b1103f4c"
+      "bytes": 29600,
+      "sha256": "0e153d224f05b9cd080e64c20253db107d7186ebb1175a748f2e23434635bd32"
     },
     {
       "path": "project-app/ProjectDesk/PublicMppValidation.cs",
@@ -6887,8 +6892,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeCodec.Tasks.cs",
-      "bytes": 9508,
-      "sha256": "a4608f100a1201e08401b938075159b027f99535287156fe1a8169084361fa3e"
+      "bytes": 9756,
+      "sha256": "cb0deddc99a2d84b2400b02c9c4df162cb1a1b90a74c3ae7d2dc3fde561b103e"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeCodec.cs",
@@ -6947,8 +6952,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.Baselines.cs",
-      "bytes": 2924,
-      "sha256": "8db98fcdef39d21f78f4e23a5a849e8e248bf94635c1c69db5dc25fa778e6f2f"
+      "bytes": 3274,
+      "sha256": "839376b5798d44a5181deba71ec158725991c5dcb8b4ecd5bf0bb2cbaa636cec"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.Calendars.cs",

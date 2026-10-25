@@ -58,6 +58,7 @@
 - 32 workspace checks, 73 template/saved-view checks, core/scheduling/durable/recovery/close suites and exact packaged native stress passed.
 - Public MPP regression gate: 78 passing stages, 10 unchanged known failures.
 - No 0.3.2 package was published; the user requested 0.3.3. Broader range selection, Resources/Notes inspector sections and per-field validation remain pending; this release does not claim the entire earlier combined design scope.
+- Native task baseline fixed cost now reads from and writes to the dedicated MPP9/12/14 field (baseline 0 and numbered baselines), so capturing a baseline on tasks with a fixed cost saves natively; three public-corpus stages leave the known-failure list.
 
 ## Unreleased documentation
 

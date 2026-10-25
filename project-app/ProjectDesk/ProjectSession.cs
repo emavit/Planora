@@ -164,8 +164,8 @@ public sealed partial class ProjectSession : IDisposable {
     }, DurableCommand.For("Recalculate",recalculateActualCosts,calculateAssignments));    public void CaptureBaseline(int number,bool overwrite=false){if(number<0||number>10)throw new ArgumentOutOfRangeException(nameof(number));Execute("Set baseline",d=>{
         if(!overwrite&&(d.AllTasks.Any(t=>t.Baselines.Any(b=>(b.Number??0)==number))||d.Assignments.Any(a=>a.Baselines.Any(b=>(b.Number??0)==number))))throw new InvalidOperationException("This baseline already exists. Choose another number or explicitly overwrite it.");
         foreach(var t in d.AllTasks){Replace(t.Baselines,number,b=>{b.Start=t.Start;b.Finish=t.Finish;b.Duration=t.Duration;b.Work=t.Work;b.Cost=t.Cost;
-            // Native baselines store total cost but have no separate qualified fixed-cost field.
-            // Zero carries no additional amount; retain nonzero values so native assessment can diagnose them.
+            // Native baseline fixed cost has its own field from MPP9 onward; zero carries no additional amount
+            // and stays absent so generations without that field remain writable.
             b.FixedCost=d.NativeInfo!=null&&t.FixedCost==0?null:t.FixedCost;});}
         foreach(var a in d.Assignments){Replace(a.Baselines,number,b=>{b.Start=a.Start;b.Finish=a.Finish;b.Work=a.Work;b.Cost=a.Cost;});}
         foreach(var r in d.Resources){Replace(r.Baselines,number,b=>{b.Work=r.Work;b.Cost=r.Cost;});}
