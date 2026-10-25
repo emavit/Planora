@@ -6,6 +6,7 @@
 - Fixed the Windows CI failure present since the public example corpus was added: `LICENSE-MPXJ.txt` was converted to CRLF on Windows checkouts, so its pinned SHA-256 never matched and the Windows build/model/UI steps were skipped. The file now keeps its exact bytes like the other hashed fixtures.
 - Restored the theme, formatting and spreadsheet smoke checks on every platform. They predated the compact workspace default (ribbon hidden) and the Planning default tab, and expected dark-palette colours from before 0.3.10. They now show the ribbon, select the Task tab where needed and assert that dark/light surfaces and ribbon chrome follow the theme instead of fixed colour literals. Theme 37, formatting 58 and smoke checks pass.
 - Normalized line endings for 13 text files committed with CRLF despite `.gitattributes`. Fresh macOS/Linux clones no longer show 9 of them as modified. Content is unchanged.
+- `validate.ps1 -IncludeExtended` runs the PDF, multi-timeline, theme, formatting, auto-date, visual-review and smoke checks on a generated project, and `-IncludeUi` now includes the release-gate icon check. CI runs the public MPP regression gate on all three platforms, and the UI plus extended checks on Windows and macOS, so drift in these checks and new MPP regressions fail the build.
 
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 

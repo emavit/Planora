@@ -27,8 +27,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 990,
-      "sha256": "4cb17757e3173568642df90d15c9a209331455dcecce3032f2a83b8212c33e7a"
+      "bytes": 1227,
+      "sha256": "d9e52d3257f0440b62b9ed25c839995f3912373f458920ce0f6c55831fb17caf"
     },
     {
       "path": ".gitignore",
@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7510,
-      "sha256": "7e4a3a3b22d0f49fb70d3b8ebfc1f26b7936715c7c504f322c37b08cc2df5df9"
+      "bytes": 7900,
+      "sha256": "4ee33c791de6ee0aae69b36959e70df789a9ba9b50f8e73e9c22e8d879468e22"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7943,
-      "sha256": "94852d34866d132f68001bc5445991a7ce239fc4e6295b455a8b96a44de8df14"
+      "bytes": 8648,
+      "sha256": "4694fe7dd08e291774ab1aa41913136f640804946b4205273d547574334182f3"
     },
     {
       "path": "SECURITY.md",
@@ -7912,8 +7912,8 @@
     },
     {
       "path": "scripts/validate.ps1",
-      "bytes": 1163,
-      "sha256": "68e3d43fb7bc666c618f11de1c5422c35bbd5bb69807aae109635fcd0593a14c"
+      "bytes": 2025,
+      "sha256": "581c8dfb4b4ed5ba23de63c754ac98742888f0d72a73b4da7bf9588d98b17c62"
     },
     {
       "path": "scripts/verify-mpp-regressions.ps1",

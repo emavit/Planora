@@ -49,7 +49,17 @@ An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; t
 ./scripts/validate.ps1
 ```
 
-The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. On Windows, `./scripts/validate.ps1 -IncludeUi` also runs headless recovery and close-flow checks. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+
+Check the public MPP corpus against the documented baseline:
+
+```powershell
+./scripts/verify-mpp-regressions.ps1 -Assembly project-app/ProjectDesk/bin/Release/net10.0/Planora.dll -Output artifacts/validation/public-mpp
+```
+
+GitHub CI runs the model checks and the MPP gate on Windows, macOS and Linux, and the UI and extended checks on Windows and macOS.
+
+On macOS, install the .NET 10 SDK and PowerShell 7, then run the same scripts with `pwsh`, for example `pwsh ./scripts/validate.ps1 -IncludeUi -IncludeExtended`.
 
 ## Quick start: your first project
 
