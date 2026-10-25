@@ -27,6 +27,7 @@ static class Program {
             return TimelineValidation.Run(fixture,args[1]);
         }
         if(args.FirstOrDefault()=="--resource-sheet-test")return ResourceSheetValidation.Run(args[1]);
+        if(args.FirstOrDefault()=="--perf-test")return PerformanceValidation.Run(args[1],args.Length>2?args[2].Split(',').Select(int.Parse).ToArray():[500,2000,5000]);
         if(args.FirstOrDefault()=="--planning-library-test")return PlanningLibraryValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--workspace-test")return WorkspaceValidation.Run(args[1]);
         if(args.FirstOrDefault()=="--durable-test")return DurableValidation.Run(args[1]);

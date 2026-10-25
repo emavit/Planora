@@ -1,4 +1,4 @@
-param([switch]$IncludeUi,[switch]$IncludeExtended,[switch]$NoBuild)
+param([switch]$IncludeUi,[switch]$IncludeExtended,[switch]$IncludePerformance,[switch]$NoBuild)
 $ErrorActionPreference='Stop'
 $repo=Split-Path $PSScriptRoot -Parent
 Push-Location $repo
@@ -15,5 +15,6 @@ try {
   $fixture=Join-Path $results 'core-test/core-functions.mpp';if(-not (Test-Path -LiteralPath $fixture -PathType Leaf)){throw 'Core fixture missing for extended checks.'}
   foreach($check in @('pdf-test','timeline-test','theme-test','format-test','auto-date-test','visual-review','smoke')){$output=Join-Path $results $check;New-Item -ItemType Directory -Path $output -Force | Out-Null;$copy=Join-Path $output 'input.mpp';Copy-Item -LiteralPath $fixture -Destination $copy;$arguments=if($check -eq 'smoke'){@('--smoke',$copy)}else{@(('--'+$check),$copy,$output)};dotnet $assembly @arguments 2>&1 | Tee-Object -FilePath (Join-Path $output 'result.log');if($LASTEXITCODE -ne 0){throw "Check failed: $check"}}
  }
+ if($IncludePerformance){$output=Join-Path $results 'perf-test';New-Item -ItemType Directory -Path $output -Force | Out-Null;dotnet $assembly --perf-test $output 2>&1 | Tee-Object -FilePath (Join-Path $output 'result.log');if($LASTEXITCODE -ne 0){throw 'Check failed: perf-test'}}
  Write-Output "Validation evidence: $results"
 } finally {Pop-Location}

@@ -49,7 +49,7 @@ An experimental Apple Silicon build can be produced with `-Runtime osx-arm64`; t
 ./scripts/validate.ps1
 ```
 
-The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
+The default checks use generated local data: durable history, core authoring/save/reopen and automatic scheduling. `-IncludeUi` adds the headless release-gate UI checks (recovery, close flow, workspace, templates, resource sheet, timelines, icons). `-IncludeExtended` adds the PDF, multi-timeline, theme, formatting, auto-date, visual-review and spreadsheet smoke checks against a generated project. `-IncludePerformance` pastes 500/2,000/5,000-task plans and reports paste, window, edit, reschedule, undo, save and reopen timings in `perf-test/results.json`; it has no timing budgets yet. Logs go to a fresh `artifacts/validation/` directory. No paid AI requests or Microsoft Project automation are needed.
 
 Check the public MPP corpus against the documented baseline:
 

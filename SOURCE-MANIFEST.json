@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 8556,
-      "sha256": "87576dedbaf91711ec6de602baa07fa78d3eda9d8408ec86aec583e7946d6dce"
+      "bytes": 9095,
+      "sha256": "e2ba7d56f5ffd0b1164bad790875069a0024786ee3a3456cb76c8ca536d8dbfc"
     },
     {
       "path": "CLAUDE.md",
@@ -77,8 +77,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8648,
-      "sha256": "4694fe7dd08e291774ab1aa41913136f640804946b4205273d547574334182f3"
+      "bytes": 8838,
+      "sha256": "9d3431426f18c6d1187513668cb3d114b213aa1c898fe81bb26530d87a8c2f4d"
     },
     {
       "path": "SECURITY.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "docs/CODE-INVENTORY.md",
-      "bytes": 6421,
-      "sha256": "256ae243bc569ea015f884fd1647eb405febc51386177b26641187566f82ffcf"
+      "bytes": 6528,
+      "sha256": "8bfc99d729e4c4a5bf4bb90bfb36e316fb0fe01d9e32d31340fd1e415870b559"
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
@@ -551,6 +551,11 @@
       "sha256": "5ebe5dc9a701fa3025cc4f725c37b14e1e1061b3dcbd6d245bbbd11aab683e1c"
     },
     {
+      "path": "project-app/ProjectDesk/PerformanceValidation.cs",
+      "bytes": 5444,
+      "sha256": "a6d915e9871bc53a4e1e63afa3a41184de67a72c35f1c42a9f1dbac0c6f7c665"
+    },
+    {
       "path": "project-app/ProjectDesk/PlannerWindow.Appearance.cs",
       "bytes": 5341,
       "sha256": "7e32fe4173e2fcb376a825996af022d6bd52eb05613d215abf3dd510d6ad060a"
@@ -617,8 +622,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 35118,
-      "sha256": "344f9b34a6b8d621a938a4e4a7419f190d95e173165dbe0ae327f703b79158a4"
+      "bytes": 35286,
+      "sha256": "585a6c7728cd0c00d02170434243c0f1fc66996d64dadb1a1683dc460011ce6e"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
@@ -7912,8 +7917,8 @@
     },
     {
       "path": "scripts/validate.ps1",
-      "bytes": 2025,
-      "sha256": "581c8dfb4b4ed5ba23de63c754ac98742888f0d72a73b4da7bf9588d98b17c62"
+      "bytes": 2334,
+      "sha256": "3ea04be32639ae282b22111533c87a8eb9f511de2c92d6c21ad3b5d611abc77d"
     },
     {
       "path": "scripts/verify-mpp-regressions.ps1",

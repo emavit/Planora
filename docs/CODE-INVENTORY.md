@@ -98,3 +98,4 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | TemplateLibraryWindow.cs | Search, preview and new-project choice |
 | WorkspaceValidation.cs | Navigation, inspector, editing and MPP regressions |
 | PlanningLibraryValidation.cs | Template and saved-view regressions |
+| PerformanceValidation.cs | Large-plan timing measurement (paste, edit, reschedule, Undo, save, reopen) |
