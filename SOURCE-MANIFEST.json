@@ -42,38 +42,38 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7335,
-      "sha256": "cd7e97fa7f623e8643f38c60112eaaa01094c0e04ecf64ea4cf68a6976525eec"
+      "bytes": 7510,
+      "sha256": "7e4a3a3b22d0f49fb70d3b8ebfc1f26b7936715c7c504f322c37b08cc2df5df9"
     },
     {
       "path": "CLAUDE.md",
-      "bytes": 132,
-      "sha256": "4b545c1be2fdd87cd6019bb0890d9f66c94bf8f1dec280bd60fe35e67d6ab0d4"
+      "bytes": 129,
+      "sha256": "fd5b8290ee43b1b48731092fb21c503780b2fa932b07efd9e29950154c5279fe"
     },
     {
       "path": "CODE_OF_CONDUCT.md",
-      "bytes": 516,
-      "sha256": "615f19ed12fcc9dca728e08581aaff4bc81135af99601d1fd779a88cb374c28d"
+      "bytes": 511,
+      "sha256": "83b2c93ef8367a5d3ab2c50e7fe50250adc5cd45f724862bd0e53d98bf380ef8"
     },
     {
       "path": "CONTRIBUTING.md",
-      "bytes": 1387,
-      "sha256": "5dc317f0a91997c87c751cbfc32ae426a5bee91b6607edea0e24af3252abd389"
+      "bytes": 1376,
+      "sha256": "aaeb8d998ff815b4f5573514c8a3b094bca19700490b6fe9dec5601d00cef3fb"
     },
     {
       "path": "LICENSE",
-      "bytes": 1098,
-      "sha256": "39811d1ae736e8dc4f51f4c6667cc4bc5f8033b0d8e013a841b62431f569dc0b"
+      "bytes": 1077,
+      "sha256": "912347eee747d5666d1b700d53e08478001c0db714f73978b6a60908d1f27e6d"
     },
     {
       "path": "NuGet.Config",
-      "bytes": 182,
-      "sha256": "8bd42cedcdd4fb83acfe31664f15fcdde79902c327b2d4dd5b32460b3eab6b29"
+      "bytes": 180,
+      "sha256": "ef18aae73f086bb5fc3e982ce9b14cd85951b0c85871c7f3459dfa7041d5158b"
     },
     {
       "path": "PACKAGE-CHECKS.json",
-      "bytes": 2125,
-      "sha256": "6b8bd11722104aeb21424005f9a4bc31604ab4f476cc38ac6c57432c01fa7d69"
+      "bytes": 2067,
+      "sha256": "bf763fc69fc74d9821f14db9cd41877c0a32f63c65d7fbe429643d94dff2366d"
     },
     {
       "path": "README.md",
@@ -82,8 +82,8 @@
     },
     {
       "path": "SECURITY.md",
-      "bytes": 790,
-      "sha256": "a9272b25bddc0642e649b971d53e49de27ad03d38025311e90cd3b2c37c420a9"
+      "bytes": 783,
+      "sha256": "c3ed701797dde1b8f9e145079c71ec2c77574b475118abfe79160b5e3484102f"
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
@@ -107,18 +107,18 @@
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
-      "bytes": 512,
-      "sha256": "943d8b418c516395dd43a78bac744fa15b2bcf993dc332baa151ac95c9cb7ee5"
+      "bytes": 507,
+      "sha256": "91b38dd9c0545f085917aff280ec141aafdf57789d9f8efe4b8789524c42406f"
     },
     {
       "path": "docs/DECISIONS/ADR-0002-original-bytes.md",
-      "bytes": 513,
-      "sha256": "2f84a80d1417dc0ceeded11047a21986e1813ad2ef5b1c9455b083b8d17b4bfa"
+      "bytes": 508,
+      "sha256": "7c70d4229f5d5da7a4f06b01066845bf78a51f5206031ae75a6d7aacd8d9fbd6"
     },
     {
       "path": "docs/DEPENDENCIES.md",
-      "bytes": 1706,
-      "sha256": "cd9f14497c85164a9d14356a42e8789c3fa8149a31717ce02bc75bc612ffbc19"
+      "bytes": 1671,
+      "sha256": "623010fb9fedf5df862b2978f3a85104102f861895f71ec33ab9f8ae588686d1"
     },
     {
       "path": "docs/DESIGN-DIRECTION.md",
@@ -142,8 +142,8 @@
     },
     {
       "path": "docs/RECOVERY.md",
-      "bytes": 2473,
-      "sha256": "9813b712fcd836f2598f7de2c9dae1ecc4ca1220df59325cdedc4c25bfea97fb"
+      "bytes": 2452,
+      "sha256": "f046c28f5251d032006f5e52163c1e46b0c89779425e4211c10feb1380df5a80"
     },
     {
       "path": "docs/RELEASE.md",
@@ -322,8 +322,8 @@
     },
     {
       "path": "global.json",
-      "bytes": 118,
-      "sha256": "f83fe9284e13ca92886496d6d4955dc0cbf7aeda6e1f50a12290e0ca26bf8d4c"
+      "bytes": 111,
+      "sha256": "20c93ca7812d0a9825eef71217156f95ab2f4fe5aadfeb22ebc1c24b630018d3"
     },
     {
       "path": "project-app/ProjectDesk/AiChatWindow.cs",
@@ -7902,8 +7902,8 @@
     },
     {
       "path": "scripts/build.ps1",
-      "bytes": 1322,
-      "sha256": "8ff64536cebf8ede83e1c68f91835e9873aded8f78638184f9b39167c35185d9"
+      "bytes": 1306,
+      "sha256": "c189fdb584f1e4ef4f234d146e520c2eb1348b724168a8dee7552b1a3aeeccec"
     },
     {
       "path": "scripts/release.ps1",
