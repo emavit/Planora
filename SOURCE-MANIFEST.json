@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 9095,
-      "sha256": "e2ba7d56f5ffd0b1164bad790875069a0024786ee3a3456cb76c8ca536d8dbfc"
+      "bytes": 9403,
+      "sha256": "a32aa1d31f89fbb8570725407594f493702ce421988cd3b7c0d7ad120d79774c"
     },
     {
       "path": "CLAUDE.md",
@@ -131,14 +131,19 @@
       "sha256": "dd52f5f5ada0eb87d18325f46ace13ec761f67e78d760f82dd7722ff66365058"
     },
     {
+      "path": "docs/MAC-QUALIFICATION.md",
+      "bytes": 6870,
+      "sha256": "48ec814bf2e2f3e9c091b7978db0493606518f50733d68ca4de1f88e62068ebd"
+    },
+    {
       "path": "docs/MOBILE-PLAN.md",
       "bytes": 2939,
       "sha256": "b058c420be4e40a74f4b97985901aba3b3627f4f82a3ef6dadf7be37653866d2"
     },
     {
       "path": "docs/PLATFORM_GUIDE.md",
-      "bytes": 1461,
-      "sha256": "1a2574e729fb9268ff6083e077f84b9bc0e8337aac0a82db943ecc46f2b679f4"
+      "bytes": 1545,
+      "sha256": "246d15b2ff3f22b25cb8bb8191aa31636a0e8052ee7ec078b1d9bb13882b4987"
     },
     {
       "path": "docs/RECOVERY.md",
@@ -157,8 +162,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 10272,
-      "sha256": "7729dff47420dc85e0faa359e3777d5faac71796b617120f47d1b32857b0ede7"
+      "bytes": 10423,
+      "sha256": "552e64d509eab18ca7ef38411392b0ac75400eb468a17f0c89b6c6ebfa0ac408"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",

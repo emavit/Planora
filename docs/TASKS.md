@@ -19,7 +19,7 @@ The broader [functional and GUI improvement inventory](IMPROVEMENTS.md) expands 
 | VIEW-01 | Define typed statuses/custom fields shared by table, board and calendar | TaskColumns.cs, ProgressBoardModule.cs, CalendarViewModule.cs | Model specification |
 | ARCH-01 | Characterize platform seams and produce approved per-file migration map | docs/ARCHITECTURE.md, app modules | Owner approval before migration |
 | MPP-01 | Expand synthetic/publicly redistributable operation matrix; retain failures | PublicMppValidation.cs, vendor model | Dataset/provenance checks |
-| MAC-01 | Actual M1 smoke/recovery/PDF/credential qualification | Platform adapters, packaging | REL-01 and Windows gate |
+| MAC-01 | Actual M1 smoke/recovery/PDF/credential qualification. In progress on Apple Silicon (M4 Pro): evidence and open items in [MAC-QUALIFICATION.md](MAC-QUALIFICATION.md); Keychain and Codex CLI discovery fail | Platform adapters, packaging | REL-01 and Windows gate |
 | MOB-01 | After macOS completion: evaluate Android/iOS frameworks, shared-core feasibility and phone/tablet feature matrix; record reviewed decisions | docs/MOBILE-PLAN.md, architecture ADRs | MAC-01 and macOS completion gate |
 | MOB-02 | Develop Android app against agreed scope; qualify lifecycle, offline data, touch/accessibility, secure storage and distribution on real devices | Future mobile client and adapters | MOB-01 |
 | MOB-03 | Develop iOS app against agreed scope; qualify lifecycle, offline data, touch/accessibility, secure storage and distribution on real devices | Future mobile client and adapters | MOB-01 |
