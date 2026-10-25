@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 14593,
-      "sha256": "8f6aece823393730b366dbffbce01c7548018418ca0194c36b12ed1021688274"
+      "bytes": 14985,
+      "sha256": "20e9846929008b60fbbaf88aec0f7edecc1343b33e9cba1d5d375f1c13ac5c1c"
     },
     {
       "path": "CLAUDE.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "docs/CODE-INVENTORY.md",
-      "bytes": 6676,
-      "sha256": "feb43c5c5b78c061c1369ca3ab2654a2da4594111bb58828035e9ac006896cc9"
+      "bytes": 6781,
+      "sha256": "411009b154a0650f2e385b0ad47b0367c3ff188565d1a1ff5d0a7e681ba82028"
     },
     {
       "path": "docs/DECISIONS/ADR-0001-preserve-dotnet.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 7637,
-      "sha256": "03ebf2356f348b7936cd1f15c4dc0cc83ecbce65ef72d2463a99c73b0d39ed64"
+      "bytes": 8052,
+      "sha256": "1c0afcfa8369d23eb20794e1be9dd5902231e617ecd06dfce1b0c4390eb175e2"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -162,13 +162,13 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 10384,
-      "sha256": "b4395fbad23a1a234016e82abe8a3dd95f672e842721728bf4b18371b92336e6"
+      "bytes": 12916,
+      "sha256": "72d48e3d650d1009b9f1541bab507eba1c7474494b6e37e18ca58ddc6a1af266"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
-      "bytes": 10902,
-      "sha256": "8bf0e09a0910fc22bf67ca109b72c5603b2fbcfb9251cf0fe67e55015ccdff7f"
+      "bytes": 10920,
+      "sha256": "293748a4d8cc3a09cdc7b3fc64dded11dd78fb791ca6867ef825efdd3c6b8e10"
     },
     {
       "path": "docs/USER-GUIDE.md",
@@ -177,13 +177,13 @@
     },
     {
       "path": "docs/WORKING-APP-PLAN.md",
-      "bytes": 7798,
-      "sha256": "2fb3d2242d3a31305e713e61eee57a3cb2b85b2c82200114ce81c47c5e4681b0"
+      "bytes": 7857,
+      "sha256": "4169032a16011648fa94b6fb9131a0e4be078e3a5f23d1c9bda13310eecf221f"
     },
     {
       "path": "docs/compatibility-known-failures.json",
-      "bytes": 2923,
-      "sha256": "1b2e1609817ef4d16fdf2411d77fb5341d4c80aef10fad3c047a5b851dbb62e9"
+      "bytes": 2147,
+      "sha256": "87438debe9878e37f9bc598d32582eefa8d2742c0af3af7f3537557ea934e2a7"
     },
     {
       "path": "docs/design/README.md",
@@ -532,8 +532,8 @@
     },
     {
       "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
-      "bytes": 6416,
-      "sha256": "40413c50b31b48f29af5d7e8fc4bb990928ca9f013ff678917da360d4749c677"
+      "bytes": 7787,
+      "sha256": "8007843a55f0bf999133b258be080d911ad5a5eb0ce3dcfa3880bf41fbdfbccf"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
@@ -7242,13 +7242,13 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/ProjectDocument.Validation.Relationships.cs",
-      "bytes": 10772,
-      "sha256": "4ee1a7b94db7e19c71c43a95208b5b23aa17b90c53bf49c6a832137ee40f8de8"
+      "bytes": 11529,
+      "sha256": "3de03c114fd68bbed985d7127ec12481d42e356e3fbc63cf20abd8c480aa92b5"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/ProjectDocument.Validation.cs",
-      "bytes": 15732,
-      "sha256": "7c2e3574fd59382ff031f8ed4e96b4ec94c15207048eb6b25920f49fde82f33d"
+      "bytes": 16774,
+      "sha256": "ddbd06a952e38c5ca3197b2ad636da14560ae60e574631c3821104caad5e8e3b"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/ProjectDocument.Views.cs",

@@ -61,6 +61,7 @@
 - Native task baseline fixed cost now reads from and writes to the dedicated MPP9/12/14 field (baseline 0 and numbered baselines), so capturing a baseline on tasks with a fixed cost saves natively; three public-corpus stages leave the known-failure list.
 - Manually scheduled MPP14 tasks now read Start/Finish from the fields Project displays (0x0b400503/0x0b400504) and authored manual dates are written there too, matching Project's own MSPDI export of the public corpus; the producer-XML stage leaves the known-failure list.
 - Baselines that Project wrote with a start later than their finish no longer block unrelated native edits: an unchanged source baseline range is reported as a warning and retained byte for byte, while authored inverted dates still fail validation; three mpp14baselines stages leave the known-failure list.
+- A resource calendar that Project 2010 wrote without a resolvable base calendar no longer blocks unrelated native edits while its record is unchanged (warning, bytes retained, calculation still refuses it, no inherited calendar assumed); the last three mpp14assignmentfields stages leave the list. Public MPP gate: 88 passed / 0 documented failures, which is not a full-compatibility claim.
 
 ## Unreleased documentation
 

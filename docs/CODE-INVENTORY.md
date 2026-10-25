@@ -101,3 +101,4 @@ Generated from this upload snapshot. Declarations are a navigation aid, not a se
 | WorkspaceValidation.cs | Navigation, inspector, editing and MPP regressions |
 | PlanningLibraryValidation.cs | Template and saved-view regressions |
 | PerformanceValidation.cs | Large-plan timing measurement (paste, edit, reschedule, Undo, save, reopen) |
+| MppFidelityValidation.cs | Native MPP fidelity regressions from the public corpus (run by core-test) |

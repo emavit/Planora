@@ -82,3 +82,14 @@ Direct workspace Hide timelines / Show timelines toggle implemented. Build and 5
 ## Packaged 0.3.10 — 2026-10-19
 
 User requested immediate release and GitHub update. One-click timeline visibility packaged; 57 workspace, 4,878 icon checks and standard release gates passed, including 20 native Windows cycles. Public MPP remains 78 pass / 10 known failures. Windows ZIP and SHA-256 checksum prepared; standard release copy verified.
+
+## Public MPP failure clusters resolved — 2026-10-25
+
+All ten documented public-corpus failures are fixed in the shared engine (identical on Windows and macOS); the gate is 88 passed / 0 documented failures, which is not a full-compatibility claim. Evidence and changes per cluster:
+
+- Baseline fixed cost (mpp9task, mpp12task, mpp14task): Project stores task baseline fixed cost in 0x0b4001e0 (baseline 0) and the seventh slot of each numbered baseline block (MPXJ FieldMap9/12/14 BASELINE_FIXED_COST, BASELINE<N>_FIXED_COST); every corpus file maps those ids. Reader and native writer now carry the amount (currency ×100). MPP8 has no such field and still reports a nonzero captured amount as unsupported.
+- Manual task dates (assignment-assignments-project2019): MPP14 keeps a manual task's displayed Start/Finish in 0x0b400503/0x0b400504 and the scheduled dates in 0x0b400023/0x0b400024 (MPXJ FieldMap14). The reader prefers the display pair for manual tasks; the MPP14 writer mirrors Start/Finish into it. Manual Duration (0x0b400508) is not yet modeled separately; the corpus does not expose a difference.
+- Inverted baseline dates (mpp14baselines): raw baseline start/finish bytes decode consistently and one year apart (typed test values); Project 2010 writes them as entered. Validation downgrades an unchanged source baseline range to a warning (same number, start and finish in the native load snapshot); authored values stay errors.
+- Base-less resource calendar (mpp14assignmentfields, calendar UID 4 of budget work resource R2): kind flag 0x0d400000 clear, resource id 2, no name or pattern, base id bytes 03 00 FF FF and an unresolvable base GUID. Validation downgrades the finding to a warning only for an unchanged native calendar record without a positive source base id; calculation still refuses the calendar and no inherited calendar is assumed.
+
+Owner confirmation in Microsoft Project (Windows): open examples/public-mpp/mpp14assignmentfields.mpp, check the Base Calendar shown for "Budget Work Resource" and whether Project repairs or rejects calendar 4 (save as XML and inspect Calendar UID 4), then open an .mpp saved by Planora with a captured baseline on a fixed-cost task and a manually scheduled task to confirm the Baseline Fixed Cost column and the manual Start/Finish display. The core-test MPP fidelity checks (`MppFidelityValidation.cs`) cover each cluster. On this Mac, timeline-ui-test fails at the base commit ("Gantt Ctrl+wheel did not zoom independently") independently of these changes.

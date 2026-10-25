@@ -54,7 +54,18 @@ internal static class MppFidelityValidation {
             var authored=s.AssessSave(Path.Combine(folder,"inverted-baseline-authored.mpp"));
             Check(authored.Diagnostics.Any(d=>d.Code=="PROJECT_DATE_RANGE"&&d.Severity==ProjectDiagnosticSeverity.Error),"Authored inverted baseline dates still block saving");
         }
-        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost, manual dates, preserved producer baselines).");return checks;
+        using(var s=new ProjectSession()){
+            s.Open(Path.Combine(corpus,"mpp14assignmentfields.mpp"));var calendar=s.Document!.Calendars.GetByUid(4);
+            Check(calendar.IsBaseCalendar==false&&calendar.BaseCalendar==null,"Producer resource calendar without a resolvable base is retained");
+            s.Rename(1,"Renamed task");string dest=Path.Combine(folder,"baseless-calendar-rename.mpp");var report=s.AssessSave(dest);
+            Check(!report.HasErrors&&report.Diagnostics.Any(d=>d.Code=="PROJECT_CALENDAR_REFERENCE"&&d.Severity==ProjectDiagnosticSeverity.Warning&&d.Location=="/Calendar[UID=4]"),"Unchanged base-less producer calendar is reported, not blocking");
+            s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);
+            Check(reopened.Calendars.GetByUid(4).BaseCalendar==null&&reopened.Resources.GetByUid(2).Calendar?.Uid==4,"Base-less producer calendar survives the edited save unchanged");
+            s.SetWorkingWeek(4,new Dictionary<DayOfWeek,ProjectWorkingTime[]>{[DayOfWeek.Monday]=Array.Empty<ProjectWorkingTime>()});
+            var authored=s.AssessSave(Path.Combine(folder,"baseless-calendar-authored.mpp"));
+            Check(authored.Diagnostics.Any(d=>d.Code=="PROJECT_CALENDAR_REFERENCE"&&d.Severity==ProjectDiagnosticSeverity.Error),"Editing a base-less calendar still blocks saving");
+        }
+        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost, manual dates, preserved producer values).");return checks;
     }
     private static string FindCorpus() {
         for(var directory=new DirectoryInfo(AppContext.BaseDirectory);directory!=null;directory=directory.Parent){

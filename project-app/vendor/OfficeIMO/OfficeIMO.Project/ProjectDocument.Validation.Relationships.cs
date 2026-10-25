@@ -2,13 +2,20 @@ namespace OfficeIMO.Project;
 
 public sealed partial class ProjectDocument {
     private void ValidateCalendars(Finding add, CancellationToken token) {
+        Dictionary<string, object?>? current = null;
         foreach (var calendar in Calendars) {
             token.ThrowIfCancellationRequested();
             string location = "/Calendar[UID=" + calendar.Uid + "]";
             if (calendar.IsBaseCalendar == true && calendar.BaseCalendar != null)
                 add("PROJECT_CALENDAR_KIND", "A base calendar cannot also inherit a resource base-calendar reference. Create a derived calendar with Calendars.Add(name, baseCalendar).", location);
-            if (calendar.BaseCalendar == null && (calendar.SourceBaseCalendarUid > 0 || calendar.IsBaseCalendar == false))
-                add("PROJECT_CALENDAR_REFERENCE", "A derived calendar requires an existing base calendar.", location);
+            if (calendar.BaseCalendar == null && (calendar.SourceBaseCalendarUid > 0 || calendar.IsBaseCalendar == false)) {
+                // Project 2010 writes resource calendars whose base reference does not resolve (public corpus
+                // mpp14assignmentfields.mpp, calendar UID 4). The unchanged record is retained byte for byte;
+                // calculation still refuses it and any authored change restores the error.
+                if (!(calendar.SourceBaseCalendarUid > 0) && IsUnchangedNativeRecord(location, ref current, token))
+                    add("PROJECT_CALENDAR_REFERENCE", "The native source stores this non-base calendar without a resolvable base calendar. The record is retained unchanged and is not used for calculation.", location, ProjectDiagnosticSeverity.Warning);
+                else add("PROJECT_CALENDAR_REFERENCE", "A derived calendar requires an existing base calendar.", location);
+            }
             var days = new HashSet<DayOfWeek>();
             foreach (var day in calendar.WeekDays) {
                 token.ThrowIfCancellationRequested();

@@ -60,21 +60,5 @@
       "sha256": "B2592BE8D205ACAF3D02C240C8A68D33DF00C62BAD27477B6F93A3C950D0DB5A"
     }
   ],
-  "failures": [
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "rename-undo-redo-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    },
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "new-task-link-resource-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    },
-    {
-      "file": "mpp14assignmentfields.mpp",
-      "stage": "baseline-10-capture-native-save",
-      "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
-    }
-  ]
+  "failures": []
 }

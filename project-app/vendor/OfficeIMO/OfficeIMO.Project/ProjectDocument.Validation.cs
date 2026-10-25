@@ -167,6 +167,23 @@ public sealed partial class ProjectDocument {
         }
         return false;
     }
+    // True when every inventoried value under the entity path equals the native source snapshot, so native
+    // output leaves the producer record untouched.
+    private bool IsUnchangedNativeRecord(string entityPath, ref Dictionary<string, object?>? current, CancellationToken token) {
+        var original = NativeSource?.Snapshot;
+        if (original == null) return false;
+        current ??= ProjectModelSnapshot.Capture(this, token);
+        bool Belongs(string key) => key.StartsWith(entityPath + "/", StringComparison.Ordinal) || key.StartsWith(entityPath + "[", StringComparison.Ordinal);
+        foreach (var pair in original) {
+            token.ThrowIfCancellationRequested();
+            if (Belongs(pair.Key) && !(current.TryGetValue(pair.Key, out var value) && Equals(value, pair.Value))) return false;
+        }
+        foreach (var pair in current) {
+            token.ThrowIfCancellationRequested();
+            if (Belongs(pair.Key) && !original.ContainsKey(pair.Key)) return false;
+        }
+        return true;
+    }
     private static void CheckTimephased(ProjectCollection<ProjectTimephasedValue> intervals, int ownerUid, string location, Finding add, CancellationToken token) {
         foreach (var interval in intervals) {
             token.ThrowIfCancellationRequested();

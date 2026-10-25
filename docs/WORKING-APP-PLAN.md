@@ -14,7 +14,7 @@ Official reference: https://docs.lovable.dev/tips-tricks/chatgpt-app and https:/
 
 - Latest packaged executable: 0.3.1; combined 0.3.2 remains unfinished.
 - First Apple-inspired desktop pass builds successfully; 26 workspace/inspector checks passed. These are focused checks, not whole-product qualification.
-- Last packaged public MPP baseline: 78 passing stages and 10 known failures. A matching baseline prevents regressions but does not make these failures acceptable full compatibility.
+- Last packaged public MPP baseline: 78 passing stages and 10 known failures; the source baseline since 2026-10-25 is 88 passing stages and 0 known failures. A matching baseline prevents regressions but does not establish full compatibility.
 - Native Windows checks previously passed for 0.3.1; repeat against the next exact packaged binary.
 
 ## Execution order
