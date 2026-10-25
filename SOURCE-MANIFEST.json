@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 10915,
-      "sha256": "223d2736ede1b7a67a790c9e02bbe61cef920de633345204f496b730b6c0598b"
+      "bytes": 11144,
+      "sha256": "d1188e78e6f3459d724f6198a0251860fdecf5cd742d147cf45b7c464504c944"
     },
     {
       "path": "CLAUDE.md",
@@ -622,8 +622,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlanoraPackage.cs",
-      "bytes": 3528,
-      "sha256": "f5e21808fef2e27a94aedb24d1607db8cfa8bfe0d82bbfbebb9a87b7ae49768f"
+      "bytes": 3663,
+      "sha256": "d8110b7dd6e08165d166aae5c1932508cb54069753f8d139309d5910adfb5b18"
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
