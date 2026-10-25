@@ -56,6 +56,9 @@ Timings vary by a few hundred milliseconds between runs. Budgets need an agreed 
 2. Type, select ranges, copy/paste between Planora and Numbers/Excel with a physical keyboard and trackpad; check ⌘ shortcuts and IME input.
 3. Open a Mac-saved `.mpp` in Microsoft Project on Windows and compare tasks, links, resources and baselines (requires the Windows machine).
 4. Run an M1 device once if available.
+5. Open `Planora.app` and check the macOS menu bar: File, Edit, Task, Resource, Project, View, Format, AI, Connectors, Help and Appearance, with working items and Theme checks.
+6. Before adding shortcut labels to the native menu, check with a real keyboard that ⌘ shortcuts are not triggered twice (window handler plus menu key equivalent).
+7. Decide on the remaining Mac look-and-feel items that need interactive testing: a toolbar integrated with the window controls (window dragging must keep working) and following the system accent colour.
 
 ## How to reproduce
 
