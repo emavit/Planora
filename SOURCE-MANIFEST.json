@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 12963,
-      "sha256": "d8242b1475be12bab84d9aeea0a6618ad9274a9256440aef7ac8389f156bb8c1"
+      "bytes": 13275,
+      "sha256": "adfd573b763f3546b110ad6aafc800b595621635e4079bc483dd8cab710340f6"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 7495,
-      "sha256": "aedaca2901898923e30bcc74cfe882035790dc5fc33f5cd931a2bb761eeca95a"
+      "bytes": 7547,
+      "sha256": "0090b2602f3de680f5606b8c1e6f0d14f99494e31d27c1de15e6c0144602a2ff"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -627,8 +627,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.cs",
-      "bytes": 61974,
-      "sha256": "365541df85a9910ab08ed8bf17083dbc63e01224124859fc4df770c0e33faec8"
+      "bytes": 62317,
+      "sha256": "1835b92cb877e3e559729195359c27870c75ae9de2838b656d132aaec7d96017"
     },
     {
       "path": "project-app/ProjectDesk/PlanningLibraryValidation.cs",
@@ -642,8 +642,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 35812,
-      "sha256": "37560fa3c42a58363418c63ba761737276aac9187c5bdcd5f604ff85d384db75"
+      "bytes": 36310,
+      "sha256": "12b0db6d3260595148805e41f2a9b319e86c05dab4933b3ac86fcc91664cf106"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
@@ -827,8 +827,8 @@
     },
     {
       "path": "project-app/ProjectDesk/WorkspaceValidation.cs",
-      "bytes": 11894,
-      "sha256": "fc52c266cec9d30571134077ef308093f35e72abc8d5f62cb1b39595d2a0ee08"
+      "bytes": 13131,
+      "sha256": "74684c598ab2878ef11d6c0e50a98b0b23cbb9cb17be1862b063aaaf129a0138"
     },
     {
       "path": "project-app/vendor/OfficeIMO/.editorconfig",

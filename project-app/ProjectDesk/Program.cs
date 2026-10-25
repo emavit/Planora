@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 
 namespace ProjectDesk;
 
@@ -260,6 +261,8 @@ public sealed class DesktopApp : Application {
             desktop.MainWindow = new PlannerWindow(session,stability?Path.Combine("project-app/previews","native-check-views.json"):null);
             if(planora&&path!=null)((PlannerWindow)desktop.MainWindow).OpenPlanoraCopy(path);
             if(stability)NativeStabilityCheck.Start((PlannerWindow)desktop.MainWindow,session,desktop);
+            // macOS delivers Finder Open/Open With as activation events rather than command-line arguments.
+            if(TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activation)activation.Activated+=(_,e)=>{if(e is FileActivatedEventArgs opened&&opened.Files.Select(f=>f.TryGetLocalPath()).FirstOrDefault(p=>p!=null) is string file&&desktop.MainWindow is PlannerWindow window)Dispatcher.UIThread.Post(()=>_=window.OpenFromSystem(file));};
             desktop.Exit += (_, _) => session.Dispose();
         }
         base.OnFrameworkInitializationCompleted();
