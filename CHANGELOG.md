@@ -64,6 +64,7 @@
 - A resource calendar that Project 2010 wrote without a resolvable base calendar no longer blocks unrelated native edits while its record is unchanged (warning, bytes retained, calculation still refuses it, no inherited calendar assumed); the last three mpp14assignmentfields stages leave the list. Public MPP gate: 88 passed / 0 documented failures, which is not a full-compatibility claim.
 - On macOS and Linux, a local MCP connector can no longer point at a `#!/usr/bin/env` launcher such as `npx`, mirroring the existing Windows `.cmd`/`.bat` rule. Those launchers look up their interpreter on `PATH`, which is minimal when Planora is opened from Finder, so the connector would fail at connect time; validation asks for the runtime executable (for example `/opt/homebrew/bin/node`) with the script as an argument. MCP check: 60.
 - Switching an MPP14 task between manual and automatic without moving it now rewrites both native date pairs, so Planora's own output reopens with the same dates (previously the scheduled pair could keep a stale producer value). MPP fidelity checks: 24.
+- A refused macOS Keychain prompt now produces a plain message (allow access and retry) instead of an OSStatus code; the credential size message no longer names Windows. Documents handed over by Finder while Planora is busy, or beyond the first one, are reported in the status line instead of being dropped silently. Workspace check: 64.
 
 ## Unreleased documentation
 

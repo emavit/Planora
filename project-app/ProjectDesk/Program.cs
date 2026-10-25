@@ -262,7 +262,7 @@ public sealed class DesktopApp : Application {
             if(planora&&path!=null)((PlannerWindow)desktop.MainWindow).OpenPlanoraCopy(path);
             if(stability)NativeStabilityCheck.Start((PlannerWindow)desktop.MainWindow,session,desktop);
             // macOS delivers Finder Open/Open With as activation events rather than command-line arguments.
-            if(TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activation)activation.Activated+=(_,e)=>{if(e is FileActivatedEventArgs opened&&opened.Files.Select(f=>f.TryGetLocalPath()).FirstOrDefault(p=>p!=null) is string file&&desktop.MainWindow is PlannerWindow window)Dispatcher.UIThread.Post(()=>_=window.OpenFromSystem(file));};
+            if(TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activation)activation.Activated+=(_,e)=>{if(e is FileActivatedEventArgs opened&&desktop.MainWindow is PlannerWindow window){var files=opened.Files.Select(f=>f.TryGetLocalPath()).OfType<string>().ToList();if(files.Count>0)Dispatcher.UIThread.Post(()=>_=window.OpenFromSystem(files[0],files.Count-1));}};
             desktop.Exit += (_, _) => session.Dispose();
         }
         base.OnFrameworkInitializationCompleted();

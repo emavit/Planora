@@ -12,6 +12,7 @@ public sealed partial class PlannerWindow {
         // Headless and unsupported hosts do not export native menus; keep the in-window menu there.
         Opened+=(_,_)=>menus.IsVisible=!NativeMenu.GetIsNativeMenuExported(this);
     }
+    // The mirror is built once from the items present at construction; items added to the in-window menu later are not mirrored.
     internal static NativeMenu MirrorMenu(Menu menus){var native=new NativeMenu();foreach(var item in menus.Items)native.Items.Add(Mirror(item));return native;}
     private static NativeMenuItemBase Mirror(object? item){
         if(item is not MenuItem source)return new NativeMenuItemSeparator();

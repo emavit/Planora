@@ -45,7 +45,13 @@ internal static class MacKeychain {
         query.Set(s.Class,s.GenericPassword);query.Set(s.Service,service.Handle);query.Set(s.Account,name.Handle);
         return query;
     }
-    private static void Check(int status,string operation){if(status!=Success)throw new IOException($"Could not {operation} the credential in the macOS Keychain (OSStatus {status}).");}
+    private const int UserCanceled=-128,AuthFailed=-25293,InteractionNotAllowed=-25308;
+    private static void Check(int status,string operation){
+        if(status==Success)return;
+        // Unsigned builds change identity on update, so macOS may ask again and the user can deny access.
+        if(status is UserCanceled or AuthFailed or InteractionNotAllowed)throw new IOException($"Planora was not allowed to {operation} the credential in the macOS Keychain. Allow access when macOS asks, then try again.");
+        throw new IOException($"Could not {operation} the credential in the macOS Keychain (OSStatus {status}).");
+    }
 
     private sealed record Symbols(IntPtr Class,IntPtr GenericPassword,IntPtr Service,IntPtr Account,IntPtr ValueData,IntPtr ReturnData,IntPtr MatchLimit,IntPtr MatchLimitOne,IntPtr Label,IntPtr True,IntPtr KeyCallBacks,IntPtr ValueCallBacks){
         public static Symbols Load(){
