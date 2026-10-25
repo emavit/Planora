@@ -237,6 +237,8 @@ static class Program {
         }
         return AppBuilder.Configure<DesktopApp>().UsePlatformDetect().StartWithClassicDesktopLifetime(args);
     }
+    // Command line that starts this app again, whether it runs from its apphost or as "dotnet Planora.dll".
+    internal static (string FileName,string[] Arguments) SelfCommand(params string[] args){string executable=Environment.ProcessPath??throw new InvalidOperationException("Cannot locate Planora executable.");return Path.GetFileNameWithoutExtension(executable).Equals("dotnet",StringComparison.OrdinalIgnoreCase)?(executable,[typeof(Program).Assembly.Location,..args]):(executable,args);}
     private static void CommitInline(DataGrid grid,int uid,string header,string value){grid.SelectedItem=grid.ItemsSource!.OfType<SheetRecord>().Single(r=>r.Uid==uid);grid.CurrentColumn=grid.Columns.Single(c=>Equals(c.Header,header));grid.ScrollIntoView(grid.SelectedItem,grid.CurrentColumn);grid.Focus();Dispatcher.UIThread.RunJobs();if(!grid.BeginEdit())throw new Exception(header+" cannot begin edit");Dispatcher.UIThread.RunJobs();grid.GetVisualDescendants().OfType<TextBox>().Single(t=>t.Name=="CellTextBox"&&t.IsVisible).Text=value;if(!grid.CommitEdit())throw new Exception(header+" edit could not commit");}
 }
 
