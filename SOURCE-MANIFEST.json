@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 9946,
-      "sha256": "7aeeb6efc9cdab1c49e6fc2cf495e386d43280d0a12b709e896c61319e2e9b06"
+      "bytes": 10541,
+      "sha256": "12e8e66a2f9aae632f2a3551abc6e66d36f08b4349bb07e9fed0675285238f43"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 6893,
-      "sha256": "a5e72b1e1b41b59df0b09db83319fa03f309eeb7f1e85698a81900ee2aedbcbd"
+      "bytes": 6963,
+      "sha256": "05a9e7638252deb33b1461ecc85178ba70141e8d4fd03671bd4b17792654e54f"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -162,8 +162,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 10423,
-      "sha256": "552e64d509eab18ca7ef38411392b0ac75400eb468a17f0c89b6c6ebfa0ac408"
+      "bytes": 10408,
+      "sha256": "9ba7d5c763b8d797e764ca9c8a259b7accc1fd943b2f1e3327bc0cb069422613"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
@@ -337,23 +337,23 @@
     },
     {
       "path": "project-app/ProjectDesk/AiCodexClient.cs",
-      "bytes": 6504,
-      "sha256": "f470365675974925ddb0f52fb67a502779d338c8e20a227d5ca439c3c0e59bb6"
+      "bytes": 8823,
+      "sha256": "2949a338210015436152ca37d73c190f815c78cc5ddf1aa1fdf6b9b55bd87924"
     },
     {
       "path": "project-app/ProjectDesk/AiConnectionEditor.cs",
-      "bytes": 7136,
-      "sha256": "103cd4357cde53be1c027144b29cdd31f818fb622a40fbe81b0e5c00a3c23436"
+      "bytes": 7156,
+      "sha256": "7ff80e64e8acc4a93f1ff255391bd5d4c9c8304cddafd0ae3d70794267ae0194"
     },
     {
       "path": "project-app/ProjectDesk/AiConnections.cs",
-      "bytes": 10646,
-      "sha256": "021fe8d78a9e3290419c3cb87e3ffb82350b6c5ef10d5152e104963aee13d712"
+      "bytes": 10669,
+      "sha256": "73ddad59f302ddeebab55df72c85dd3354e85a6fd0f0957ef58954923eb1f33d"
     },
     {
       "path": "project-app/ProjectDesk/AiValidation.cs",
-      "bytes": 14876,
-      "sha256": "0f592cb518565c3e5a517a355234bbcc5e7ae2d9630155cd19ad5fd66a4eece8"
+      "bytes": 16569,
+      "sha256": "fff005695e38077d7bec0f78ed57581152f245d46948934324cad3f830d94d6d"
     },
     {
       "path": "project-app/ProjectDesk/AppBrand.cs",
