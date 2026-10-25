@@ -26,7 +26,23 @@ internal static class MppFidelityValidation {
             s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);
             Check(reopened.Tasks.GetByUid(1).Baselines.Single(b=>b.Number==number).FixedCost==task.FixedCost,name+": captured baseline fixed cost reloads from "+generation);
         }
-        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost).");return checks;
+        // Manual task dates: MPP14 stores Start/Finish in 0x0b400503/0x0b400504 and the scheduled dates in 0x0b400023/0x0b400024 (MPXJ FieldMap14).
+        using(var s=new ProjectSession()){
+            s.Open(Path.Combine(corpus,"assignment-assignments-project2019-mpp14.mpp"));var task=s.Document!.Tasks.GetByUid(1);
+            Check(task.IsManual==true&&task.Start==new DateTime(2016,1,4,8,0,0)&&task.Finish==new DateTime(2016,1,15,17,0,0),"Manual task reads the Start/Finish that Project exported to MSPDI");
+            var manualStart=new DateTime(2016,2,1,8,0,0);var manualFinish=new DateTime(2016,2,12,17,0,0);
+            s.Execute("Move manual task",d=>{var t=d.Tasks.GetByUid(1);t.Start=manualStart;t.Finish=manualFinish;});
+            string dest=Path.Combine(folder,"manual-dates.mpp");s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);
+            Check(reopened.Tasks.GetByUid(1).Start==manualStart&&reopened.Tasks.GetByUid(1).Finish==manualFinish,"Edited manual dates survive a native round trip");
+            Check(reopened.Tasks.GetByUid(2).Start==new DateTime(2016,1,4,8,0,0),"Untouched manual task keeps its producer dates");
+        }
+        using(var s=new ProjectSession()){
+            s.NewProject("Manual dates",new DateTime(2026,10,19,8,0,0));int t=s.AddTask("Manual",calculateDates:false);var start=new DateTime(2016,1,4,8,0,0);
+            s.Execute("Author manual dates",d=>{var task=d.Tasks.GetByUid(t);task.IsManual=true;task.Start=start;task.Finish=start.AddDays(11).AddHours(9);});
+            string dest=Path.Combine(folder,"manual-authored.mpp");s.SaveCopy(dest,true);using var reopened=ProjectDocument.Load(dest);
+            Check(reopened.Tasks.GetByUid(t).IsManual==true&&reopened.Tasks.GetByUid(t).Start==start&&reopened.Tasks.GetByUid(t).Finish==start.AddDays(11).AddHours(9),"Authored manual dates survive a new MPP14 file");
+        }
+        Console.WriteLine($"PASS: {checks} MPP fidelity checks (baseline fixed cost, manual dates).");return checks;
     }
     private static string FindCorpus() {
         for(var directory=new DirectoryInfo(AppContext.BaseDirectory);directory!=null;directory=directory.Parent){

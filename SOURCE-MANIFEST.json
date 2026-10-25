@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 14013,
-      "sha256": "2b4968b8a9a00a7800ab75b4f8012ed65efe75ca90fd33b82044a5013ca1c34d"
+      "bytes": 14286,
+      "sha256": "812edde05a7597d1e3964f94cccd2365687ca5c730f30504be7078060ac565fd"
     },
     {
       "path": "CLAUDE.md",
@@ -182,8 +182,8 @@
     },
     {
       "path": "docs/compatibility-known-failures.json",
-      "bytes": 3796,
-      "sha256": "1f12e842fb5ea9c81d4fac29965d39511c96be963c8e9aa016acf15b4e15cfce"
+      "bytes": 3586,
+      "sha256": "f0e28e79ed41bf15a6b4f21c70115a844a16394d7e2a9178ba6b34b349158061"
     },
     {
       "path": "docs/design/README.md",
@@ -532,8 +532,8 @@
     },
     {
       "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
-      "bytes": 2807,
-      "sha256": "32bc9272a1eb391833857b6a246a68eb4806f951fc38e3f19912e1f15cf8f16b"
+      "bytes": 4724,
+      "sha256": "1cc490d8bbe1b02f1a0d176ba07c97ce6437db7fb50e0412852b82f6b44049fb"
     },
     {
       "path": "project-app/ProjectDesk/NativeStabilityCheck.cs",
@@ -6892,8 +6892,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeCodec.Tasks.cs",
-      "bytes": 9756,
-      "sha256": "cb0deddc99a2d84b2400b02c9c4df162cb1a1b90a74c3ae7d2dc3fde561b103e"
+      "bytes": 10240,
+      "sha256": "3d7ddfba3a97099957876d828f53ef2f3d444208a5537a8d6dd884c13e7d1cc3"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeCodec.cs",
@@ -6982,8 +6982,8 @@
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.Fields.cs",
-      "bytes": 8446,
-      "sha256": "e8f04da6f91274ac481fbf493bd3556aeaa12bc3049b9edcf0c6605ac0e43ed7"
+      "bytes": 9409,
+      "sha256": "b4d61f0311a5cefe959f17eae3ce59041f4349a85991dff1d756acbfdd5d8850"
     },
     {
       "path": "project-app/vendor/OfficeIMO/OfficeIMO.Project/Native/ProjectNativeWriter.FlatWork.cs",

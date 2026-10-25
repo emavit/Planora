@@ -38,6 +38,10 @@ internal sealed partial class ProjectNativeWriter {
         if (_profile == ProjectNativeProfile.Mpp14) {
             Field(editor, uid, path, "IsManual", 0x0b400000u | 0x500, Kind.Boolean, 1);
             Field(editor, uid, path, "IsActive", 0x0b400000u | 0x4ff, Kind.Boolean, 1);
+            // Project 2010+ displays 0x0b400503/0x0b400504 as Start/Finish of a manually scheduled task and keeps
+            // the scheduled dates in 0x0b400023/0x0b400024; automatic tasks carry the same value in both pairs.
+            WriteManualDate(editor, uid, path, "Start", 0x0b400503);
+            WriteManualDate(editor, uid, path, "Finish", 0x0b400504);
         } else {
             // Project 2007 has automatic, active tasks only. Opposite values remain
             // unhandled so the model inventory diagnoses their conversion loss.
@@ -61,6 +65,13 @@ internal sealed partial class ProjectNativeWriter {
         Field(editor, uid, path, "Duration", 0x0b400000u | 0x1d, Kind.Duration, 1, 0x0b400000u | 0xb5);
         Field(editor, uid, path, "ActualDuration", 0x0b400000u | 0x1c, Kind.Duration, 1, 0x0b400000u | 0xb5);
         Field(editor, uid, path, "RemainingDuration", 0x0b400000u | 0x1f, Kind.Duration, 1, 0x0b400000u | 0xb5);
+    }
+    private void WriteManualDate(IProjectNativeTableEditor editor, int uid, string path, string name, uint id) {
+        string key = path + "/" + name;
+        if (!editor.HasField(id) || !(Changed(key) || Changed(path + "/IsManual"))) return;
+        _current.TryGetValue(key, out var value);
+        try { editor.Set(uid, id, value is DateTime date ? BitConverter.GetBytes(ProjectNativeCreation.Date(date)) : null); }
+        catch (ArgumentException ex) { AddDiagnostic(new ProjectDiagnostic("PROJECT_NATIVE_VALUE_UNREPRESENTABLE", ProjectDiagnosticSeverity.Error, ex.Message, key)); }
     }
     private void WriteResourceFields(IProjectNativeTableEditor editor, int uid, string path) {
         Field(editor, uid, path, "Initials", 0x0c400002, Kind.Text); Field(editor, uid, path, "Group", 0x0c400003, Kind.Text); Field(editor, uid, path, "EmailAddress", 0x0c400023, Kind.Text);

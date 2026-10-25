@@ -62,11 +62,6 @@
   ],
   "failures": [
     {
-      "file": "assignment-assignments-project2019-mpp14.mpp",
-      "stage": "independent-producer-xml",
-      "error": "System.Exception: MPP data differs from repository's matching producer XML"
-    },
-    {
       "file": "mpp14assignmentfields.mpp",
       "stage": "rename-undo-redo-native-save",
       "error": "System.IO.InvalidDataException: PROJECT_CALENDAR_REFERENCE at /Calendar[UID=4]: A derived calendar requires an existing base calendar."
