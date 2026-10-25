@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 9403,
-      "sha256": "a32aa1d31f89fbb8570725407594f493702ce421988cd3b7c0d7ad120d79774c"
+      "bytes": 9946,
+      "sha256": "7aeeb6efc9cdab1c49e6fc2cf495e386d43280d0a12b709e896c61319e2e9b06"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 6870,
-      "sha256": "48ec814bf2e2f3e9c091b7978db0493606518f50733d68ca4de1f88e62068ebd"
+      "bytes": 6893,
+      "sha256": "a5e72b1e1b41b59df0b09db83319fa03f309eeb7f1e85698a81900ee2aedbcbd"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -382,8 +382,8 @@
     },
     {
       "path": "project-app/ProjectDesk/ChartDrawing.cs",
-      "bytes": 2848,
-      "sha256": "599b909f1216d02ac9bc42b8fbbe0e4d99000b257327b5a1d4f1a6042c846117"
+      "bytes": 3904,
+      "sha256": "3d6940ebc6a08c225a352cf9b3ddfa4a87cd270e1f9fa37813102482e704b121"
     },
     {
       "path": "project-app/ProjectDesk/CloseFlowValidation.cs",
@@ -792,8 +792,8 @@
     },
     {
       "path": "project-app/ProjectDesk/TimelineValidation.cs",
-      "bytes": 10647,
-      "sha256": "677da11a59c057e0c079e805b1759477098071eceac6a46ccde8b180e3978d6b"
+      "bytes": 11247,
+      "sha256": "4e0d07e1dc8e483a2c41cfd06000889dd59e245157fad8d077f71871735db1f3"
     },
     {
       "path": "project-app/ProjectDesk/UiIcons.cs",
