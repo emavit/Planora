@@ -184,7 +184,8 @@ static class Program {
                 window.Sheet.SetFilter("","Milestones");window.KeyPressQwerty(Avalonia.Input.PhysicalKey.F3,Avalonia.Input.RawInputModifiers.None);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.F3,Avalonia.Input.RawInputModifiers.None);Dispatcher.UIThread.RunJobs();if(window.TaskCount!=oldCount)throw new Exception("F3 did not reset task filtering");
                 window.Sheet.FocusName(-1,true);Dispatcher.UIThread.RunJobs();
                 window.Clipboard!.SetTextAsync("Keyboard paste A\nKeyboard paste B").GetAwaiter().GetResult();
-                window.KeyPressQwerty(Avalonia.Input.PhysicalKey.V,Avalonia.Input.RawInputModifiers.Control);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.V,Avalonia.Input.RawInputModifiers.Control);Dispatcher.UIThread.RunJobs();
+                var pasteModifier=OperatingSystem.IsMacOS()?Avalonia.Input.RawInputModifiers.Meta:Avalonia.Input.RawInputModifiers.Control;
+                window.KeyPressQwerty(Avalonia.Input.PhysicalKey.V,pasteModifier);window.KeyReleaseQwerty(Avalonia.Input.PhysicalKey.V,pasteModifier);Dispatcher.UIThread.RunJobs();
                 if(session.Tasks.Count!=oldCount+2||!session.Tasks.Any(t=>t.Name=="Keyboard paste B"))throw new Exception("Ctrl+V in the name editor did not create task rows");session.Undo();window.RefreshForValidation();Dispatcher.UIThread.RunJobs();
                 var originalColumns=window.Sheet.VisibleKeys.ToArray();
                 window.Sheet.ApplyColumns(["DisplayId","TaskMode","Name","ResourceNames","Baseline0.Start","PercentComplete","Cost"]);

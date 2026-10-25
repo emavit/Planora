@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 6372,
-      "sha256": "0c6382f581338563297cf0dcbaf82e4e951849af98bca4fb5b621a1c37ee675a"
+      "bytes": 6600,
+      "sha256": "a38beffd346f87a1127edc553852cce10bc3c2f8a5cd25d421f6133d3b43f6b2"
     },
     {
       "path": "CLAUDE.md",
@@ -617,8 +617,8 @@
     },
     {
       "path": "project-app/ProjectDesk/Program.cs",
-      "bytes": 34685,
-      "sha256": "ae84cdb36e798c50662406f9d26d71e66c0209d04e1fbb0bd98617f3fc861463"
+      "bytes": 34771,
+      "sha256": "1cdac8a62a7c8a93393dff4f665ac50f541c563c6263fd5fbf35abfc1eccb0ab"
     },
     {
       "path": "project-app/ProjectDesk/ProgressBoardModule.cs",
@@ -782,8 +782,8 @@
     },
     {
       "path": "project-app/ProjectDesk/TimelineValidation.cs",
-      "bytes": 10573,
-      "sha256": "91d621482873bdc99902d025dbb7ec49d15319fb28b147493fb6904122996658"
+      "bytes": 10647,
+      "sha256": "677da11a59c057e0c079e805b1759477098071eceac6a46ccde8b180e3978d6b"
     },
     {
       "path": "project-app/ProjectDesk/UiIcons.cs",

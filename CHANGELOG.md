@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — macOS validation
+
+- Validation checks send ⌘ instead of Ctrl for wheel zoom and keyboard paste on macOS, matching the app's platform shortcuts. Timeline UI and multi-timeline checks pass on macOS (31 each).
+
 ## 0.3.8 — 2026-10-19 · Modern identity and Apple/Office workspace
 
 - More compact ribbon command groups, tinted active tabs and quiet centered overflow arrows.
