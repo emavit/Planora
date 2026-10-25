@@ -134,7 +134,7 @@ public sealed partial class PlannerWindow {
     if(File.Exists(path)||Directory.Exists(path))throw new IOException("Planora never overwrites files. Choose a new file name: "+path);
     if(string.Equals(path,_session.SourcePath,StringComparison.OrdinalIgnoreCase))throw new IOException("Planora never overwrites the opened original.");
     if(!Directory.Exists(Path.GetDirectoryName(path)))throw new IOException("The folder does not exist: "+Path.GetDirectoryName(path));
-    if(_busy)throw Busy();
+    RequireIdle();
     _busy=true;
     try{
      bool saved=await SaveCopyTo(path,async notices=>{string text=$"Save a copy of the project as\n{path}"+(notices.Count>0?"\n\nThis edited copy needs a compatibility review. Existing views, stored work/cost distributions or other information may not fully follow the edits. Your original file will remain unchanged.\n"+string.Join("\n",notices):"")+"\n\nNo existing file is replaced.";return await Approve(client,"save a copy of "+ProjectName,text,"Save Copy");});

@@ -97,7 +97,9 @@ public static class PlanoraMcpValidation {
    string saved=Path.Combine(output,"claude-code-copy.mpp");int asked=approvals.Count;
    Assert(Call("save_project_copy",new{path="relative.mpp"},error:true).GetProperty("error").GetString()!.Contains("absolute"),"Saving needs an absolute path");
    File.WriteAllText(Path.Combine(output,"existing.mpp"),"keep");Assert(Call("save_project_copy",new{path=Path.Combine(output,"existing.mpp")},error:true).GetProperty("error").GetString()!.Contains("never overwrites")&&File.ReadAllText(Path.Combine(output,"existing.mpp"))=="keep"&&approvals.Count==asked,"Existing files are never overwritten");
-   Call("save_project_copy",new{path=saved});using(var reopened=ProjectDocument.Load(saved))Assert(reopened.AllTasks.Any(t=>t.Name=="Build")&&approvals.Last().Contains(saved),"An approved copy is saved and reopens");
+   var grid=window.Sheet.Grid;grid.SelectedItem=grid.ItemsSource!.OfType<TaskTableRow>().Single(r=>r.Uid==build.Uid);grid.CurrentColumn=grid.Columns.Single(c=>Equals(c.Header,"Task Name"));grid.Focus();Pump();
+   if(!grid.BeginEdit())throw new Exception("Task name cell did not enter edit mode");Pump();grid.GetVisualDescendants().OfType<TextBox>().Single(t=>t.Name=="CellTextBox"&&t.IsVisible).Text="Build (edited)";
+   Call("save_project_copy",new{path=saved});using(var reopened=ProjectDocument.Load(saved))Assert(reopened.AllTasks.Any(t=>t.Name=="Build (edited)")&&approvals.Last().Contains(saved),"An approved copy is saved with the cell being edited and reopens");
    string package=Path.Combine(output,"claude-code-copy.planora");Call("save_project_copy",new{path=package});Assert(File.Exists(package),"A .planora copy can be saved");
 
    // A pending decision holds further proposals; reads continue.

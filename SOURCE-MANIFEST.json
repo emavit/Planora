@@ -612,8 +612,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.Mcp.cs",
-      "bytes": 24899,
-      "sha256": "7f680551484771e20bd9285b17ace8e33af251219605143e585e82dc6d2c3114"
+      "bytes": 24891,
+      "sha256": "f0107ef86703475acf2dad124a5ef04d315d6341d60501658caff5ed21e1cd38"
     },
     {
       "path": "project-app/ProjectDesk/PlannerWindow.NativeMenu.cs",
@@ -662,8 +662,8 @@
     },
     {
       "path": "project-app/ProjectDesk/PlanoraMcpValidation.cs",
-      "bytes": 20908,
-      "sha256": "84f94ae8aed0afe92aca11d51463169b11c03277bab8ac70cd4f022423ba1b99"
+      "bytes": 21362,
+      "sha256": "f022ece445e929dcab7f2b517e5eac1c76fab987081225a713050b0db92a7d61"
     },
     {
       "path": "project-app/ProjectDesk/PlanoraPackage.cs",
