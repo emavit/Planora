@@ -62,6 +62,7 @@
 - Manually scheduled MPP14 tasks now read Start/Finish from the fields Project displays (0x0b400503/0x0b400504) and authored manual dates are written there too, matching Project's own MSPDI export of the public corpus; the producer-XML stage leaves the known-failure list.
 - Baselines that Project wrote with a start later than their finish no longer block unrelated native edits: an unchanged source baseline range is reported as a warning and retained byte for byte, while authored inverted dates still fail validation; three mpp14baselines stages leave the known-failure list.
 - A resource calendar that Project 2010 wrote without a resolvable base calendar no longer blocks unrelated native edits while its record is unchanged (warning, bytes retained, calculation still refuses it, no inherited calendar assumed); the last three mpp14assignmentfields stages leave the list. Public MPP gate: 88 passed / 0 documented failures, which is not a full-compatibility claim.
+- On macOS and Linux, a local MCP connector can no longer point at a `#!/usr/bin/env` launcher such as `npx`, mirroring the existing Windows `.cmd`/`.bat` rule. Those launchers look up their interpreter on `PATH`, which is minimal when Planora is opened from Finder, so the connector would fail at connect time; validation asks for the runtime executable (for example `/opt/homebrew/bin/node`) with the script as an argument. MCP check: 60.
 
 ## Unreleased documentation
 

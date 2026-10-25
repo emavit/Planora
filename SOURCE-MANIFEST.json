@@ -42,8 +42,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 14985,
-      "sha256": "20e9846929008b60fbbaf88aec0f7edecc1343b33e9cba1d5d375f1c13ac5c1c"
+      "bytes": 15426,
+      "sha256": "57c61e436a319fe82384064dc74ce353d02ff81858180c231b2e5ae17c4707c3"
     },
     {
       "path": "CLAUDE.md",
@@ -132,8 +132,8 @@
     },
     {
       "path": "docs/MAC-QUALIFICATION.md",
-      "bytes": 8052,
-      "sha256": "1c0afcfa8369d23eb20794e1be9dd5902231e617ecd06dfce1b0c4390eb175e2"
+      "bytes": 8105,
+      "sha256": "fa05fde88fbd6d9465028ebc8a4a2521c0a6a1df4ce2d4d73aba934d03b28ea7"
     },
     {
       "path": "docs/MOBILE-PLAN.md",
@@ -497,8 +497,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorSettings.cs",
-      "bytes": 6408,
-      "sha256": "afcca0170de29d9a292b4cc730a89f2b7295c13de60dba61e0ce8c217abcfe08"
+      "bytes": 7350,
+      "sha256": "0f06c1f0420b8beed533c4e0471e53c19f5bc0d7248b4e758d5c9df7f046093e"
     },
     {
       "path": "project-app/ProjectDesk/McpConnectorsWindow.cs",
@@ -527,8 +527,8 @@
     },
     {
       "path": "project-app/ProjectDesk/McpValidation.cs",
-      "bytes": 13194,
-      "sha256": "430b6cc1ceed050423101cb6c6fc7d72e951dcabbda1410363b5173ec83c035e"
+      "bytes": 13945,
+      "sha256": "18081a8f8f247ffae9c469b6159937bf6394263415f9424e0ce800378a0d8d87"
     },
     {
       "path": "project-app/ProjectDesk/MppFidelityValidation.cs",
