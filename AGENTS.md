@@ -11,4 +11,6 @@ Do not overwrite original MPP files, kill user applications, upload private proj
 
 Before adding a platform operation: define the interface, supply a fake, implement the relevant adapter, wire it at the composition root, add cancellation/error tests and update docs/PLATFORM_GUIDE.md. macOS requires real hardware qualification after Windows. Android/iOS development begins only after macOS completion and validation; see docs/MOBILE-PLAN.md.
 
+Releases: Windows and macOS ship together, whoever develops. Publish only through the Release workflow (`.github/workflows/release.yml`; push tag vX.Y.Z after the version and releases/X.Y.Z are on main). Never attach a locally built package to a GitHub release or publish one platform alone. Process: releases/release.md.
+
 Definition of done: acceptance criteria met; build and relevant checks passed; docs/CHANGELOG updated; task status accurate; no secrets/private artifacts; limitations reported. Keep third-party headers and licenses. Do not claim full MPP fidelity or a complete roadmap from a finite sample set. Record blocked checks rather than bypassing approval.

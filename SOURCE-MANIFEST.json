@@ -31,19 +31,24 @@
       "sha256": "6a9b780506515a695bf00059bf82a7ad507bdf3a3499f6a289ab755a7892449e"
     },
     {
+      "path": ".github/workflows/release.yml",
+      "bytes": 5506,
+      "sha256": "dea20df107805b95d71f586cf7417bf3a55b60de6c20eeed20955122cc84e827"
+    },
+    {
       "path": ".gitignore",
       "bytes": 417,
       "sha256": "0ebfecfb0aae7090aa95c655a8d5189172136b0739a41f8c2f2745e2d3ca977d"
     },
     {
       "path": "AGENTS.md",
-      "bytes": 2068,
-      "sha256": "b50d88c45d7ea0a1b8b1fe120a81555139ca56fa57dd04891d2c4ba010ea193a"
+      "bytes": 2391,
+      "sha256": "3fd19cc6f37e3f2ba6dc0ab74dcb4df2ff6c3a331de9ce6a76b166d63cf38d98"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 18591,
-      "sha256": "2b28e005ec3699d6bcaf466f9d3cafb69f5d9b351bebc77b89b00068976dfc04"
+      "bytes": 19321,
+      "sha256": "64b98f3697a563f85baee8b7309aa11bdf3d11dad9c55d49217e239efe09dcbe"
     },
     {
       "path": "CLAUDE.md",
@@ -7967,8 +7972,8 @@
     },
     {
       "path": "releases/release.md",
-      "bytes": 3058,
-      "sha256": "fcdfd452d460b71af8d577c44ad20e5ad7ee76ab1ecf15604fe6813e0f23e98c"
+      "bytes": 4478,
+      "sha256": "b1d03d0ec096878ff6b6ee179a02910b8dc241ce4b1a874d67355331006e00ff"
     },
     {
       "path": "scripts/build.ps1",
@@ -7982,8 +7987,8 @@
     },
     {
       "path": "scripts/release.ps1",
-      "bytes": 6749,
-      "sha256": "e2d4bf9b62a34179aa02e19a13d55b6b3236d70b0112142759cdeadb8223f80f"
+      "bytes": 7032,
+      "sha256": "57e16ba0f61e81f5a8aeb0f3289692a74a6f9d40401b0d0ac715f49c53b6ec59"
     },
     {
       "path": "scripts/validate.ps1",

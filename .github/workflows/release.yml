@@ -1,0 +1,116 @@
+name: Release
+# Every Planora release is built here, on GitHub's Windows and macOS machines, so both platforms always ship
+# together whoever prepares the release and on whichever computer. Commit releases/X.Y.Z/ and the project version
+# on main, then push the tag vX.Y.Z (or run this workflow with publish ticked). Without publish, a manual run builds
+# and checks both packages and keeps them as workflow artifacts, which is how to rehearse a release.
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version, for example 0.3.12 (must match the project version and releases/VERSION)'
+        required: true
+      publish:
+        description: 'Publish the GitHub release (otherwise build and check only)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: release
+  cancel-in-progress: false
+env:
+  TAG_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+  INPUT_VERSION: ${{ github.event.inputs.version }}
+  AVALONIA_TELEMETRY_OPTOUT: '1'
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+jobs:
+  package:
+    strategy:
+      # A release needs both platforms; stop the other build as soon as one fails.
+      fail-fast: true
+      matrix:
+        include:
+          - os: windows-latest
+            runtime: win-x64
+          - os: macos-latest
+            runtime: osx-arm64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Resolve version
+        shell: pwsh
+        run: |
+          $version = if ($env:TAG_VERSION) { $env:TAG_VERSION.Substring(1) } else { $env:INPUT_VERSION }
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "Invalid version '$version'." }
+          "VERSION=$version" >> $env:GITHUB_ENV
+      - name: Build, check and package
+        shell: pwsh
+        run: ./scripts/release.ps1 -Version $env:VERSION -Runtime ${{ matrix.runtime }} -IncludeNative
+      - name: Keep the package
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ matrix.runtime }}
+          path: |
+            project-app/releases/Planora-${{ env.VERSION }}-${{ matrix.runtime }}.zip
+            project-app/releases/Planora-${{ env.VERSION }}-${{ matrix.runtime }}.zip.sha256
+          if-no-files-found: error
+      - name: Keep diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-${{ matrix.runtime }}
+          path: artifacts/release-staging/
+          if-no-files-found: ignore
+
+  publish:
+    needs: package
+    if: github.event_name == 'push' || github.event.inputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          merge-multiple: true
+          path: dist
+      - name: Publish both platforms
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          $version = if ($env:TAG_VERSION) { $env:TAG_VERSION.Substring(1) } else { $env:INPUT_VERSION }
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "Invalid version '$version'." }
+          $tag = "v$version"
+          git fetch origin main --quiet
+          git merge-base --is-ancestor $env:GITHUB_SHA origin/main
+          if ($LASTEXITCODE -ne 0) { throw 'Releases are made from commits on main.' }
+          # Exactly one Windows and one macOS download, each matching its checksum.
+          $expected = @('win-x64', 'osx-arm64') | ForEach-Object { "Planora-$version-$_.zip", "Planora-$version-$_.zip.sha256" }
+          $found = @(Get-ChildItem dist -File | ForEach-Object Name | Sort-Object)
+          if (Compare-Object ($expected | Sort-Object) $found) { throw "Both platform packages are required; found: $($found -join ', ')" }
+          foreach ($zip in Get-ChildItem dist -Filter *.zip) {
+            $recorded = (Get-Content -LiteralPath "$($zip.FullName).sha256" -Raw).Split(' ')[0]
+            if ($recorded -ne (Get-FileHash -LiteralPath $zip.FullName -Algorithm SHA256).Hash.ToLowerInvariant()) { throw "Checksum mismatch: $($zip.Name)" }
+          }
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) { throw "Release $tag already exists; completed releases are immutable." }
+          $notes = "releases/$version/release.md"
+          $spec = Get-Content -LiteralPath "releases/$version/release.json" -Raw | ConvertFrom-Json
+          $title = ((Get-Content -LiteralPath $notes -TotalCount 1) -replace '^#\s*', '').Trim()
+          $body = (Get-Content -LiteralPath $notes -Raw) + "`n## Build`n`nBuilt and checked on Windows and macOS by the [Release workflow]($env:RUN_URL), including the native check on each platform.`n"
+          Set-Content -LiteralPath release-body.md -Value $body -Encoding utf8
+          $arguments = @($tag) + (Get-ChildItem dist -File | ForEach-Object FullName) + @('--title', $title, '--notes-file', 'release-body.md', '--target', $env:GITHUB_SHA)
+          if ($spec.prerelease -ne $false) { $arguments += '--prerelease' }
+          gh release create @arguments
+          if ($LASTEXITCODE -ne 0) { throw 'Could not create the release.' }
