@@ -7987,8 +7987,8 @@
     },
     {
       "path": "scripts/release.ps1",
-      "bytes": 7032,
-      "sha256": "57e16ba0f61e81f5a8aeb0f3289692a74a6f9d40401b0d0ac715f49c53b6ec59"
+      "bytes": 6941,
+      "sha256": "0779dbcc620810d7a8078807d8285f50f422863fbc69f1da1fb68d0a4b1ff224"
     },
     {
       "path": "scripts/validate.ps1",

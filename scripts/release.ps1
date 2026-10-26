@@ -69,17 +69,15 @@ try {
  $repoPrefix=[IO.Path]::GetFullPath($repo).TrimEnd([IO.Path]::DirectorySeparatorChar)+[IO.Path]::DirectorySeparatorChar
  foreach($target in @($staging,$output)){if(![IO.Path]::GetFullPath($target).StartsWith($repoPrefix,[StringComparison]::OrdinalIgnoreCase)){throw 'Release path escaped repository.'}}
  Move-Item -LiteralPath $staging -Destination $output
- # The download is the release folder as one ZIP (top-level folder VERSION-RUNTIME) plus a .sha256 line: hash, two spaces, name.
+ # The download is the release folder as one ZIP (top-level folder VERSION-RUNTIME) plus a .sha256 line: hash, two spaces,
+ # name, LF, so shasum -a 256 -c and sha256sum -c verify either platform's download anywhere.
  $zipName="Planora-$Version-$Runtime.zip";$zip=Join-Path (Split-Path $output -Parent) $zipName
  if(Test-Path -LiteralPath $zip){throw 'Release ZIP already exists; completed releases are immutable.'}
  if($mac){
-  # ditto keeps the bundle's symlinks and executable bits, which generic ZIP tools drop. LF so shasum -a 256 -c verifies it.
+  # ditto keeps the bundle's symlinks and executable bits, which generic ZIP tools drop.
   & ditto -c -k --keepParent $output $zip;if($LASTEXITCODE -ne 0){throw 'Could not create the release ZIP.'}
-  [IO.File]::WriteAllText("$zip.sha256",(Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$zipName+"`n")
- }else{
-  Compress-Archive -LiteralPath $output -DestinationPath $zip
-  [IO.File]::WriteAllText("$zip.sha256",(Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$zipName+"`r`n")
- }
+ }else{Compress-Archive -LiteralPath $output -DestinationPath $zip}
+ [IO.File]::WriteAllText("$zip.sha256",(Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$zipName+"`n")
  Write-Output "Release archive: $zip"
  Write-Output "Release ready: $output"
 } finally {Pop-Location}
