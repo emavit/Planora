@@ -47,8 +47,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 19321,
-      "sha256": "64b98f3697a563f85baee8b7309aa11bdf3d11dad9c55d49217e239efe09dcbe"
+      "bytes": 19473,
+      "sha256": "26897cb200037e44c84c6ddfd800de65aa802e7acded6393d045d77b3a9de41e"
     },
     {
       "path": "CLAUDE.md",
@@ -82,8 +82,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9756,
-      "sha256": "aa7da1a6f7cbe29a5ccfb99c845176e6a3ed754b1c9f403ea3580eff5636d682"
+      "bytes": 10064,
+      "sha256": "fa851f7c88ac213d4935607c1b1bb235cc502fc11f8ddfaf95f5b2425fd0e541"
     },
     {
       "path": "SECURITY.md",
@@ -167,8 +167,8 @@
     },
     {
       "path": "docs/TASKS.md",
-      "bytes": 13542,
-      "sha256": "d03364428c931b6bea913f1bfa3d4480e9945e7b567b762e07cea6e219a00116"
+      "bytes": 13853,
+      "sha256": "0b288b698e73ee4e1a2b3e40980c1b777d7040d60fcb1cbf3d187dcd7ff614e2"
     },
     {
       "path": "docs/UI-RELEASE-PLAN.md",
@@ -693,7 +693,7 @@
     {
       "path": "project-app/ProjectDesk/ProjectDesk.csproj",
       "bytes": 1362,
-      "sha256": "e45c97fa422544360bf6d2c60c819e8b52edf06a4f076b43816205220b791dc8"
+      "sha256": "b5e64a2c9ba03ee701c8cfffa0ec36165379196766f7025ef5e0021651866ac9"
     },
     {
       "path": "project-app/ProjectDesk/ProjectPresentation.cs",
@@ -7901,6 +7901,16 @@
       "sha256": "3171c73541b9dbb07cd2fbb1a5b334ee9a60ae9961969c97e2b13bc2b5752e0e"
     },
     {
+      "path": "releases/0.3.12/release.json",
+      "bytes": 549,
+      "sha256": "3189c07a0b28338e99953da6ea521113e2a1ddd0ffa0751501f5e4056ab508af"
+    },
+    {
+      "path": "releases/0.3.12/release.md",
+      "bytes": 2881,
+      "sha256": "dcf96c2a9fe47c3c2f24ca40679a1512f039bc17019090588e55e91023fa6570"
+    },
+    {
       "path": "releases/0.3.3/release.json",
       "bytes": 356,
       "sha256": "fdf6dcabf4be485bcacd6eb4ec3c1d9899e718a4a8a090f97c7cedc5be00de23"
@@ -7972,8 +7982,8 @@
     },
     {
       "path": "releases/release.md",
-      "bytes": 4478,
-      "sha256": "b1d03d0ec096878ff6b6ee179a02910b8dc241ce4b1a874d67355331006e00ff"
+      "bytes": 4641,
+      "sha256": "57b6a1ffc91a987c0f13983acd16d36a7c1c06f928d0fa36884ac95a7b63984a"
     },
     {
       "path": "scripts/build.ps1",

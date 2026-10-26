@@ -79,6 +79,10 @@ Project Entry preset, coordinated dropdown styling and semantic colored icons pa
 ## Timeline visibility shortcut — 2026-10-19
 Direct workspace Hide timelines / Show timelines toggle implemented. Build and 57 workspace checks pass, including persistence and unchanged lane/date state. Source-only change after 0.3.9.
 
+## Packaged 0.3.12 — 2026-10-26
+
+First release built by the Release workflow: Windows (win-x64) and macOS (osx-arm64) packaged and checked on GitHub's machines with `release.ps1 -IncludeNative`, published together from tag v0.3.12. Adds Claude Code control (mcp-host-test 61 checks on macOS, 58 on Windows).
+
 ## Packaged 0.3.11 — 2026-10-25
 
 First macOS preview packaged on Apple Silicon with `release.ps1 -Version 0.3.11 -Runtime osx-arm64 -IncludeNative`: durable, core (including 24 MPP fidelity checks), auto-model, recovery, close, workspace 64, icons 4,900, timelines 42, resource sheet, templates 73, AI 56 and MCP 60 checks passed, public MPP 88 / 0 known failures, and 20 native macOS cycles. Ad-hoc signed Planora.app, ZIP and SHA-256 checksum prepared locally. GitHub publication follows the merge into main; no Windows package was built for 0.3.11.

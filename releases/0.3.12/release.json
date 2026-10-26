@@ -1,0 +1,18 @@
+{
+  "version": "0.3.12",
+  "previousVersion": "0.3.11",
+  "features": [
+    "Claude Code control: work on the open project from Claude Code with your Claude subscription, approving each change in Planora",
+    "Windows and macOS released together, both built and checked by the Release workflow (the first Windows package with the 0.3.11 MPP fixes)"
+  ],
+  "checks": [
+    "workspace-test",
+    "icons-ui-test",
+    "timeline-ui-test",
+    "resource-sheet-test",
+    "planning-library-test",
+    "ai-test",
+    "mcp-test",
+    "mcp-host-test"
+  ]
+}

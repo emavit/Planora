@@ -6,9 +6,11 @@
 
 An offline desktop project planner with spreadsheet-style task editing, linked Gantt charts, resources, baselines, multiple timelines, PDF export, local recovery and optional AI/MCP connections.
 
-**Status:** version 0.3.11: Windows preview (latest Windows package 0.3.10) and the first macOS preview for Apple Silicon. macOS is not yet qualified; see [macOS qualification](docs/MAC-QUALIFICATION.md). Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. Versions 0.3.0, 0.3.1 and 0.3.3 passed automated and native Windows stress checks on this machine. The public MPP regression corpus passes all 88 stages since 0.3.11; full compatibility is not qualified.
+**Status:** version 0.3.12: Windows and macOS (Apple Silicon) preview; every release now ships both platforms. macOS is not yet qualified; see [macOS qualification](docs/MAC-QUALIFICATION.md). Android and iOS apps are planned **after the macOS app is completed and validated**. The delivery order is **Windows → macOS → Android and iOS**; mobile development has not started. This is not full Microsoft Project feature or file-format parity. Versions 0.3.0, 0.3.1 and 0.3.3 passed automated and native Windows stress checks on this machine. The public MPP regression corpus passes all 88 stages since 0.3.11; full compatibility is not qualified.
 
 ## Latest additions
+
+0.3.12 lets Claude Code work on the open project with your Claude subscription, with every change approved in Planora, and is the first release built for Windows and macOS together. [Download for Windows and macOS](https://github.com/emavit/Planora/releases/tag/v0.3.12) · [Release notes](releases/0.3.12/release.md).
 
 0.3.11 is the first macOS preview: Planora.app with the macOS menu bar, Finder document opening, Keychain-stored secrets and the system font, plus fixes for all ten documented public MPP corpus failures (also on Windows). [Download the macOS preview](https://github.com/emavit/Planora/releases/tag/v0.3.11) · [Release notes](releases/0.3.11/release.md).
 
